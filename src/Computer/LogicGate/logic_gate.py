@@ -20,7 +20,7 @@ class LogicGate:
 
     def _logic(self) -> None:
         raise NotImplementedError("`_logic` needs to be implemented!")
-    
+
     def _sanitize_input(self, value: int) -> None:
         assert value == 0 or value == 1, f"{value} is not a valid input!"
 

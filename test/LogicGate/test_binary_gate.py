@@ -3,9 +3,11 @@ import pytest
 from Computer.LogicGate.binary_gate import BinaryGate
 from Computer.LogicGate.logic_gate import LogicGateError
 
+
 @pytest.fixture
 def binary_gate():
     return BinaryGate()
+
 
 def test_binary_gate_init(binary_gate):
     assert hasattr(binary_gate, "_name")
@@ -18,11 +20,13 @@ def test_binary_gate_init(binary_gate):
     assert binary_gate._input0_pin is None
     assert binary_gate._input1_pin is None
 
+
 def test_binary_gate_logic_error(binary_gate):
     with pytest.raises(NotImplementedError) as exc:
         binary_gate._logic()
 
     assert exc.value.args[0] == "`_logic` needs to be implemented!"
+
 
 def test_binary_gate_set_input_pin_error_bad_pin(binary_gate):
     with pytest.raises(LogicGateError) as exc:
@@ -30,18 +34,20 @@ def test_binary_gate_set_input_pin_error_bad_pin(binary_gate):
 
     assert exc.value.args[0] == "Entered an unknown pin: 3!"
 
+
 def test_binary_gate_set_input_pin(binary_gate):
     binary_gate.set_input_pin(0)
     assert binary_gate._input0_pin == 0
     binary_gate.set_input_pin(1, pin=1)
     assert binary_gate._input1_pin == 1
 
+
 @pytest.mark.parametrize(
     ("pin",),
     [
-        (0, ),
-        (1, ),
-    ]
+        (0,),
+        (1,),
+    ],
 )
 def test_binary_gate_set_input_pin_error_pin_set(pin, request):
     binary_gate = BinaryGate()
