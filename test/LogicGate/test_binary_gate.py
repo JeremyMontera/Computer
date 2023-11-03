@@ -50,10 +50,3 @@ def test_binary_gate_set_input_pin_error_pin_set(pin, request):
         binary_gate.set_input_pin(0, pin=pin)
 
     assert exc.value.args[0] == f"Input pin {pin} has already been set!"
-
-def test_binary_gate_set_input_pin_error_pin1_set(binary_gate):
-    binary_gate.set_input_pin(1, pin=1)
-    with pytest.raises(LogicGateError) as exc:
-        binary_gate.set_input_pin(0, pin=1)
-
-    assert exc.value.args[0] == "Input pin 1 has already been set!"
