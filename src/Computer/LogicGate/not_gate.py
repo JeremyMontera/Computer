@@ -14,4 +14,4 @@ class NotGate(UnaryGate):
 
         print(f"[00:00:00] not {bool(self._input0_pin)} is {output}.")
 
-        return output
+        self._output_pin = int(output)

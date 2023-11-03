@@ -19,4 +19,4 @@ class AndGate(BinaryGate):
             f"{output}."
         )
 
-        return output
+        self._output_pin = int(output)
