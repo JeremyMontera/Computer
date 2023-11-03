@@ -10,6 +10,7 @@ class BinaryGate(LogicGate):
         self._input1_pin: Optional[int] = None
 
     def set_input_pin(self, value: int, pin: int = 0) -> None:
+        self._sanitize_input(value)
         if pin == 0:
             if self._input0_pin is not None:
                 raise LogicGateError("Input pin 0 has already been set!")
