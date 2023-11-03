@@ -16,7 +16,7 @@ class BinaryGate(LogicGate):
         name:           the name of the logic gate class (public)
         output_pin:     the output of the pin that set later on by the logic (private)
     """
-    
+
     def __init__(self):
         """Constructor..."""
 
@@ -81,13 +81,13 @@ class BinaryGate(LogicGate):
             if self._input0_pin is not None:
                 raise LogicGateError("Input pin 0 has already been set!")
             else:
-                print(f"[00:00:00] Setting the input for pin 0.")
+                print("[00:00:00] Setting the input for pin 0.")
                 self._input0_pin = value
         elif pin == 1:
             if self._input1_pin is not None:
                 raise LogicGateError("Input pin 1 has already been set!")
             else:
-                print(f"[00:00:00] Setting the input for pin 1.")
+                print("[00:00:00] Setting the input for pin 1.")
                 self._input1_pin = value
         else:
             raise LogicGateError(f"Entered an unknown pin: {pin}!")

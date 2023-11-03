@@ -67,7 +67,7 @@ class UnaryGate(LogicGate):
             if self._input0_pin is not None:
                 raise LogicGateError("Input pin 0 has already been set!")
             else:
-                print(f"[00:00:00] Setting the input for pin 0.")
+                print("[00:00:00] Setting the input for pin 0.")
                 self._input0_pin = value
         else:
             raise LogicGateError(f"Entered an unknown pin: {pin}!")

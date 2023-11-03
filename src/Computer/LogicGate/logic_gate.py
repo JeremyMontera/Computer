@@ -70,7 +70,7 @@ class LogicGate:
     def _sanitize_input(self, value: int) -> None:
         """
         This will check the values being set to the input pins. Since inputs are
-        assumed to be binary, it checks if the input is 0/1. This is called when 
+        assumed to be binary, it checks if the input is 0/1. This is called when
         `set_input_pin` is called by one of the descendants.
 
         This is a private method not intended to be directly called by the user.
