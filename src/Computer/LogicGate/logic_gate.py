@@ -113,6 +113,7 @@ class LogicGate:
             [00:00:00] Setting the input for pin 1.
             >>> and_gate.get_output_pin()
             [00:00:00] The output pin has not been set yet.
+            [00:00:00] True and False is False.
             [00:00:00] Getting the output of the gate.
             0
             ```
@@ -123,7 +124,7 @@ class LogicGate:
                 held by the input pins.
         """
 
-        if self._output_pin is not None:
+        if self._output_pin is None:
             print("[00:00:00] The output pin has not been set yet.")
 
             self._logic()
