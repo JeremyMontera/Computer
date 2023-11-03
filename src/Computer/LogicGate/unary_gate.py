@@ -2,6 +2,7 @@ from typing import Optional
 
 from .logic_gate import LogicGate, LogicGateError
 
+
 class UnaryGate(LogicGate):
     def __init__(self):
         super().__init__()
