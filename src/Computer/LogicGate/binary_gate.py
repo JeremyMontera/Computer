@@ -1,6 +1,9 @@
-from typing import Optional
+from typing import Optional, Union, TYPE_CHECKING
 
 from .logic_gate import LogicGate, LogicGateError
+
+if TYPE_CHECKING:
+    from Computer.Connection import Connection
 
 
 class BinaryGate(LogicGate):
@@ -25,24 +28,20 @@ class BinaryGate(LogicGate):
         This inherits from the `LogicGate` parent class.
         """
 
-        self._input0_pin: Optional[int] = None
+        self._input0_pin: Optional[Union[int, 'Connection']] = None
         """
         The first input pin of the binary gate. This is initially set to `'None'`.
 
-        TODO: see the TODO under `_output_pin` in `LogicGate` class.
-
         Type:
-            integer
+            integer | [`Connection`][Computer.Connection]
         """
 
-        self._input1_pin: Optional[int] = None
+        self._input1_pin: Optional[Union[int, 'Connection']] = None
         """
         The second input pin of the binary gate. This is initially set to `'None'`.
 
-        TODO: see the TODO under `_output_pin` in `LogicGate` class.
-
         Type:
-            integer
+            integer | [`Connection`][Computer.Connection]
         """
 
         self._type: str = "binary"
@@ -53,7 +52,7 @@ class BinaryGate(LogicGate):
             string
         """
 
-    def set_input_pin(self, value: int, pin: int = 0) -> None:
+    def set_input_pin(self, value: Union[int, 'Connection'], pin: int = 0) -> None:
         """
         This will set the input pins. It will allow the user to set the value of either
         of the two pins.

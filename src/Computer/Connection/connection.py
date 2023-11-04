@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from Computer.LogicGate import LogicGate
+if TYPE_CHECKING:
+    from Computer.LogicGate import LogicGate
 
 class ConnectionError(Exception):
     ...

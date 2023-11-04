@@ -1,6 +1,9 @@
-from typing import Optional
+from typing import Optional, Union, TYPE_CHECKING
 
 from .logic_gate import LogicGate, LogicGateError
+
+if TYPE_CHECKING:
+    from Computer.Connection import Connection
 
 
 class UnaryGate(LogicGate):
@@ -23,14 +26,12 @@ class UnaryGate(LogicGate):
         This inherits from the `LogicGate` parent class.
         """
 
-        self._input0_pin: Optional[int] = None
+        self._input0_pin: Optional[Union[int, 'Connection']] = None
         """
         The first input pin of the binary gate. This is initially set to `'None'`.
 
-        TODO: see the TODO under `_output_pin` in `LogicGate` class.
-
         Type:
-            integer
+            integer | [`Connection`][Computer.Connection]
         """
 
         self._type: str = "unary"
@@ -41,7 +42,7 @@ class UnaryGate(LogicGate):
             string
         """
 
-    def set_input_pin(self, value: int, pin: int = 0) -> None:
+    def set_input_pin(self, value: Union[int, 'Connection'], pin: int = 0) -> None:
         """
         This will set the input pin.
 

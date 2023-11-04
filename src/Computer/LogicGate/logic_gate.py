@@ -1,5 +1,7 @@
-from typing import Optional
+from typing import Optional, Union, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from Computer.Connection import Connection
 
 class LogicGateError(Exception):
     ...
@@ -28,15 +30,12 @@ class LogicGate:
             string
         """
 
-        self._output_pin: Optional[int] = None
+        self._output_pin: Optional[Union[int, 'Connection']] = None
         """
         The output pin of the logic gate. This is initially set to `'None'`.
 
-        TODO: when we implement the `Connection` class, allow this to be either an
-        integer or a `Connection` class instance.
-
         Type:
-            integer
+            integer | [`Connection`][Computer.Connection]
         """
 
         self._type: str = ""
@@ -81,7 +80,7 @@ class LogicGate:
 
         raise NotImplementedError("`_logic` needs to be implemented!")
 
-    def _sanitize_input(self, value: int) -> None:
+    def _sanitize_input(self, value: Union[int, 'Connection']) -> None:
         """
         This will check the values being set to the input pins. Since inputs are
         assumed to be binary, it checks if the input is 0/1. This is called when
@@ -89,7 +88,6 @@ class LogicGate:
 
         This is a private method not intended to be directly called by the user.
 
-        TODO: update when `Connections` are implemented.
         TODO: make this more flexible to allow for exotic input types?
 
         Raises:
@@ -100,7 +98,8 @@ class LogicGate:
                 The value to be inputted to the logic gate.
         """
 
-        assert value == 0 or value == 1, f"{value} is not a valid input!"
+        if isinstance(value, int):
+            assert value == 0 or value == 1, f"{value} is not a valid input!"
 
         print("[00:00:00] The input has been validated.")
 
@@ -147,7 +146,7 @@ class LogicGate:
 
         return self._output_pin
 
-    def set_input_pin(self, value: int, pin: int = 0) -> None:
+    def set_input_pin(self, value: Union[int, 'Connection'], pin: int = 0) -> None:
         """
         This will set the input pins. Since the child gate classes could have one or
         more pins, it will allow the user to input the value of an arbitrary pin. As
