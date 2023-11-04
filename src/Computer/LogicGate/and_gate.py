@@ -18,7 +18,7 @@ class AndGate(BinaryGate):
 
     def __init__(self):
         """Constructor..."""
-        
+
         super().__init__()
         """
         This inherits from the `BinaryGate` parent class.

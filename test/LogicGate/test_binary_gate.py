@@ -1,9 +1,10 @@
-import pytest
 import copy
 
+import pytest
+
+from Computer.Connection import Connection
 from Computer.LogicGate.binary_gate import BinaryGate
 from Computer.LogicGate.logic_gate import LogicGateError
-from Computer.Connection import Connection
 
 
 @pytest.fixture
@@ -55,7 +56,6 @@ def test_binary_gate_set_input_pin(binary_gate, connection):
     new_gate.set_input_pin(connection)
     assert isinstance(new_gate._input0_pin, Connection)
     assert new_gate._input0_pin == connection
-
 
 
 @pytest.mark.parametrize(

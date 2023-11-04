@@ -1,7 +1,8 @@
-from typing import Optional, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Union
 
 if TYPE_CHECKING:
     from Computer.Connection import Connection
+
 
 class LogicGateError(Exception):
     ...
@@ -30,7 +31,7 @@ class LogicGate:
             string
         """
 
-        self._output_pin: Optional[Union[int, 'Connection']] = None
+        self._output_pin: Optional[Union[int, "Connection"]] = None
         """
         The output pin of the logic gate. This is initially set to `'None'`.
 
@@ -80,7 +81,7 @@ class LogicGate:
 
         raise NotImplementedError("`_logic` needs to be implemented!")
 
-    def _sanitize_input(self, value: Union[int, 'Connection']) -> None:
+    def _sanitize_input(self, value: Union[int, "Connection"]) -> None:
         """
         This will check the values being set to the input pins. Since inputs are
         assumed to be binary, it checks if the input is 0/1. This is called when
@@ -146,7 +147,7 @@ class LogicGate:
 
         return self._output_pin
 
-    def set_input_pin(self, value: Union[int, 'Connection'], pin: int = 0) -> None:
+    def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
         """
         This will set the input pins. Since the child gate classes could have one or
         more pins, it will allow the user to input the value of an arbitrary pin. As

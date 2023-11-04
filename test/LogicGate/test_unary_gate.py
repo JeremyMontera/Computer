@@ -1,9 +1,10 @@
-import pytest
 import copy
 
+import pytest
+
+from Computer.Connection import Connection
 from Computer.LogicGate.logic_gate import LogicGateError
 from Computer.LogicGate.unary_gate import UnaryGate
-from Computer.Connection import Connection
 
 
 @pytest.fixture

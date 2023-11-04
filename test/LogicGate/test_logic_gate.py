@@ -1,8 +1,9 @@
-import pytest
 from contextlib import nullcontext as does_not_raise
 
-from Computer.LogicGate.logic_gate import LogicGate
+import pytest
+
 from Computer.Connection import Connection
+from Computer.LogicGate.logic_gate import LogicGate
 
 
 @pytest.fixture
@@ -40,7 +41,7 @@ def test_logic_gate_logic_error(logic_gate):
     [
         (3, pytest.raises(AssertionError), "3 is not a valid input!"),
         (Connection(), does_not_raise(), ""),
-    ]
+    ],
 )
 def test_logic_gate_sanitize_input_error(value, error, msg):
     logic_gate = LogicGate()
