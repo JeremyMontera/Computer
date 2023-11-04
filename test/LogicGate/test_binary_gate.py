@@ -1,12 +1,19 @@
 import pytest
+import copy
 
 from Computer.LogicGate.binary_gate import BinaryGate
 from Computer.LogicGate.logic_gate import LogicGateError
+from Computer.Connection import Connection
 
 
 @pytest.fixture
 def binary_gate():
     return BinaryGate()
+
+
+@pytest.fixture
+def connection():
+    return Connection()
 
 
 def test_binary_gate_init(binary_gate):
@@ -38,11 +45,17 @@ def test_binary_gate_set_input_pin_error_bad_pin(binary_gate):
     assert exc.value.args[0] == "Entered an unknown pin: 3!"
 
 
-def test_binary_gate_set_input_pin(binary_gate):
-    binary_gate.set_input_pin(0)
-    assert binary_gate._input0_pin == 0
-    binary_gate.set_input_pin(1, pin=1)
-    assert binary_gate._input1_pin == 1
+def test_binary_gate_set_input_pin(binary_gate, connection):
+    gate = copy.deepcopy(binary_gate)
+    gate.set_input_pin(0)
+    assert gate._input0_pin == 0
+    gate.set_input_pin(1, pin=1)
+    assert gate._input1_pin == 1
+    new_gate = copy.deepcopy(binary_gate)
+    new_gate.set_input_pin(connection)
+    assert isinstance(new_gate._input0_pin, Connection)
+    assert new_gate._input0_pin == connection
+
 
 
 @pytest.mark.parametrize(

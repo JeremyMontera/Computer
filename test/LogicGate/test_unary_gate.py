@@ -1,12 +1,19 @@
 import pytest
+import copy
 
 from Computer.LogicGate.logic_gate import LogicGateError
 from Computer.LogicGate.unary_gate import UnaryGate
+from Computer.Connection import Connection
 
 
 @pytest.fixture
 def unary_gate():
     return UnaryGate()
+
+
+@pytest.fixture
+def connection():
+    return Connection()
 
 
 def test_unary_gate_init(unary_gate):
@@ -36,9 +43,14 @@ def test_unary_gate_set_input_pin_error_bad_pin(unary_gate):
     assert exc.value.args[0] == "Entered an unknown pin: 3!"
 
 
-def test_unary_gate_set_input_pin(unary_gate):
-    unary_gate.set_input_pin(0)
-    assert unary_gate._input0_pin == 0
+def test_unary_gate_set_input_pin(unary_gate, connection):
+    gate = copy.deepcopy(unary_gate)
+    gate.set_input_pin(0)
+    assert gate._input0_pin == 0
+    new_gate = copy.deepcopy(unary_gate)
+    new_gate.set_input_pin(connection)
+    assert isinstance(new_gate._input0_pin, Connection)
+    assert new_gate._input0_pin == connection
 
 
 def test_unary_gate_set_input_pin_error_pin_set(unary_gate):

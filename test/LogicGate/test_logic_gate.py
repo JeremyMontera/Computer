@@ -1,6 +1,8 @@
 import pytest
+from contextlib import nullcontext as does_not_raise
 
 from Computer.LogicGate.logic_gate import LogicGate
+from Computer.Connection import Connection
 
 
 @pytest.fixture
@@ -33,11 +35,20 @@ def test_logic_gate_logic_error(logic_gate):
     assert exc.value.args[0] == "`_logic` needs to be implemented!"
 
 
-def test_logic_gate_sanitize_input_error(logic_gate):
-    with pytest.raises(AssertionError) as exc:
-        logic_gate._sanitize_input(3)
+@pytest.mark.parametrize(
+    ("value", "error", "msg"),
+    [
+        (3, pytest.raises(AssertionError), "3 is not a valid input!"),
+        (Connection(), does_not_raise(), ""),
+    ]
+)
+def test_logic_gate_sanitize_input_error(value, error, msg):
+    logic_gate = LogicGate()
+    with error as exc:
+        logic_gate._sanitize_input(value)
 
-    assert exc.value.args[0] == "3 is not a valid input!"
+    if isinstance(value, int):
+        assert exc.value.args[0] == msg
 
 
 def test_logic_gate_set_input_pin_error(logic_gate):
