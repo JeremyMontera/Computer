@@ -42,6 +42,12 @@ class UnaryGate(LogicGate):
             string
         """
 
+    def has_input_set(self, pin: Optional[int] = 0) -> bool:
+        if pin == 0:
+            return not self._input0_pin is None
+        else:
+            raise LogicGateError(f"Entered an unknown pin: {pin}!")
+
     def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
         """
         This will set the input pin.

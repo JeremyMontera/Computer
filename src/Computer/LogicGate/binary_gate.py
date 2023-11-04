@@ -52,6 +52,15 @@ class BinaryGate(LogicGate):
             string
         """
 
+    def has_input_set(self, pin: Optional[int] = 0) -> bool:
+        if pin == 0:
+            return self._input0_pin is not None
+        elif pin == 1:
+            return self._input1_pin is not None
+        else:
+            raise LogicGateError(f"Entered an unknown pin: {pin}!")
+
+
     def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
         """
         This will set the input pins. It will allow the user to set the value of either
