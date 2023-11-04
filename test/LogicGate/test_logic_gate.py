@@ -52,6 +52,19 @@ def test_logic_gate_sanitize_input_error(value, error, msg):
         assert exc.value.args[0] == msg
 
 
+def test_logic_gate_has_input_set_error(logic_gate):
+    with pytest.raises(NotImplementedError) as exc:
+        logic_gate.has_input_set(pin=0)
+
+    assert exc.value.args[0] == "`has_input_set` needs to be implemented!"
+
+
+def test_logic_gate_has_output_set(logic_gate):
+    assert not logic_gate.has_output_set()
+    logic_gate._output_pin = 0
+    assert logic_gate.has_output_set()
+
+
 def test_logic_gate_set_input_pin_error(logic_gate):
     with pytest.raises(NotImplementedError) as exc:
         logic_gate.set_input_pin(0)
