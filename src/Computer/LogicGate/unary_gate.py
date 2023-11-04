@@ -33,6 +33,14 @@ class UnaryGate(LogicGate):
             integer
         """
 
+        self._type: str = "unary"
+        """
+        The type of logic gate.
+
+        Type:
+            string
+        """
+
     def set_input_pin(self, value: int, pin: int = 0) -> None:
         """
         This will set the input pin.

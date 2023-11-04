@@ -13,6 +13,9 @@ def test_unary_gate_init(unary_gate):
     assert hasattr(unary_gate, "_name")
     assert isinstance(unary_gate._name, str)
     assert unary_gate._name == ""
+    assert hasattr(unary_gate, "_type")
+    assert isinstance(unary_gate._type, str)
+    assert unary_gate.type == "unary"
     assert hasattr(unary_gate, "_output_pin")
     assert unary_gate._output_pin is None
     assert hasattr(unary_gate, "_input0_pin")

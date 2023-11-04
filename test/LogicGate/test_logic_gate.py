@@ -11,6 +11,7 @@ def logic_gate():
 def test_logic_gate_init(logic_gate):
     assert hasattr(logic_gate, "_name")
     assert isinstance(logic_gate._name, str)
+    assert isinstance(logic_gate._type, str)
     assert logic_gate._name == ""
     assert hasattr(logic_gate, "_output_pin")
     assert logic_gate._output_pin is None
@@ -18,7 +19,11 @@ def test_logic_gate_init(logic_gate):
 
 def test_logic_gate_name_attribute(logic_gate):
     logic_gate.name = "Logic Gate"
-    assert logic_gate._name == "Logic Gate"
+    assert logic_gate.name == "Logic Gate"
+
+
+def test_logic_gate_type_attribute(logic_gate):
+    assert logic_gate.type == ""
 
 
 def test_logic_gate_logic_error(logic_gate):

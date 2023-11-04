@@ -39,6 +39,14 @@ class LogicGate:
             integer
         """
 
+        self._type: str = ""
+        """
+        The type of logic gate.
+
+        Type:
+            string
+        """
+
     @property
     def name(self) -> str:
         """The name of the logic gate."""
@@ -50,6 +58,12 @@ class LogicGate:
         """Set the name of the logic gate."""
 
         self._name = value
+
+    @property
+    def type(self) -> str:
+        """The type of logic gate."""
+
+        return self._type
 
     def _logic(self) -> None:
         """

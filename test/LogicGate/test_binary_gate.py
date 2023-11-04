@@ -13,6 +13,9 @@ def test_binary_gate_init(binary_gate):
     assert hasattr(binary_gate, "_name")
     assert isinstance(binary_gate._name, str)
     assert binary_gate._name == ""
+    assert hasattr(binary_gate, "_type")
+    assert isinstance(binary_gate._type, str)
+    assert binary_gate.type == "binary"
     assert hasattr(binary_gate, "_output_pin")
     assert binary_gate._output_pin is None
     assert hasattr(binary_gate, "_input0_pin")

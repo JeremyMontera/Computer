@@ -45,6 +45,14 @@ class BinaryGate(LogicGate):
             integer
         """
 
+        self._type: str = "binary"
+        """
+        The type of logic gate.
+
+        Type:
+            string
+        """
+
     def set_input_pin(self, value: int, pin: int = 0) -> None:
         """
         This will set the input pins. It will allow the user to set the value of either
