@@ -12,7 +12,7 @@ class Connection:
         self._output: Optional['LogicGate'] = None
 
     def feed(self) -> int:
-        if self._output is None:
+        if self._input is None:
             raise ConnectionError("The output hasn't been connected yet!")
         
         print(f"[00:00:00] Feeding input gate {self._input.name}'s output.")
@@ -26,4 +26,10 @@ class Connection:
         self._input = gate
 
     def set_output(self, gate: 'LogicGate') -> None:
-        ...
+        if not gate.has_input_set(pin=0):
+            gate.set_input_pin(self, pin=0)
+        elif gate.type == "binary":
+            if not gate.has_input_set(pin=1):
+                gate.set_input_pin(self, pin=1)
+        else:
+            raise ConnectionError(f"{gate.name}'s input pin(s) are already set!")
