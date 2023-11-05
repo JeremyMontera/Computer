@@ -37,10 +37,10 @@ def test_unary_gate_logic_error(unary_gate):
     assert exc.value.args[0] == "`_logic` needs to be implemented!"
 
 
-def test_unary_gate_has_input_set(unary_gate):
-    assert not unary_gate.has_input_set(pin=0)
+def test_unary_gate_has_input_pin_set(unary_gate):
+    assert not unary_gate.has_input_pin_set(pin=0)
     unary_gate._input0_pin = 0
-    assert unary_gate.has_input_set(pin=0)
+    assert unary_gate.has_input_pin_set(pin=0)
 
 
 def test_unary_gate_set_input_pin_error_bad_pin(unary_gate):

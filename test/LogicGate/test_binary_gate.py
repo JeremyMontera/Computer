@@ -39,13 +39,13 @@ def test_binary_gate_logic_error(binary_gate):
     assert exc.value.args[0] == "`_logic` needs to be implemented!"
 
 
-def test_binary_gate_has_input_set(binary_gate):
-    assert not binary_gate.has_input_set(pin=0)
-    assert not binary_gate.has_input_set(pin=1)
+def test_binary_gate_has_input_pin_set(binary_gate):
+    assert not binary_gate.has_input_pin_set(pin=0)
+    assert not binary_gate.has_input_pin_set(pin=1)
     binary_gate._input0_pin = 0
     binary_gate._input1_pin = 1
-    assert binary_gate.has_input_set(pin=0)
-    assert binary_gate.has_input_set(pin=1)
+    assert binary_gate.has_input_pin_set(pin=0)
+    assert binary_gate.has_input_pin_set(pin=1)
 
 
 def test_binary_gate_set_input_pin_error_bad_pin(binary_gate):
