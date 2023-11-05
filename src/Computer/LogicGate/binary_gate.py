@@ -52,7 +52,7 @@ class BinaryGate(LogicGate):
             string
         """
 
-    def has_input_set(self, pin: Optional[int] = 0) -> bool:
+    def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
         if pin == 0:
             return self._input0_pin is not None
         elif pin == 1:

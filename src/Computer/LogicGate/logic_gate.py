@@ -147,10 +147,10 @@ class LogicGate:
 
         return self._output_pin
     
-    def has_input_set(self, pin: Optional[int] = 0) -> bool:
+    def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
         raise NotImplementedError("`has_input_set` needs to be implemented!")
     
-    def has_output_set(self) -> bool:
+    def has_output_pin_set(self) -> bool:
         return self._output_pin is not None
 
     def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
