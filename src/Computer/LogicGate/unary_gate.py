@@ -43,6 +43,37 @@ class UnaryGate(LogicGate):
         """
 
     def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
+        """
+        This will check to see if the requested input pin has been set yet.
+
+        This is a public method that can be called by the user, but more than likely,
+        it will be called by the `Connection` class.
+
+        Example:
+            ```python
+            >>> not_gate = NotGate()
+            >>> not_gate.has_input_pin_set(pin = 0)
+            False
+            >>> not_gate.set_input_pin(0, pin = 0)
+            [00:00:00] The input has been validated.
+            [00:00:00] Setting the input for pin 0.
+            >>> not_gate.has_input_pin_set(pin = 0)
+            True
+            ```
+
+        Raises:
+            LogicGateError:
+                Entered an unknown pin: {pin}!
+
+        Args:
+            pin:
+                (Optional) The pin to check. This defaults to pin 0.
+
+        Returns:
+            flag:
+                ...
+        """
+
         if pin == 0:
             return self._input0_pin is not None
         else:

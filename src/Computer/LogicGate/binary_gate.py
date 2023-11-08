@@ -53,6 +53,37 @@ class BinaryGate(LogicGate):
         """
 
     def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
+        """
+        This will check to see if the requested input pin has been set yet.
+
+        This is a public method that can be called by the user, but more than likely,
+        it will be called by the `Connection` class.
+
+        Example:
+            ```python
+            >>> or_gate = OrGate()
+            >>> or_gate.has_input_pin_set(pin = 0)
+            False
+            >>> or_gate.set_input_pin(0, pin = 0)
+            [00:00:00] The input has been validated.
+            [00:00:00] Setting the input for pin 0.
+            >>> or_gate.has_input_pin_set(pin = 0)
+            True
+            ```
+
+        Raises:
+            LogicGateError:
+                Entered an unknown pin: {pin}!
+
+        Args:
+            pin:
+                (Optional) The pin to check. This defaults to pin 0.
+
+        Returns:
+            flag:
+                ...
+        """
+
         if pin == 0:
             return self._input0_pin is not None
         elif pin == 1:
