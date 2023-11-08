@@ -10,3 +10,7 @@ comp2 - Create Connection Class
     (3) Make changes to LogicGate subdirectory
     (4) Write / Update unit tests
     (5) Write documentation
+
+comp3 - Create Bit/BitStream classes
+comp4 - Create hybrid gate classes: xor, nor, nand, nxor, ...
+comp5 - Refactor LogicGate class

@@ -1,6 +1,7 @@
+from Computer.Connection import Connection
+
 from .binary_gate import BinaryGate
 from .logic_gate import LogicGateError
-from Computer.Connection import Connection
 
 
 class AndGate(BinaryGate):
@@ -49,7 +50,7 @@ class AndGate(BinaryGate):
             raise LogicGateError("The first input pin has not been set!")
         elif self._input1_pin is None:
             raise LogicGateError("The second input pin has not been set!")
-        
+
         if isinstance(self._input0_pin, Connection):
             input0 = self._input0_pin.feed()
         elif isinstance(self._input0_pin, int):

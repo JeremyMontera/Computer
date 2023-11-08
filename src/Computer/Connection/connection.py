@@ -28,9 +28,9 @@ class Connection:
         self._input_connection = gate
 
     def set_output_connection(self, gate: "LogicGate", pin: int = 0) -> None:
-        if gate.has_input_pin_set(pin = pin):
+        if gate.has_input_pin_set(pin=pin):
             raise ConnectionError(f"{gate.name} already has pin {pin} set!")
-        
+
         print(f"[00:00:00] Setting {gate.name}'s input pin to the output connection.")
         gate.set_input_pin(self, pin=pin)
         self._output_connection = gate

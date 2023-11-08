@@ -28,6 +28,7 @@ def test_connection_feed(mock_get_output, conn):
     mock_get_output.assert_called_once()
     assert ret == 1
 
+
 def test_connection_set_input_connection_error(conn):
     gate = LogicGate()
     gate.name = "foo"
@@ -37,6 +38,7 @@ def test_connection_set_input_connection_error(conn):
 
     assert exc.value.args[0] == "foo's output pin is already set!"
 
+
 def test_connection_set_input_connection(conn):
     gate = LogicGate()
     gate.name = "bar"
@@ -44,14 +46,16 @@ def test_connection_set_input_connection(conn):
     assert conn._input_connection is not None
     assert conn._input_connection.name == "bar"
 
+
 def test_connection_set_output_connection_binary_error_has_connection(conn):
     gate: BinaryGate = BinaryGate()
     gate.name = "foo:bar"
     gate.set_input_pin(0, pin=0)
     with pytest.raises(ConnectionError) as exc:
-        conn.set_output_connection(gate, pin = 0)
+        conn.set_output_connection(gate, pin=0)
 
     assert exc.value.args[0] == "foo:bar already has pin 0 set!"
+
 
 def test_connection_set_output_connection_binary(conn):
     gate: BinaryGate = BinaryGate()
@@ -61,14 +65,16 @@ def test_connection_set_output_connection_binary(conn):
     assert conn._output_connection is not None
     assert isinstance(conn._output_connection, BinaryGate)
 
+
 def test_connection_set_output_connection_unary_error_has_connection(conn):
     gate: UnaryGate = UnaryGate()
     gate.name = "spam:eggs"
     gate.set_input_pin(0, pin=0)
     with pytest.raises(ConnectionError) as exc:
-        conn.set_output_connection(gate, pin = 0)
+        conn.set_output_connection(gate, pin=0)
 
     assert exc.value.args[0] == "spam:eggs already has pin 0 set!"
+
 
 def test_connection_set_output_connection_unary(conn):
     gate: UnaryGate = UnaryGate()

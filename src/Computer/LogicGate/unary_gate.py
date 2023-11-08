@@ -44,7 +44,7 @@ class UnaryGate(LogicGate):
 
     def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
         if pin == 0:
-            return not self._input0_pin is None
+            return self._input0_pin is not None
         else:
             raise LogicGateError(f"Entered an unknown pin: {pin}!")
 

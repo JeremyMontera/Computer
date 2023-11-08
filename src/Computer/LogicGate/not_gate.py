@@ -1,6 +1,7 @@
+from Computer.Connection import Connection
+
 from .logic_gate import LogicGateError
 from .unary_gate import UnaryGate
-from Computer.Connection import Connection
 
 
 class NotGate(UnaryGate):
@@ -43,7 +44,7 @@ class NotGate(UnaryGate):
 
         if self._input0_pin is None:
             raise LogicGateError("The first input pin has not been set!")
-        
+
         if isinstance(self._input0_pin, Connection):
             input0 = self._input0_pin.feed()
         elif isinstance(self._input0_pin, int):
