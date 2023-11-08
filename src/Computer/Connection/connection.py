@@ -28,9 +28,6 @@ class Connection:
         self._input_connection = gate
 
     def set_output_connection(self, gate: "LogicGate", pin: int = 0) -> None:
-        if pin != 0 and pin != 1:
-            raise ConnectionError(f"Entered an unknown pin: {pin}!")
-        
         if gate.has_input_pin_set(pin = pin):
             raise ConnectionError(f"{gate.name} already has pin {pin} set!")
         
