@@ -179,7 +179,7 @@ class LogicGate:
             flag:
                 ...
         """
-        
+
         return self._output_pin is not None
 
     def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:

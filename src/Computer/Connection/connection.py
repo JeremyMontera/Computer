@@ -32,7 +32,7 @@ class Connection:
         Type:
             LogicGate
         """
-        
+
         self._output_connection: Optional["LogicGate"] = None
         """
         The logic gate the connection is feed data to.
