@@ -2,9 +2,9 @@ import copy
 
 import pytest
 
-from Computer.Connection import Connection
-from Computer.LogicGate.binary_gate import BinaryGate
-from Computer.LogicGate.logic_gate import LogicGateError
+from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.LogicGate.binary_gate import BinaryGate
+from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
 
 
 @pytest.fixture

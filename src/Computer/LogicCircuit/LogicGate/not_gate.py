@@ -1,4 +1,4 @@
-from Computer.Connection import Connection
+from Computer.LogicCircuit.Connection import Connection
 
 from .logic_gate import LogicGateError
 from .unary_gate import UnaryGate

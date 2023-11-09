@@ -2,8 +2,8 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from Computer.Connection import Connection
-from Computer.LogicGate.logic_gate import LogicGate
+from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.LogicGate.logic_gate import LogicGate
 
 
 @pytest.fixture
