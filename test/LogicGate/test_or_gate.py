@@ -3,9 +3,11 @@ import pytest
 from Computer.LogicGate import OrGate
 from Computer.LogicGate.logic_gate import LogicGateError
 
+
 @pytest.fixture
 def or_gate():
     return OrGate()
+
 
 def test_and_gate_logic_error(or_gate):
     with pytest.raises(LogicGateError) as exc:
@@ -18,6 +20,7 @@ def test_and_gate_logic_error(or_gate):
 
     assert exc.value.args[0] == "The second input pin has not been set!"
 
+
 @pytest.mark.parametrize(
     ("pin0", "pin1", "output"),
     [
@@ -25,7 +28,7 @@ def test_and_gate_logic_error(or_gate):
         (1, 0, 1),
         (0, 1, 1),
         (1, 1, 1),
-    ]
+    ],
 )
 def test_or_gate_logic(pin0, pin1, output):
     gate = OrGate()

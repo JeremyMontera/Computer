@@ -1,3 +1,5 @@
+from Computer.Connection import Connection
+
 from .binary_gate import BinaryGate
 from .logic_gate import LogicGateError
 
@@ -49,11 +51,18 @@ class OrGate(BinaryGate):
         elif self._input1_pin is None:
             raise LogicGateError("The second input pin has not been set!")
 
-        output = bool(self._input0_pin) or bool(self._input1_pin)
+        if isinstance(self._input0_pin, Connection):
+            input0 = self._input0_pin.feed()
+        elif isinstance(self._input0_pin, int):
+            input0 = self._input0_pin
 
-        print(
-            f"[00:00:00] {bool(self._input0_pin)} or {bool(self._input1_pin)} is "
-            f"{output}."
-        )
+        if isinstance(self._input1_pin, Connection):
+            input1 = self._input1_pin.feed()
+        elif isinstance(self._input1_pin, int):
+            input1 = self._input1_pin
+
+        output = bool(input0) or bool(input1)
+
+        print(f"[00:00:00] {bool(input0)} or {bool(input1)} is {output}.")
 
         self._output_pin = int(output)

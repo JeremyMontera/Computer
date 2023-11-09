@@ -1,6 +1,9 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional, Union
 
 from .logic_gate import LogicGate, LogicGateError
+
+if TYPE_CHECKING:
+    from Computer.Connection import Connection
 
 
 class BinaryGate(LogicGate):
@@ -25,27 +28,70 @@ class BinaryGate(LogicGate):
         This inherits from the `LogicGate` parent class.
         """
 
-        self._input0_pin: Optional[int] = None
+        self._input0_pin: Optional[Union[int, "Connection"]] = None
         """
         The first input pin of the binary gate. This is initially set to `'None'`.
 
-        TODO: see the TODO under `_output_pin` in `LogicGate` class.
-
         Type:
-            integer
+            integer | [`Connection`][Computer.Connection]
         """
 
-        self._input1_pin: Optional[int] = None
+        self._input1_pin: Optional[Union[int, "Connection"]] = None
         """
         The second input pin of the binary gate. This is initially set to `'None'`.
 
-        TODO: see the TODO under `_output_pin` in `LogicGate` class.
-
         Type:
-            integer
+            integer | [`Connection`][Computer.Connection]
         """
 
-    def set_input_pin(self, value: int, pin: int = 0) -> None:
+        self._type: str = "binary"
+        """
+        The type of logic gate.
+
+        Type:
+            string
+        """
+
+    def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
+        """
+        This will check to see if the requested input pin has been set yet.
+
+        This is a public method that can be called by the user, but more than likely,
+        it will be called by the `Connection` class.
+
+        Example:
+            ```python
+            >>> or_gate = OrGate()
+            >>> or_gate.has_input_pin_set(pin = 0)
+            False
+            >>> or_gate.set_input_pin(0, pin = 0)
+            [00:00:00] The input has been validated.
+            [00:00:00] Setting the input for pin 0.
+            >>> or_gate.has_input_pin_set(pin = 0)
+            True
+            ```
+
+        Raises:
+            LogicGateError:
+                Entered an unknown pin: {pin}!
+
+        Args:
+            pin:
+                (Optional) The pin to check. This defaults to pin 0.
+
+        Returns:
+            flag:
+                ...
+        """
+
+        if pin == 0:
+            return self._input0_pin is not None
+        elif pin == 1:
+            return self._input1_pin is not None
+        else:
+            raise LogicGateError(f"Entered an unknown pin: {pin}!")
+
+    def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
         """
         This will set the input pins. It will allow the user to set the value of either
         of the two pins.

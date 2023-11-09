@@ -3,9 +3,11 @@ import pytest
 from Computer.LogicGate import AndGate
 from Computer.LogicGate.logic_gate import LogicGateError
 
+
 @pytest.fixture
 def and_gate():
     return AndGate()
+
 
 def test_and_gate_logic_error(and_gate):
     with pytest.raises(LogicGateError) as exc:
@@ -18,6 +20,7 @@ def test_and_gate_logic_error(and_gate):
 
     assert exc.value.args[0] == "The second input pin has not been set!"
 
+
 @pytest.mark.parametrize(
     ("pin0", "pin1", "output"),
     [
@@ -25,7 +28,7 @@ def test_and_gate_logic_error(and_gate):
         (1, 0, 0),
         (0, 1, 0),
         (1, 1, 1),
-    ]
+    ],
 )
 def test_and_gate_logic(pin0, pin1, output):
     gate = AndGate()
