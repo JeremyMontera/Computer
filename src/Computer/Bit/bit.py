@@ -40,5 +40,5 @@ class Bit:
                 return BitValue.ON
             else:
                 raise BitError(f"Entered an unknown value: {value}!")
-        except ValueError:
+        except (ValueError, TypeError):
             raise BitError("Entered something that cannot be handled!")
