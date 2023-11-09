@@ -12,5 +12,10 @@ comp2 - Create Connection Class
     (5) Write documentation
 
 comp3 - Create Bit/BitStream classes
+    (1) Implement Bit class
+    (2) Refactor code to use Bit class instead of int
+    (3) Implement BitString class
+    (4) Update unit tests
+    (5) Write documentation
 comp4 - Create hybrid gate classes: xor, nor, nand, nxor, ...
 comp5 - Refactor LogicGate class
