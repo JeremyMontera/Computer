@@ -8,6 +8,10 @@ class BitString:
         self._max_length: int = max_length
         self._bits: List[Bit] = []
 
+    def __iter__(self) -> Bit:
+        for bit in self._bits:
+            yield bit
+
     def __len__(self) -> int:
         return sum(1 for bit in self._bits if bit is not None)
 
