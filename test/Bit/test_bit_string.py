@@ -1,5 +1,7 @@
 import pytest
+
 from Computer.Bit import Bit, BitString
+
 
 @pytest.fixture
 def bits():
@@ -9,6 +11,7 @@ def bits():
     bits.push_right(Bit(0))
     return bits
 
+
 def test_bit_string_init():
     empty: BitString = BitString(10)
     assert isinstance(empty._max_length, int)
@@ -16,18 +19,22 @@ def test_bit_string_init():
     assert isinstance(empty._bits, list)
     assert empty._bits == []
 
+
 def test_bit_string_max_length(bits):
     assert bits.max_length == 5
 
+
 def test_bit_string_iter(bits):
     res = [0, 1, 0]
-    for (bit0, bit1) in zip(bits, res):
+    for bit0, bit1 in zip(bits, res):
         assert isinstance(bit0, Bit)
         assert int(bool(bit0)) == bit1
+
 
 def test_bit_string_length(bits):
     assert len(bits) == 3
     assert len(bits) < bits.max_length
+
 
 @pytest.mark.parametrize(
     "config",

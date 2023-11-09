@@ -51,7 +51,7 @@ class BitString:
         """
 
         return len(self._bits)
-    
+
     def __str__(self) -> str:
         """
         This overrides Python's built-in `str` function: it returns a string
@@ -76,7 +76,7 @@ class BitString:
         Returns:
             bit:
                 ...
-        
+
         Raises:
             BitError:
                 This bit string is empty.
@@ -99,7 +99,7 @@ class BitString:
         Returns:
             bit:
                 ...
-        
+
         Raises:
             BitError:
                 This bit string is empty.
@@ -122,7 +122,7 @@ class BitString:
         Returns:
             bit:
                 ...
-        
+
         Raises:
             BitError:
                 This bit string has the maximum number of bits allowed!
@@ -143,7 +143,7 @@ class BitString:
         Returns:
             bit:
                 ...
-        
+
         Raises:
             BitError:
                 This bit string has the maximum number of bits allowed!

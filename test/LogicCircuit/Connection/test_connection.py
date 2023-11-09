@@ -2,7 +2,8 @@ from unittest import mock
 
 import pytest
 
-from Computer.LogicCircuit.Connection.connection import Connection, ConnectionError
+from Computer.LogicCircuit.Connection.connection import (Connection,
+                                                         ConnectionError)
 from Computer.LogicCircuit.LogicGate import LogicGate
 from Computer.LogicCircuit.LogicGate.binary_gate import BinaryGate
 from Computer.LogicCircuit.LogicGate.unary_gate import UnaryGate
