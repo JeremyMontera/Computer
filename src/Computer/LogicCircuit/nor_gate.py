@@ -1,11 +1,11 @@
 from typing import Optional, Union
 
-from .LogicGate import OrGate, NotGate
-from .LogicGate.logic_gate import LogicGateError
 from .Connection import Connection
+from .LogicGate import NotGate, OrGate
+from .LogicGate.logic_gate import LogicGateError
 
-class NorGate():
 
+class NorGate:
     def __init__(self):
         self._input0_pin: Optional[Union[int, Connection]] = None
         self._input1_pin: Optional[Union[int, Connection]] = None
@@ -15,7 +15,7 @@ class NorGate():
         self._gate0.name = "nor :: or gate"
         self._gate1: NotGate = NotGate()
         self._gate1.name = "nor :: not gate"
-        
+
         self._conn0: Connection = Connection()
         self._conn0.set_input_connection(self._gate0)
         self._conn0.set_output_connection(self._gate1)
@@ -30,7 +30,7 @@ class NorGate():
             return self._input1_pin is not None
         else:
             raise LogicGateError(f"Entered an unknown pin: {pin}!")
-        
+
     def has_output_pin_set(self) -> bool:
         return self._output_pin is not None
 

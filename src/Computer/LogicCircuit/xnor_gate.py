@@ -1,12 +1,12 @@
 from typing import Optional, Union
 
-from .LogicGate import NotGate
-from .xor_gate import XorGate
-from .LogicGate.logic_gate import LogicGateError
 from .Connection import Connection
+from .LogicGate import NotGate
+from .LogicGate.logic_gate import LogicGateError
+from .xor_gate import XorGate
 
-class XnorGate():
 
+class XnorGate:
     def __init__(self):
         self._input0_pin: Optional[Union[int, Connection]] = None
         self._input1_pin: Optional[Union[int, Connection]] = None
@@ -31,7 +31,7 @@ class XnorGate():
             return self._input1_pin is not None
         else:
             raise LogicGateError(f"Entered an unknown pin: {pin}!")
-        
+
     def has_output_pin_set(self) -> bool:
         return self._output_pin is not None
 

@@ -1,12 +1,12 @@
 from typing import Optional, Union
 
+from .Connection import Connection
 from .LogicGate import AndGate
 from .LogicGate.logic_gate import LogicGateError
-from .Connection import Connection
 from .nand_gate import NandGate
 
-class XorGate():
 
+class XorGate:
     def __init__(self):
         self._input0_pin: Optional[Union[int, Connection]] = None
         self._input1_pin: Optional[Union[int, Connection]] = None
@@ -18,7 +18,7 @@ class XorGate():
         self._gate1.name = "xor :: and gate 0"
         self._gate2: AndGate = AndGate()
         self._gate2.name = "xor :: and gate 1"
-        
+
         self._conn0: Connection = Connection()
         self._conn0.set_input_connection(self._gate0)
         self._conn0.set_output_connection(self._gate2, pin=0)
@@ -39,7 +39,7 @@ class XorGate():
             return self._input1_pin is not None
         else:
             raise LogicGateError(f"Entered an unknown pin: {pin}!")
-        
+
     def has_output_pin_set(self) -> bool:
         return self._output_pin is not None
 
