@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 from .LogicGate import AndGate, NotGate
+from .LogicGate.logic_gate import LogicGateError
 from .Connection import Connection
 
 class NandGate():
@@ -11,16 +12,27 @@ class NandGate():
         self._output_pin: Optional[Union[int, Connection]] = None
 
         self._gate0: AndGate = AndGate()
-        self._gate0.name = "and gate"
+        self._gate0.name = "nand :: and gate"
         self._gate1: NotGate = NotGate()
-        self._gate1.name = "not gate"
-        
+        self._gate1.name = "nand :: not gate"
+
         self._conn0: Connection = Connection()
         self._conn0.set_input_connection(self._gate0)
         self._conn0.set_output_connection(self._gate1)
 
-    def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
-        self._gate0.set_input_pin(value, pin=pin)
-
     def get_output_pin(self) -> int:
         return self._gate1.get_output_pin()
+
+    def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
+        if pin == 0:
+            return self._input0_pin is not None
+        elif pin == 1:
+            return self._input1_pin is not None
+        else:
+            raise LogicGateError(f"Entered an unknown pin: {pin}!")
+        
+    def has_output_pin_set(self) -> bool:
+        return self._output_pin is not None
+
+    def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
+        self._gate0.set_input_pin(value, pin=pin)
