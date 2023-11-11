@@ -1,1 +1,1 @@
-from .connection import Connection  # F401: noqa
+from .connection import Connection  # noqa: F401
