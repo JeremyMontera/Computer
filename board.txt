@@ -25,8 +25,8 @@ comp4 - Create hybrid gate classes: xor, nor, nand, nxor, ...
     (4) Write documentation DEFER THIS TO comp5
 
 comp5 - Refactor LogicGate class
-    (1) Delete BinaryGate/UnaryGate modules
-    (2) Make LogicGate an abstract base class interface
+    (1) Delete BinaryGate/UnaryGate modules                                         x
+    (2) Make LogicGate an abstract base class interface                             x
     (3) Make other gate classes inherit from LogicGate interface
     (4) Make gate classes and connections use Bits
     (5) Update unt tests

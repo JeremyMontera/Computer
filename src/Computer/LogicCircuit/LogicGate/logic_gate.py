@@ -1,86 +1,79 @@
-from typing import TYPE_CHECKING, Optional, Union
+import abc
+from typing import TYPE_CHECKING, Optional, Union, List, cast
 
 if TYPE_CHECKING:
     from Computer.LogicCircuit.Connection import Connection
+
+PIN = Optional[Union[int, 'Connection']]
 
 
 class LogicGateError(Exception):
     ...
 
 
-class LogicGate:
+class ILogicGate(metaclass=abc.ABCMeta):
 
     """
-    This implements a generic logic gate class. Since the type of logic gate determines
-    how many input pins there are, this class will not have any input pins. Every logic
-    class does have an output pin and a name.
+    This implements an interface for the `LogicGate` class. This will encompase both
+    binary and unary gate definitions.
 
     Attributes:
-        name:           the name of the logic gate class (public)
-        output_pin:     the output of the pin that set later on by the logic (private)
+        input_pins:     the list of all possible input pins (private)
+        name:           the name of the logic gate (public)
+        output_pin:     the output pin (private)
     """
 
+    @abc.abstractclassmethod
     def __init__(self):
         """Constructor..."""
 
+        self._input_pin: List[PIN] = cast(List, None)
+        """
+        The list of all possible input pins.
+
+        Type:
+            List[int | Connection]
+        """
+
         self._name: str = ""
         """
-        The name of the logic gate. This is initially set to a blank string.
+        The name of the logic gate.
 
         Type:
             string
         """
 
-        self._output_pin: Optional[Union[int, "Connection"]] = None
+        self._output_pin: PIN = None
         """
-        The output pin of the logic gate. This is initially set to `'None'`.
+        The output pin.
 
         Type:
-            integer | [`Connection`][Computer.Connection]
-        """
-
-        self._type: str = ""
-        """
-        The type of logic gate.
-
-        Type:
-            string
+            integer | Connection
         """
 
     @property
     def name(self) -> str:
         """The name of the logic gate."""
 
-        return self._name
+        ...
 
     @name.setter
     def name(self, value: str) -> None:
         """Set the name of the logic gate."""
 
-        self._name = value
+        ...
 
-    @property
-    def type(self) -> str:
-        """The type of logic gate."""
-
-        return self._type
-
+    @abc.abstractclassmethod
     def _logic(self) -> None:
         """
-        This implements how the inputs get transformed into the output. This is
-        dependent on what logic gate is running the logic, so for now, this will raise
-        a `NotImplementedError` and will need to be implemented by one of the
-        descendant classes.
+        This implements how the inputs get transformed into the output.
 
         This is a private method not intended to be directly called by the user.
-
-        Raises:
-            NotImplementedError:
-                `_logic` needs to be implemented!
         """
 
-        raise NotImplementedError("`_logic` needs to be implemented!")
+        ...
 
+    @abc.abstractclassmethod
     def _sanitize_input(self, value: Union[int, "Connection"]) -> None:
         """
         This will check the values being set to the input pins. Since inputs are
@@ -88,8 +81,6 @@ class LogicGate:
         `set_input_pin` is called by one of the descendants.
 
         This is a private method not intended to be directly called by the user.
-
-        TODO: make this more flexible to allow for exotic input types?
 
         Raises:
             {value} is not a valid input!
@@ -99,11 +90,9 @@ class LogicGate:
                 The value to be inputted to the logic gate.
         """
 
-        if isinstance(value, int):
-            assert value == 0 or value == 1, f"{value} is not a valid input!"
+        ...
 
-        print("[00:00:00] The input has been validated.")
-
+    @abc.abstractclassmethod
     def get_output_pin(self) -> int:
         """
         This will get the value of the output pin. This will first run the logic of the
@@ -116,57 +105,30 @@ class LogicGate:
         will be called by the `Connection` class, which looks for an output that has
         this method implemented for polymorphism.
 
-        Example:
-            ```python
-            >>> and_gate = AndGate()
-            >>> and_gate.set_input_pin(1, pin=0)
-            [00:00:00] The input has been validated.
-            [00:00:00] Setting the input for pin 0.
-            >>> and_gate.set_input_pin(0, pin=1)
-            [00:00:00] The input has been validated.
-            [00:00:00] Setting the input for pin 1.
-            >>> and_gate.get_output_pin()
-            [00:00:00] The output pin has not been set yet.
-            [00:00:00] True and False is False.
-            [00:00:00] Getting the output of the gate.
-            0
-            ```
-
         Returns:
             output_pin:
                 The value of the output after the logic has been applied to the values
                 held by the input pins.
         """
 
-        if self._output_pin is None:
-            print("[00:00:00] The output pin has not been set yet.")
+        ...
 
-            self._logic()
-
-        print("[00:00:00] Getting the output of the gate.")
-
-        return self._output_pin
-
+    @abc.abstractclassmethod
     def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
         """
-        This will check to see if the requested input pin has been set yet. Since the
-        child gate classes have the input pins implemented, this will raise a
-        `NotImplementedError` and will defer implementation to the child classes.
+        This will check to see if the requested input pin has been set yet.
 
         This is a public method that can be called by the user, but more than likely,
         it will be called by the `Connection` class.
-
-        Raises:
-            NotImplementedError:
-                `had_input_pin_set` needs to be implemented!
 
         Args:
             pin:
                 (Optional) The pin to check. This defaults to pin 0.
         """
 
-        raise NotImplementedError("`has_input_set` needs to be implemented!")
+        ...
 
+    @abc.abstractclassmethod
     def has_output_pin_set(self) -> bool:
         """
         This will check to see if the output pin has been set yet. Most of the time,
@@ -180,22 +142,16 @@ class LogicGate:
                 ...
         """
 
-        return self._output_pin is not None
+        ...
 
+    @abc.abstractclassmethod
     def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
         """
-        This will set the input pins. Since the child gate classes could have one or
-        more pins, it will allow the user to input the value of an arbitrary pin. As
-        such, it will also raise a `NotImplementedError` and will defer implementation
-        to child classes.
+        This will set the input pins.
 
         The is a public method that can be called by the user, but more than likely, it
         will be called by the `Connection` class, which looks for an input that has
         this method implemented for polymorphism.
-
-        Raises:
-            NotImplementedError:
-                `set_input_pin` needs to be implemented!
 
         Args:
             value:
@@ -205,4 +161,4 @@ class LogicGate:
                 handle the case of unary gates.
         """
 
-        raise NotImplementedError("`set_input_pin` needs to be implemented!")
+        ...
