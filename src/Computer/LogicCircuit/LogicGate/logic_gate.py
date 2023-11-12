@@ -27,7 +27,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
     def __init__(self):
         """Constructor..."""
 
-        self._input_pin: List[PIN] = cast(List, None)
+        self._input_pins: List[PIN] = cast(List, None)
         """
         The list of all possible input pins.
 
@@ -50,18 +50,6 @@ class ILogicGate(metaclass=abc.ABCMeta):
         Type:
             integer | Connection
         """
-
-    @property
-    def name(self) -> str:
-        """The name of the logic gate."""
-
-        ...
-
-    @name.setter
-    def name(self, value: str) -> None:
-        """Set the name of the logic gate."""
-
-        ...
 
     @abc.abstractclassmethod
     def _logic(self) -> None:
@@ -124,6 +112,10 @@ class ILogicGate(metaclass=abc.ABCMeta):
         Args:
             pin:
                 (Optional) The pin to check. This defaults to pin 0.
+
+        Returns:
+            flag:
+                ...
         """
 
         ...
