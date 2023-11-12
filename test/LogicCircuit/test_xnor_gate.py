@@ -1,12 +1,15 @@
-import pytest
 from unittest import mock
 
-from Computer.LogicCircuit import XorGate, XnorGate, NotGate
+import pytest
+
+from Computer.LogicCircuit import NotGate, XnorGate, XorGate
 from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
+
 
 @pytest.fixture
 def xnor_gate():
     return XnorGate()
+
 
 def test_xnor_gate_init(xnor_gate):
     assert hasattr(xnor_gate, "_input0_pin")
@@ -23,10 +26,12 @@ def test_xnor_gate_init(xnor_gate):
     assert xnor_gate._gate1.name == "xnor :: not gate"
     assert hasattr(xnor_gate, "_conn0")
 
+
 @mock.patch.object(NotGate, "get_output_pin")
 def test_xnor_gate_get_output_pin(mock_out, xnor_gate):
     xnor_gate.get_output_pin()
     mock_out.assert_called_once
+
 
 def test_xnor_gate_has_input_pin_set(xnor_gate):
     xnor_gate._input0_pin = 0
@@ -34,16 +39,19 @@ def test_xnor_gate_has_input_pin_set(xnor_gate):
     assert xnor_gate.has_input_pin_set(pin=0)
     assert xnor_gate.has_input_pin_set(pin=1)
 
+
 def test_xnor_gate_has_input_pin_set_error(xnor_gate):
     with pytest.raises(LogicGateError) as exc:
         xnor_gate.has_input_pin_set(pin=2)
 
     assert exc.value.args[0] == "Entered an unknown pin: 2!"
 
+
 def test_xnor_gate_has_output_pin_set(xnor_gate):
     assert not xnor_gate.has_output_pin_set()
     xnor_gate._output_pin = 0
     assert xnor_gate.has_output_pin_set()
+
 
 @mock.patch.object(XorGate, "set_input_pin")
 def test_xnor_gate_set_input_pin(mock_in, xnor_gate):

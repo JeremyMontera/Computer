@@ -1,12 +1,15 @@
-import pytest
 from unittest import mock
 
-from Computer.LogicCircuit import XorGate, NandGate, AndGate, NotGate
+import pytest
+
+from Computer.LogicCircuit import AndGate, NandGate, XorGate
 from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
+
 
 @pytest.fixture
 def xor_gate():
     return XorGate()
+
 
 def test_xor_gate_init(xor_gate):
     assert hasattr(xor_gate, "_input0_pin")
@@ -27,10 +30,12 @@ def test_xor_gate_init(xor_gate):
     assert hasattr(xor_gate, "_conn0")
     assert hasattr(xor_gate, "_conn1")
 
+
 @mock.patch.object(AndGate, "get_output_pin")
 def test_xnor_gate_get_output_pin(mock_out, xor_gate):
     xor_gate.get_output_pin()
     mock_out.assert_called_once
+
 
 def test_xnor_gate_has_input_pin_set(xor_gate):
     xor_gate._input0_pin = 0
@@ -38,16 +43,19 @@ def test_xnor_gate_has_input_pin_set(xor_gate):
     assert xor_gate.has_input_pin_set(pin=0)
     assert xor_gate.has_input_pin_set(pin=1)
 
+
 def test_xnor_gate_has_input_pin_set_error(xor_gate):
     with pytest.raises(LogicGateError) as exc:
         xor_gate.has_input_pin_set(pin=2)
 
     assert exc.value.args[0] == "Entered an unknown pin: 2!"
 
+
 def test_xnor_gate_has_output_pin_set(xor_gate):
     assert not xor_gate.has_output_pin_set()
     xor_gate._output_pin = 0
     assert xor_gate.has_output_pin_set()
+
 
 @mock.patch.object(NandGate, "set_input_pin")
 @mock.patch.object(AndGate, "set_input_pin")
