@@ -21,10 +21,18 @@ comp3 - Create Bit/BitStream classes
 comp4 - Create hybrid gate classes: xor, nor, nand, nxor, ...
     (1) Nest LogicGate and Connection subdirectories into LogicCircuit              x
     (2) Create/implement each of the four compound logic gates                      x
-    (3) Add/update unit tests
-    (4) Write documentation
+    (3) Add/update unit tests                                                       x
+    (4) Write documentation DEFER THIS TO comp5
 
 comp5 - Refactor LogicGate class
-comp6 - Create Branch class in Connection
-comp7 - Create Loop class in Connection
-comp8 - Implement Half Adder
+    (1) Delete BinaryGate/UnaryGate modules
+    (2) Make LogicGate an abstract base class interface
+    (3) Make other gate classes inherit from LogicGate interface
+    (4) Make gate classes and connections use Bits
+    (5) Update unt tests
+    (6) Write/update documentation
+
+comp6 - Add reset method
+comp7 - Create Branch class in Connection
+comp8 - Create Loop class in Connection
+comp9 - Implement Half Adder
