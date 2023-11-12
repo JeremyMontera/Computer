@@ -1,7 +1,7 @@
 import pytest
 
-from Computer.LogicGate import AndGate
-from Computer.LogicGate.logic_gate import LogicGateError
+from Computer.LogicCircuit.LogicGate import AndGate
+from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
 
 
 @pytest.fixture

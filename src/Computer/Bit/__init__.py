@@ -1,2 +1,2 @@
-from .bit import Bit  # F401: noqa
-from .bit_string import BitString  # F401: noqa
+from .bit import Bit  # noqa: F401
+from .bit_string import BitString  # noqa: F401

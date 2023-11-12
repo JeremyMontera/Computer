@@ -64,7 +64,7 @@ class Bit:
             >>> bool(bit)
             True
             ```
-        
+
         Returns:
             flag:
                 ...
@@ -76,7 +76,7 @@ class Bit:
 
     def __str__(self) -> str:
         """A string representation of the bit."""
-        
+
         if self._value == BitValue.OFF:
             return "Bit(OFF)"
         elif self._value == BitValue.ON:
@@ -94,7 +94,7 @@ class Bit:
         Args:
             value:
                 ...
-        
+
         Returns:
             ret:
                 ...

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Optional, Union
 
 if TYPE_CHECKING:
-    from Computer.Connection import Connection
+    from Computer.LogicCircuit.Connection import Connection
 
 
 class LogicGateError(Exception):
