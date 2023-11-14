@@ -1,156 +1,89 @@
-import abc
-from typing import TYPE_CHECKING, Optional, Union, List, cast
+import enum
+from typing import Optional, Union, List, cast
+from Computer.LogicCircuit import abc
+from Computer.LogicCircuit.Connection import Connection
 
-if TYPE_CHECKING:
-    from Computer.LogicCircuit.Connection import Connection
+PIN = Union[int, 'Connection']
 
-PIN = Optional[Union[int, 'Connection']]
+
+class LogicType(enum.Enum):
+    NOT: int = 1
+    AND: int = 2
+    OR: int = 2
 
 
 class LogicGateError(Exception):
     ...
 
 
-class ILogicGate(metaclass=abc.ABCMeta):
+class LogicGate(abc.ILogicGate):
+    
+    def __init__(self, type: Optional[LogicType] = None, name: Optional[str] = None):
+        if type is None:
+            raise LogicGateError("You need to pass a valid logic gate type!")
+        
+        self._type: LogicType = type
+        self._name: str = "" if name is None else name
+        self._output_pin: Optional[PIN] = cast(PIN, None)
+        self._input_pins: List[Optional[PIN]] = [cast(PIN, None)] * self._type.value
 
-    """
-    This implements an interface for the `LogicGate` class. This will encompase both
-    binary and unary gate definitions.
+    @property
+    def name(self) -> str:
+        return self._name
+    
+    @name.setter
+    def name(self, new_name: str) -> None:
+        self._name = new_name
 
-    Attributes:
-        input_pins:     the list of all possible input pins (private)
-        name:           the name of the logic gate (public)
-        output_pin:     the output pin (private)
-    """
-
-    @abc.abstractclassmethod
-    def __init__(self):
-        """Constructor..."""
-
-        self._input_pins: List[PIN] = cast(List, None)
-        """
-        The list of all possible input pins.
-
-        Type:
-            List[int | Connection]
-        """
-
-        self._name: str = ""
-        """
-        The name of the logic gate.
-
-        Type:
-            string
-        """
-
-        self._output_pin: PIN = None
-        """
-        The output pin.
-
-        Type:
-            integer | Connection
-        """
-
-    @abc.abstractclassmethod
+    @property
+    def type(self) -> LogicType:
+        return self._type
+    
     def _logic(self) -> None:
-        """
-        This implements how the inputs get transformed into the output.
+        inputs: List[int] = [None] * self._type.value
+        for p, pin in enumerate(self._input_pins):
+            if pin is None:
+                raise LogicGateError(f"Pin {p} has not been set yet!")
+            elif isinstance(pin, Connection):
+                inputs[p] = pin.feed()
+            elif isinstance(pin, int):
+                inputs[p] = pin
 
-        This is a private method not intended to be directly called by the user.
-        """
+        if self._type == LogicType.NOT:
+            output: bool = not bool(inputs[0])
+        elif self._type == LogicType.AND:
+            output: bool = bool(inputs[0]) and bool(inputs[1])
+        elif self._type == LogicType.OR:
+            output: bool = bool(inputs[0]) or bool(inputs[1])
 
-        ...
+        self._output_pin = int(output)
 
-    @abc.abstractclassmethod
-    def _sanitize_input(self, value: Union[int, "Connection"]) -> None:
-        """
-        This will check the values being set to the input pins. Since inputs are
-        assumed to be binary, it checks if the input is 0/1. This is called when
-        `set_input_pin` is called by one of the descendants.
-
-        This is a private method not intended to be directly called by the user.
-
-        Raises:
-            {value} is not a valid input!
-
-        Args:
-            value:
-                The value to be inputted to the logic gate.
-        """
-
-        ...
-
-    @abc.abstractclassmethod
+    def _sanitize_input(self, value: int | 'Connection') -> None:
+        if isinstance(value, int):
+            assert value in [0, 1], f"{value} is not a valid input!"
+    
     def get_output_pin(self) -> int:
-        """
-        This will get the value of the output pin. This will first run the logic of the
-        logic gate to compute the output. Since `_logic` is assumed to be private, and
-        `_output_pin` is private, it is assumed that the user will not have been able
-        to set the value of the output. However, it will bypass this `_logic` call if
-        `_output_pin` is not `'None'`.
+        if self._output_pin is None:
+            self._logic()
 
-        The is a public method that can be called by the user, but more than likely, it
-        will be called by the `Connection` class, which looks for an output that has
-        this method implemented for polymorphism.
-
-        Returns:
-            output_pin:
-                The value of the output after the logic has been applied to the values
-                held by the input pins.
-        """
-
-        ...
-
-    @abc.abstractclassmethod
-    def has_input_pin_set(self, pin: Optional[int] = 0) -> bool:
-        """
-        This will check to see if the requested input pin has been set yet.
-
-        This is a public method that can be called by the user, but more than likely,
-        it will be called by the `Connection` class.
-
-        Args:
-            pin:
-                (Optional) The pin to check. This defaults to pin 0.
-
-        Returns:
-            flag:
-                ...
-        """
-
-        ...
-
-    @abc.abstractclassmethod
+        return self._output_pin
+    
+    def has_input_pin_set(self, pin: int) -> bool:
+        if pin not in list(range(len(self._input_pins))):
+            raise LogicGateError(f"Entered an invalid pin: {pin}!")
+        
+        return self._input_pins[pin] is not None
+    
     def has_output_pin_set(self) -> bool:
-        """
-        This will check to see if the output pin has been set yet. Most of the time,
-        the expectation is that this is not set.
-
-        This is a public method that can be called by the user, but more than likely,
-        it will be called by the `Connection` class.
-
-        Returns:
-            flag:
-                ...
-        """
-
-        ...
-
-    @abc.abstractclassmethod
-    def set_input_pin(self, value: Union[int, "Connection"], pin: int = 0) -> None:
-        """
-        This will set the input pins.
-
-        The is a public method that can be called by the user, but more than likely, it
-        will be called by the `Connection` class, which looks for an input that has
-        this method implemented for polymorphism.
-
-        Args:
-            value:
-                The value to set the pin to.
-            pin:
-                (Optional) the pin to set the value to. This defaults to zero to
-                handle the case of unary gates.
-        """
-
-        ...
+        return self._output_pin is not None
+    
+    def set_input_pin(self, value: int | 'Connection', pin: int) -> None:
+        self._sanitize_input(pin)
+        if self.has_input_pin_set(pin):
+            raise LogicGateError(f"Input pin {pin} has already been set!")
+        
+        self._input_pins[pin] = value
+    
+    def reset(self) -> None:
+        self._input_pins = [None] * self._type.value
+        self._output_pin = None
