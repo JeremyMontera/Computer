@@ -1,11 +1,12 @@
 import abc
-from typing import Generic, Literal, Optional
+from typing import Literal, Optional
+
 
 class IConnection(metaclass=abc.ABCMeta):
     ...
 
-class ILogicGate(metaclass=abc.ABCMeta):
 
+class ILogicGate(metaclass=abc.ABCMeta):
     def __init__(self, type: Optional[Literal] = None, name: Optional[str] = None):
         ...
 
