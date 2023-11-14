@@ -58,7 +58,7 @@ class LogicGate(abc.ILogicGate):
 
         self._output_pin = int(output)
 
-    def _sanitize_input(self, value: int | "Connection") -> None:
+    def _sanitize_input(self, value: int | Connection) -> None:
         if isinstance(value, int):
             assert value in [0, 1], f"{value} is not a valid input!"
 
@@ -77,7 +77,7 @@ class LogicGate(abc.ILogicGate):
     def has_output_pin_set(self) -> bool:
         return self._output_pin is not None
 
-    def set_input_pin(self, value: int | "Connection", pin: int) -> None:
+    def set_input_pin(self, value: int | Connection, pin: int) -> None:
         self._sanitize_input(pin)
         if self.has_input_pin_set(pin):
             raise LogicGateError(f"Input pin {pin} has already been set!")

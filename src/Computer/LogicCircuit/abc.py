@@ -1,5 +1,8 @@
 import abc
-from typing import Literal, Optional
+import enum
+from typing import Literal, Optional, TypeVar
+
+E = TypeVar('E', bound=enum.Enum)
 
 
 class IConnection(metaclass=abc.ABCMeta):
@@ -7,7 +10,7 @@ class IConnection(metaclass=abc.ABCMeta):
 
 
 class ILogicGate(metaclass=abc.ABCMeta):
-    def __init__(self, type: Optional[Literal] = None, name: Optional[str] = None):
+    def __init__(self, type: Optional[E] = None, name: Optional[str] = None):
         ...
 
     def get_output_pin(self) -> int:
