@@ -28,9 +28,9 @@ comp5 - Refactor LogicGate class
     (1) Delete BinaryGate/UnaryGate modules                                         x
     (2) Make LogicGate an abstract base class interface                             x
     (3) Make other gate classes inherit from LogicGate interface                    x
-    (4) Re-refactor LogicGate class...
-    (4.1) Remove all classes and implement new ILogicGate interface
-    (4.2) Implement new LogicGate class per discussion
+    (4) Re-refactor LogicGate class...                                              x
+    (4.1) Remove all classes and implement new ILogicGate interface                 x
+    (4.2) Implement new LogicGate class per discussion                              x
     (5) Make gate classes and connections use Bits
     (6) Update unt tests
     (7) Write/update documentation
