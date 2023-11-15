@@ -1,1 +1,1 @@
-from .logic_gate import LogicGate  # noqa: F401
+from .logic_gate import LogicGate, LogicType  # noqa: F401

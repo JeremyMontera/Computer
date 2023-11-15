@@ -68,7 +68,7 @@ class LogicGate(abc.ILogicGate):
 
         return self._output_pin
 
-    def has_input_pin_set(self, pin: int) -> bool:
+    def has_input_pin_set(self, pin: int = 0) -> bool:
         if pin not in list(range(len(self._input_pins))):
             raise LogicGateError(f"Entered an invalid pin: {pin}!")
 
@@ -77,7 +77,7 @@ class LogicGate(abc.ILogicGate):
     def has_output_pin_set(self) -> bool:
         return self._output_pin is not None
 
-    def set_input_pin(self, value: int | Connection, pin: int) -> None:
+    def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
         self._sanitize_input(pin)
         if self.has_input_pin_set(pin):
             raise LogicGateError(f"Input pin {pin} has already been set!")
