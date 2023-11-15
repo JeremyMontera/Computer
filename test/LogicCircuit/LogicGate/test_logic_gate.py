@@ -1,72 +1,111 @@
-from contextlib import nullcontext as does_not_raise
-
+import collections
 import pytest
-
-from Computer.LogicCircuit.Connection import Connection
-from Computer.LogicCircuit.LogicGate.logic_gate import LogicGate
-
-
-@pytest.fixture
-def logic_gate():
-    return LogicGate()
+from unittest import mock
+from typing import List
+from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
+from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
 
 
-def test_logic_gate_init(logic_gate):
-    assert hasattr(logic_gate, "_name")
-    assert isinstance(logic_gate._name, str)
-    assert isinstance(logic_gate._type, str)
-    assert logic_gate._name == ""
-    assert hasattr(logic_gate, "_output_pin")
-    assert logic_gate._output_pin is None
+class TestLogicGates:
 
+    gate = collections.namedtuple("gate", ["gtype", "name", "num"])
 
-def test_logic_gate_name_attribute(logic_gate):
-    logic_gate.name = "Logic Gate"
-    assert logic_gate.name == "Logic Gate"
+    not_gate = gate(LogicType.NOT, "foo", 1)
+    and_gate = gate(LogicType.AND, "bar", 2)
+    or_gate = gate(LogicType.OR, "spam", 2)
 
+    def get_combs(self, num: int) -> List[List[int]]:
+        if num == 1:
+            return [[1], [0]]
+        elif num == 2:
+            return [[1, 1], [1, 0], [0, 1], [0, 0]]
 
-def test_logic_gate_type_attribute(logic_gate):
-    assert logic_gate.type == ""
+    def test_logic_gate_init_error_no_type(self):
+        with pytest.raises(LogicGateError) as exc:
+            LogicGate(name="blah")
 
+        assert exc.value.args[0] == "You need to pass a valid logic gate type!"
 
-def test_logic_gate_logic_error(logic_gate):
-    with pytest.raises(NotImplementedError) as exc:
-        logic_gate._logic()
+    @pytest.mark.parametrize(
+        "config",
+        [
+            not_gate,
+            and_gate,
+            or_gate,
+        ]
+    )
+    def test_logic_gate_init(self, config):
+        gate = LogicGate(type=config.gtype, name=config.name)
 
-    assert exc.value.args[0] == "`_logic` needs to be implemented!"
+        assert isinstance(gate._type, LogicType)
+        assert gate._type == config.gtype
+        assert gate._type.value == config.num
+        assert isinstance(gate._name, str)
+        assert gate._name == config.name
+        assert gate._output_pin is None
+        assert len(gate._input_pins) == config.num
+        assert all(pin is None for pin in gate._input_pins)
 
+    @pytest.mark.parametrize(
+        "config",
+        [
+            not_gate,
+            and_gate,
+            or_gate,
+        ]
+    )
+    def test_logic_gate_attrs(self, config):
+        gate = LogicGate(type=config.gtype, name=config.name)
 
-@pytest.mark.parametrize(
-    ("value", "error", "msg"),
-    [
-        (3, pytest.raises(AssertionError), "3 is not a valid input!"),
-        (Connection(), does_not_raise(), ""),
-    ],
-)
-def test_logic_gate_sanitize_input_error(value, error, msg):
-    logic_gate = LogicGate()
-    with error as exc:
-        logic_gate._sanitize_input(value)
+        assert gate.name == config.name
+        gate.name = config.name + "_1"
+        assert gate.name == config.name + "_1"
+        assert gate.type == config.gtype
 
-    if isinstance(value, int):
-        assert exc.value.args[0] == msg
+    def test_logic_gate__logic_error_input_not_set(self):
+        gate = LogicGate(type=LogicType.NOT)
+        with pytest.raises(LogicGateError) as exc:
+            gate._logic()
 
+        assert exc.value.args[0] == "Pin 0 has not been set yet!"
 
-def test_logic_gate_has_input_pin_set_error(logic_gate):
-    with pytest.raises(NotImplementedError) as exc:
-        logic_gate.has_input_pin_set(pin=0)
+    @pytest.mark.parametrize(
+        "config",
+        [
+            not_gate,
+            and_gate,
+            or_gate,
+        ]
+    )
+    def test_logic_gate__logic_pins_are_ints(self, config):
+        inputs = self.get_combs(config.num)
+        gates = LogicGate(type=config.gtype, name=config.name)
+        for i, inp in enumerate(inputs):
+            gates._input_pins = inp
+            gates._logic()
+            assert gates._output_pin is not None
+            assert isinstance(gates._output_pin, int)
 
-    assert exc.value.args[0] == "`has_input_set` needs to be implemented!"
+            if config.gtype == LogicType.NOT:
+                logic = not inp[0]
+            elif config.gtype == LogicType.AND:
+                logic = inp[0] and inp[1]
+            elif config.gtype == LogicType.OR:
+                logic = inp[0] or inp[1]
 
+            assert gates._output_pin == logic
+            gates._input_pins = [None] * config.num
+            gates._output_pin = None
 
-def test_logic_gate_has_output_pin_set(logic_gate):
-    assert not logic_gate.has_output_pin_set()
-    logic_gate._output_pin = 0
-    assert logic_gate.has_output_pin_set()
+    def test_logic_gate__sanitize_input(self):
+        gate = LogicGate(type=LogicType.AND)
+        with pytest.raises(AssertionError) as exc:
+            gate._sanitize_input(2)
 
+        assert exc.value.args[0] == "2 is not a valid input!"
 
-def test_logic_gate_set_input_pin_error(logic_gate):
-    with pytest.raises(NotImplementedError) as exc:
-        logic_gate.set_input_pin(0)
-
-    assert exc.value.args[0] == "`set_input_pin` needs to be implemented!"
+    @mock.patch.object(LogicGate, "_logic")
+    def test_logic_gate_get_output_pin(self, mock_logic):
+        gate = LogicGate(type=LogicType.AND)
+        gate.get_output_pin()
+        mock_logic.assert_called_once()
