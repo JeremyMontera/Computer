@@ -35,7 +35,22 @@ comp5 - Refactor LogicGate class
     (6) Update unt tests
     (7) Write/update documentation
 
-comp6 - Add reset method
-comp7 - Create Branch class in Connection
-comp8 - Create Loop class in Connection
-comp9 - Implement Half Adder
+comp6 - Refactor compound gates
+    (1) Create compound gate abcs
+    (2) Create compound gate factory along with gate creation function
+    (3) Remove old xor, xnor, nand, nor classes
+    (4) Create new CompoundGate class that follows ILogicGate interface
+    (5) Update unit tests
+    (6) Update docs
+
+comp7 - Add reset method
+comp8 - Create Branch class in Connection
+    (1) Create Branch class that follows IConnection interface
+    (2) Implement set_mapping and feed methods
+    (3) Add unit tests
+    (4) Update documentation
+
+comp9 - Create Switch class in Connection
+comp10 - Create Loop class in Connection
+comp11 - Implement Logger class
+comp12 - Implement Half Adder
