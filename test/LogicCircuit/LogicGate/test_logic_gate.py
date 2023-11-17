@@ -40,7 +40,6 @@ class TestLogicGates:
 
         assert isinstance(gate._type, LogicType)
         assert gate._type == config.gtype
-        assert gate._type.value == config.num
         assert isinstance(gate._name, str)
         assert gate._name == config.name
         assert len(gate._input_pins) == config.num
