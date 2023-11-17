@@ -171,4 +171,4 @@ class Connection(IConnection):
             raise ConnectionError("An output connection has already been made!")
 
         gate.set_input_pin(value=self, pin=pin)
-        self._input_connection = gate
+        self._output_connection = gate
