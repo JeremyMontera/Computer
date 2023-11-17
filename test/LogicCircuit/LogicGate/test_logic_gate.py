@@ -4,8 +4,8 @@ from unittest import mock
 
 import pytest
 
-from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
-from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
+from Computer.LogicCircuit import LogicGate, LogicType, LogicGateError
+from Computer.LogicCircuit import Connection
 
 
 class TestLogicGates:
@@ -45,7 +45,7 @@ class TestLogicGates:
         assert gate._name == config.name
         assert len(gate._input_pins) == config.num
         assert all(pin is None for pin in gate._input_pins)
-        assert gate._outpin_pin is None
+        assert gate._output_pin is None
 
     @pytest.mark.parametrize(
         "config",
@@ -121,13 +121,13 @@ class TestLogicGates:
     def test_logic_gate_has_output_pin_set(self):
         gate = LogicGate(LogicType.AND)
         assert not gate.has_output_pin_set()
-        gate._outpin_pin = 1
+        gate._output_pin = 1
         assert gate.has_output_pin_set()
 
     def test_logic_gate_reset(self):
         gate = LogicGate(LogicType.AND)
         gate._input_pins = [0, 1]
-        gate._outpin_pin = 1
+        gate._output_pin = 1
         assert gate.has_input_pin_set(pin=0)
         assert gate.has_input_pin_set(pin=1)
         assert gate.has_output_pin_set()
@@ -150,3 +150,26 @@ class TestLogicGates:
         gate.set_input_pin(value=1, pin=0)
         assert gate._input_pins[0] == 1
         mock_sanitize.assert_called_once_with(0)
+
+    def test_logic_gate_set_output_pin_error_value_none(self):
+        gate = LogicGate(LogicType.AND)
+        with pytest.raises(LogicGateError) as exc:
+            gate.set_output_pin()
+
+        assert exc.value.args[0] == "You need to enter a valid connection!"
+
+    def test_logic_gate_set_output_pin_error_pin_already_set(self):
+        gate = LogicGate(LogicType.AND)
+        conn = Connection()
+        gate._output_pin = conn
+        with pytest.raises(LogicGateError) as exc:
+            gate.set_output_pin(value=conn)
+
+        assert exc.value.args[0] == "The output pin has already been set!"
+
+    def test_logic_gate_set_output_pin(self):
+        gate = LogicGate(LogicType.AND)
+        assert not gate.has_output_pin_set()
+        conn = Connection()
+        gate.set_output_pin(value=conn)
+        assert gate.has_output_pin_set()
