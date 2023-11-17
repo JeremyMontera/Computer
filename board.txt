@@ -32,9 +32,9 @@ comp5 - Refactor LogicGate class
     (4.1) Remove all classes and implement new ILogicGate interface                 x
     (4.2) Implement new LogicGate class per discussion                              x
     (4.3) Implement IConnection interface                                           x
-    (4.4) Update Connection class
-    (5) Make gate classes and connections use Bits
-    (6) Update unt tests
+    (4.4) Update Connection class                                                   x
+    (5) Make gate classes and connections use Bits DEFER THIS TO comp7
+    (6) Update unt tests                                                            x
     (7) Write/update documentation
 
 comp6 - Refactor compound gates
@@ -45,7 +45,11 @@ comp6 - Refactor compound gates
     (5) Update unit tests
     (6) Update docs
 
-comp7 - Add reset method
+comp7 - Refactor to make use of Bits
+    (1) Make gate classes and connections use Bits
+    (2) Update unit tests
+    (3) Update docs
+
 comp8 - Create Branch class in Connection
     (1) Create Branch class that follows IConnection interface
     (2) Implement set_mapping and feed methods
