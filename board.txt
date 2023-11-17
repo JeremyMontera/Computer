@@ -31,6 +31,8 @@ comp5 - Refactor LogicGate class
     (4) Re-refactor LogicGate class...                                              x
     (4.1) Remove all classes and implement new ILogicGate interface                 x
     (4.2) Implement new LogicGate class per discussion                              x
+    (4.3) Implement IConnection interface                                           x
+    (4.4) Update Connection class
     (5) Make gate classes and connections use Bits
     (6) Update unt tests
     (7) Write/update documentation
