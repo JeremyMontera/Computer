@@ -16,11 +16,8 @@ class TestCompoundGates:
     xor_gate = cgate(CompoundType.XOR, "eggs", "xor")
     xnor_gate = cgate(CompoundType.XNOR, "spam", "xnor")
 
-    def get_combs(self, num: int) -> List[List[int]]:
-        if num == 1:
-            return [[1], [0]]
-        elif num == 2:
-            return [[1, 1], [1, 0], [0, 1], [0, 0]]
+    def get_combs(self) -> List[List[int]]:
+        return [[1, 1], [1, 0], [0, 1], [0, 0]]
 
     def test_compound_gate_init_error_bad_type(self):
         with pytest.raises(CompoundGateError) as exc:
@@ -89,6 +86,50 @@ class TestCompoundGates:
                 assert all(isinstance(item, value) for item in items)
             else:
                 assert isinstance(getattr(gate, key), value)
+
+    @pytest.mark.parametrize(
+        "config",
+        [
+            # nand_gate,
+            nor_gate,
+            # xor_gate,
+            # xnor_gate,
+        ],
+    )
+    def test_compound_gate_get_output_pin(self, config):
+        inputs = self.get_combs()
+        print(f"{config=}")
+        gate = CompoundGate(type=config.gtype, name=config.name)
+        for inp in inputs:
+            print(f"{inp=}")
+            for g in gate._input_gates:
+                g._input_pins = inp
+            
+            for g in gate._input_gates:
+                print(f"{g.name} :: {g.type} input pins: {g._input_pins}")
+
+            ret = gate.get_output_pin()
+            assert isinstance(ret, int)
+
+            print(f"{ret=}")
+
+            if config.gtype == CompoundType.NAND:
+                logic = not (inp[0] and inp[1])
+            elif config.gtype == CompoundType.NOR:
+                logic = not (inp[0] or inp[1])
+            elif config.gtype == CompoundType.XOR:
+                logic = (inp[0] and not inp[1]) or (not inp[0] and inp[1])
+            elif config.gtype == CompoundType.XNOR:
+                logic = not ((inp[0] and not inp[1]) or (not inp[0] and inp[1]))
+
+            print(f"{int(logic)=}")
+
+            assert ret == logic
+            for g in gate._input_gates:
+                g._input_pins = [None, None]
+
+            gate._output_gate._output_pin = None
+
 
     @pytest.mark.parametrize(
         "config",

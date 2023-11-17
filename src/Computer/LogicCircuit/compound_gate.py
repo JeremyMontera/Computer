@@ -39,15 +39,20 @@ class CompoundGate(ILogicGate):
             setattr(self, f"_{key}", value)
 
     def get_output_pin(self):
-        ...
+        return self._output_gate.get_output_pin()
 
-    def has_input_pin_set(self):
-        ...
+    def has_input_pin_set(self, pin: int = 0) -> bool:
+        for gate in self._input_gates:
+            if not gate.has_input_pin_set(pin=pin):
+                return False
+            
+        return True
 
-    def has_output_pin_set(self):
-        ...
+    def has_output_pin_set(self) -> bool:
+        return self._output_gate.has_output_pin_set()
 
     def reset(self):
+        # TODO: no good... don't want to access private attributes like this...
         ...
 
     def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
