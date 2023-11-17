@@ -98,7 +98,7 @@ def create_xnor_gate() -> Dict[str, STUFF]:
     }
 
 
-class CompoundError(Exception):
+class CompoundFactoryError(Exception):
     ...
 
 
@@ -112,7 +112,7 @@ class CompoundFactory(ICompoundFactory):
 
     def __init__(self, type: Optional[str] = None):
         if type is None or type not in list(self.factories.keys()):
-            raise CompoundError("You need to pass a valid compound logic gate type!")
+            raise CompoundFactoryError("You need to pass a valid compound logic gate type!")
 
         self._type: str = type
 

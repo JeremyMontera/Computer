@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import abc
 import enum
-from typing import Optional, TypeVar
+from typing import Dict, Optional, TypeVar
+
+T = TypeVar("T")
+# This is to represent arbitrary devices.
 
 E = TypeVar("E", bound=enum.Enum)
 # This is to represent an arbitrary enumeration type.
@@ -13,6 +16,10 @@ class ICompoundFactory(metaclass=abc.ABCMeta):
     def __init__(self, type: Optional[str] = None):
         """Constructor..."""
 
+        ...
+
+    @abc.abstractclassmethod
+    def create(self) -> Dict[str, T]:
         ...
 
 
