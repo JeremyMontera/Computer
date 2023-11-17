@@ -31,7 +31,7 @@ def test_connection_feed_error_no_ouput():
 
 def test_connection_feed(gate):
     conn = Connection()
-    conn._output_connection = gate
+    conn._input_connection = gate
     ret: int = conn.feed()
     assert ret == 0
 
