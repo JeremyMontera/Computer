@@ -1,25 +1,27 @@
 from typing import TYPE_CHECKING, Optional
 
+from Computer.LogicCircuit.abc import IConnection
+
 if TYPE_CHECKING:
     from Computer.LogicCircuit.LogicGate import LogicGate
 
 
 class ConnectionError(Exception):
+    """Handle any errors associated with the `Connection` class."""
+
     ...
 
 
-class Connection:
+class Connection(IConnection):
 
     """
-    This will implement a connection between logic gates. It is essentially a wire that
-    has a bandwidth of one bit currently. It can read bits in serial one at a time. The
-    user is expected to be able to make the connections between components with logic
-    gates and that is it. The user is not expected to have to feed the bits from one
-    gate to the other.
+    This implements a wire connecting two other devices. This is done via the
+    aggregation relationship. When data is requested, it will feed information from the
+    input to the output.
 
     Attributes:
-        input_connection:   the logic gate connection is receiving data from (private)
-        output_connection:  the logic gate connection is feeding data to (private)
+        input_connection:   The device it receives data from (private)
+        output_connection:  The device it feeds data to (private)
     """
 
     def __init__(self):
@@ -27,104 +29,146 @@ class Connection:
 
         self._input_connection: Optional["LogicGate"] = None
         """
-        The logic gate the connection is receiving data from.
+        The device it receives data from.
+
+        TODO: update when more devices implemented.
 
         Type:
-            LogicGate
+            Optional[LogicGate]
         """
 
         self._output_connection: Optional["LogicGate"] = None
         """
-        The logic gate the connection is feed data to.
+        The device is feeds data to.
+
+        TODO: update when more devices implemented.
 
         Type:
-            LogicGate
+            Optional[LogicGate]
         """
 
     def feed(self) -> int:
         """
-        This will take the value of the output pin of the gate connected to the input
-        and return it.
+        This is the primary method of this class. It will check to see if the input has
+        been set, and will try to get information from it. If it is a `LogicGate`
+        instance, then it will try to call
+        [`get_output_pin()`][Computer.LogicCircuit.LogicGate.get_output_pin].
 
-        While this is a public method, the user is not expected to call this method
-        directly. Instead, when trying to get the output of the last gate, it will
-        attempt to call this method to get data from the gates higher up the chain:
+        NOTE:
+            This method is marked public and can be called by the user, though it is
+            more likely to be called by the output device instead.
 
-        Sequence of events - given AndGate -> NotGate:
-            (1) NotGate.get_output_pin() calls
-            (2) NotGate._logic() calls
-            (3) NotGate._input0_pin.feed() calls
-            (4) AndGate.get_output_pin() calls
-            (5) AndGate._logic() ...
+        TODO: need to handle other devices wires can be connected to.
 
         Returns:
-            data:
-                ...
+            information:
+                The output of the device connected to this instance's input.
         """
 
-        if self._input_connection is None:
-            raise ConnectionError("The output hasn't been connected yet!")
+        # Yay! We don't want to shoot ourselves in the foot.
+        if not self.has_input_connection_set():
+            raise ConnectionError("The output connection has not been set yet!")
 
-        print(f"[00:00:00] Feeding input gate {self._input_connection.name}'s output.")
+        # TODO: update this when we can connect to other things
         return self._input_connection.get_output_pin()
 
-    def set_input_connection(self, gate: "LogicGate") -> None:
+    def has_input_connection_set(self) -> bool:
         """
-        This will set the input of the wire to the output of the requested gate. This
-        will form a aggregation relationship: the connection has-a gate.
+        This method will check to see if there is a device connected to the input of
+        this instance.
 
-        This is a public method and is intended to be called by the user and will
-        update the internal state of the `Connection` instance.
+        NOTE:
+            This method is marked public and can be called by the user.
 
-        Example:
-            ```python
-            >>> gate = AndGate()
-            >>> conn = Connection()
-            >>> gate.name = "and gate"
-            >>> conn.set_input_connection(gate)
-            [00:00:00] Setting and gate's output pin to the input connection.
-            ```
-
-        Args:
-            gate:
+        Returns:
+            flag:
                 ...
         """
 
-        if gate.has_output_pin_set():
-            raise ConnectionError(f"{gate.name}'s output pin is already set!")
+        return self._input_connection is not None
 
-        print(f"[00:00:00] Setting {gate.name}'s output pin to the input connection.")
+    def has_output_connection_set(self) -> bool:
+        """
+        This method will check to see if there is a device connected to the output of
+        this instance.
+
+        NOTE:
+            This method is marked public and can be called by the user.
+
+        Returns:
+            flag:
+                ...
+        """
+
+        return self._output_connection is not None
+
+    def reset(self) -> None:
+        """
+        This method reset the input and output ends of the wire. This is mostly a
+        convenience method to make testing smoother. It may not exist forever.
+
+        NOTE:
+            This method is marked as public and can be called by the user.
+        """
+
+        self._input_connection = None
+        self._output_connection = None
+
+    def set_input_connection(self, gate: Optional["LogicGate"] = None) -> None:
+        """
+        This will set the input end of this instance. It will form an association
+        relationship with the device by calling that device's set output and pass this
+        instance to the device.
+
+        NOTE:
+            This method is marked as public and can be called by the user.
+
+        TODO: updated when we can connect to other devices.
+
+        Args:
+            gate:
+                The device we want to connect to the input end of the wire.
+        """
+
+        # We no want to connect to nothing... and shoot ourselves in the foot...
+        if gate is None:
+            raise ConnectionError("You need to enter a gate to set the input!")
+
+        # No good it is to shoot one's self in foot if already there be connection.
+        if self.has_input_connection_set():
+            raise ConnectionError("An input connection has already been made!")
+
+        gate.set_output_pin(value=self)
         self._input_connection = gate
 
-    def set_output_connection(self, gate: "LogicGate", pin: int = 0) -> None:
+    def set_output_connection(
+        self, gate: Optional["LogicGate"] = None, pin: int = 0
+    ) -> None:
         """
-        This will set the output of the wire to the input of the requested gate. This
-        will form a aggregation relationship: the connection has-a gate.
+        This will set the output end of this instance. It will form an association
+        relationship with the device by calling that device's set input and pass this
+        instance to the device.
 
-        This is a public method and is intended to be called by the user and will
-        update the internal state of the `Connection` instance.
+        NOTE:
+            This method is marked as public and can be called by the user.
 
-        Example:
-            ```python
-            >>> gate = AndGate()
-            >>> gate.name = "and gate"
-            >>> conn.set_output_connection(gate)
-            [00:00:00] Setting and gate's input pin to the output connection.
-            [00:00:00] The input has been validated.
-            [00:00:00] Setting the input for pin 0.
-            ```
+        TODO: updated when we can connect to other devices. The function signature will
+        need to be updated, so more than likely API-breaking change coming :(
 
         Args:
             gate:
-                ...
+                The device we want to connect to the input end of the wire.
             pin:
-                (Optional) which pin to set the connection to. This is optional to
-                handle unary gates.
+                Where to hook up the output end of the wire.
         """
 
-        if gate.has_input_pin_set(pin=pin):
-            raise ConnectionError(f"{gate.name} already has pin {pin} set!")
+        # We no want to connect to nothing... and shoot ourselves in the foot...
+        if gate is None:
+            raise ConnectionError("You need to enter a gate to set the output!")
 
-        print(f"[00:00:00] Setting {gate.name}'s input pin to the output connection.")
-        gate.set_input_pin(self, pin=pin)
-        self._output_connection = gate
+        # No good it is to shoot one's self in foot if already there be connection.
+        if self.has_output_connection_set():
+            raise ConnectionError("An output connection has already been made!")
+
+        gate.set_input_pin(value=self, pin=pin)
+        self._input_connection = gate
