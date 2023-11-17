@@ -39,10 +39,17 @@ class Connection(IConnection):
         if self.has_input_connection_set():
             raise ConnectionError("An input connection has already been made!")
         
-        if gate.has_output_pin_set():
-            raise ConnectionError(f"{gate.name} already is connected!")
-        
+        gate.set_output_pin(value=self)
         self._input_connection = gate
 
-    def set_output_connection():
-        ...
+    def set_output_connection(
+        self, gate: Optional['LogicGate'] = None, pin: int = 0
+    ) -> None:
+        if gate is None:
+            raise ConnectionError("You need to enter a gate to set the output!")
+        
+        if self.has_output_connection_set():
+            raise ConnectionError("An output connection has already been made!")
+        
+        gate.set_input_pin(value=self, pin=pin)
+        self._input_connection = gate

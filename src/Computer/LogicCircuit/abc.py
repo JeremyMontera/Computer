@@ -34,7 +34,9 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_output_connection(self, gate: Optional[ILogicGate] = None) -> None:
+    def set_output_connection(
+        self, gate: Optional[ILogicGate] = None, pin: int = 0
+    ) -> None:
         ...
 
 
