@@ -38,7 +38,6 @@ comp5 - Refactor LogicGate class
     (7) Write/update documentation                                                  x
 
 comp6 - Refactor compound gates
-    (1) Create compound gate abcs
     (2) Create compound gate factory along with gate creation function              x
     (3) Remove old xor, xnor, nand, nor classes                                     x
     (4) Create new CompoundGate class that follows ILogicGate interface
