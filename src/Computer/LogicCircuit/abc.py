@@ -106,7 +106,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def reset(self) -> None:
+    def reset(self, which: Optional[str] = None) -> None:
         """This resets the input and output pins."""
 
         ...

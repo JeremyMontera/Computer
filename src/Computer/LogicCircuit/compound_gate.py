@@ -51,9 +51,21 @@ class CompoundGate(ILogicGate):
     def has_output_pin_set(self) -> bool:
         return self._output_gate.has_output_pin_set()
 
-    def reset(self):
-        # TODO: no good... don't want to access private attributes like this...
-        ...
+    def reset(self, which: Optional[str] = None):
+        def reset_inputs() -> None:
+            for gate in self._input_gates:
+                gate.reset(which = "input")
+
+        def reset_output() -> None:
+            self._output_gate.reset(which = "output")
+
+        if which == "input":
+            reset_inputs()
+        elif which == "output":
+            reset_output()
+        else:
+            reset_inputs()
+            reset_output()
 
     def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
         for gate in self._input_gates:

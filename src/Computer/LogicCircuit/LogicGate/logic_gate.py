@@ -220,17 +220,26 @@ class LogicGate(abc.ILogicGate):
 
         return self._output_pin is not None
 
-    def reset(self) -> None:
+    def reset(self, which: Optional[str] = None) -> None:
         """
         This method reset the input and output pins. This is mostly a convenience
         method to make testing smoother. It may not exist forever.
 
         NOTE:
             This method is marked as public and can be called by the user.
+
+        Args:
+            which:
+                Which pins to reset.
         """
 
-        self._input_pins = [None] * self.mapping[self._type]
-        self._output_pin = None
+        if which == "input":
+            self._input_pins = [None] * self.mapping[self._type]
+        elif which == "output":
+            self._output_pin = None
+        else:
+            self._input_pins = [None] * self.mapping[self._type]
+            self._output_pin = None
 
     def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
         """

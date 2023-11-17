@@ -136,6 +136,21 @@ class TestLogicGates:
         assert not gate.has_input_pin_set(pin=1)
         assert not gate.has_output_pin_set()
 
+        gate._input_pins = [0, 1]
+        gate._output_pin = 1
+        assert gate.has_input_pin_set(pin=0)
+        assert gate.has_input_pin_set(pin=1)
+        assert gate.has_output_pin_set()
+        gate.reset(which = "input")
+        assert not gate.has_input_pin_set(pin=0)
+        assert not gate.has_input_pin_set(pin=1)
+        assert gate.has_output_pin_set()
+        gate._input_pins = [0, 1]
+        gate.reset(which = "output")
+        assert gate.has_input_pin_set(pin=0)
+        assert gate.has_input_pin_set(pin=1)
+        assert not gate.has_output_pin_set()
+
     def test_logic_gate_set_input_pin_error_pin_already_set(self):
         gate = LogicGate(LogicType.AND)
         gate._input_pins[0] = 1
