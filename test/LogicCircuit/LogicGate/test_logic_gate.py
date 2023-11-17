@@ -4,8 +4,8 @@ from unittest import mock
 
 import pytest
 
-from Computer.LogicCircuit import LogicGate, LogicType, LogicGateError
-from Computer.LogicCircuit import Connection
+from Computer.LogicCircuit import (Connection, LogicGate, LogicGateError,
+                                   LogicType)
 
 
 class TestLogicGates:

@@ -8,7 +8,6 @@ E = TypeVar("E", bound=enum.Enum)
 
 
 class IConnection(metaclass=abc.ABCMeta):
-
     @abc.abstractclassmethod
     def __init__(self):
         ...
@@ -41,7 +40,6 @@ class IConnection(metaclass=abc.ABCMeta):
 
 
 class ILogicGate(metaclass=abc.ABCMeta):
-
     @abc.abstractclassmethod
     def __init__(self, type: Optional[E] = None, name: Optional[str] = None):
         ...

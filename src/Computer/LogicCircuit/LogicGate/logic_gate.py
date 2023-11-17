@@ -67,7 +67,7 @@ class LogicGate(abc.ILogicGate):
             raise LogicGateError(f"Entered an invalid pin: {pin}!")
 
         return self._input_pins[pin] is not None
-    
+
     def has_output_pin_set(self) -> bool:
         return self._output_pin is not None
 
@@ -85,8 +85,8 @@ class LogicGate(abc.ILogicGate):
     def set_output_pin(self, value: Optional[Connection] = None) -> None:
         if value is None:
             raise LogicGateError("You need to enter a valid connection!")
-        
+
         if self.has_output_pin_set():
             raise LogicGateError("The output pin has already been set!")
-        
+
         self._output_pin = value
