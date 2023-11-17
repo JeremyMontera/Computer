@@ -110,7 +110,9 @@ class CompoundFactory(ICompoundFactory):
 
     def __init__(self, type: Optional[str] = None):
         if type is None or type not in list(self.factories.keys()):
-            raise CompoundFactoryError("You need to pass a valid compound logic gate type!")
+            raise CompoundFactoryError(
+                "You need to pass a valid compound logic gate type!"
+            )
 
         self._type: str = type
 

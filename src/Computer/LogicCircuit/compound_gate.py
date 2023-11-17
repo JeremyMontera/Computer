@@ -1,11 +1,10 @@
 import enum
-from typing import Optional, cast, List, Union, Dict
+from typing import Dict, Optional, Union
 
+from Computer.LogicCircuit.abc import ILogicGate
 from Computer.LogicCircuit.compound_factory import CompoundFactory
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate
-from Computer.LogicCircuit.abc import ILogicGate
-
 
 PIN = Union[int, "Connection"]
 # This represents everything that a pin can be connected to.
@@ -27,13 +26,10 @@ class CompoundGateError(Exception):
 
 
 class CompoundGate(ILogicGate):
-
-    def __init__(
-        self, type: Optional[CompoundType] = None, name: Optional[str] = None
-    ):
+    def __init__(self, type: Optional[CompoundType] = None, name: Optional[str] = None):
         if type is None or not isinstance(type, CompoundType):
             raise CompoundGateError("You need to enter a valid logic gate type!")
-        
+
         self._type: CompoundType = type
         self._name: str = "" if name is None else name
         self._factory: CompoundFactory = CompoundFactory(type=type.value)

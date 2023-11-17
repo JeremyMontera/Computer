@@ -83,7 +83,7 @@ def test_factory_create(config, results, request):
             if isinstance(manifest[key], list):
                 assert len(manifest[key]) == len(res[key])
                 assert all(
-                    res[key][i].name == manifest[key][i] \
+                    res[key][i].name == manifest[key][i]
                     for i in range(len(manifest[key]))
                 )
             else:

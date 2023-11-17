@@ -1,14 +1,15 @@
-import pytest
 import collections
 from typing import List
 
+import pytest
+
 from Computer.LogicCircuit import CompoundGate, CompoundType
 from Computer.LogicCircuit.compound_gate import CompoundGateError
-from Computer.LogicCircuit.LogicGate import LogicGate
 from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.LogicGate import LogicGate
+
 
 class TestCompoundGates:
-
     cgate = collections.namedtuple("cgate", ["gtype", "name", "fact"])
     nand_gate = cgate(CompoundType.NAND, "foo", "nand")
     nor_gate = cgate(CompoundType.NOR, "bar", "nor")
@@ -68,9 +69,9 @@ class TestCompoundGates:
                     "_conn1": Connection,
                     "_conn2": Connection,
                     "_conn3": Connection,
-                }
-            )
-        ]
+                },
+            ),
+        ],
     )
     def test_compound_gate_init(self, config, manifest):
         gate = CompoundGate(type=config.gtype, name=config.name)
