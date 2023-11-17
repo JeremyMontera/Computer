@@ -1,14 +1,14 @@
 import pytest
 
 from Computer.LogicCircuit import CompoundFactory
-from Computer.LogicCircuit.compound_factory import CompoundError
+from Computer.LogicCircuit.compound_factory import CompoundFactoryError
 
 
 @pytest.fixture
 def nand_manifest():
     return {
-        "gate0": "and_0",
-        "gate1": "not_0",
+        "input_gates": ["and_0"],
+        "output_gate": "not_0",
         "conn0": ["and_0", "not_0", 0],
     }
 
@@ -16,8 +16,8 @@ def nand_manifest():
 @pytest.fixture
 def nor_manifest():
     return {
-        "gate0": "or_0",
-        "gate1": "not_0",
+        "input_gates": ["or_0"],
+        "output_gate": "not_0",
         "conn0": ["or_0", "not_0", 0],
     }
 
@@ -25,10 +25,9 @@ def nor_manifest():
 @pytest.fixture
 def xor_manifest():
     return {
-        "gate0": "and_0",
+        "input_gates": ["and_0", "and_1"],
         "gate1": "not_0",
-        "gate2": "and_1",
-        "gate3": "and_2",
+        "output_gate": "and_2",
         "conn0": ["and_0", "not_0", 0],
         "conn1": ["not_0", "and_2", 0],
         "conn2": ["and_1", "and_2", 1],
@@ -38,11 +37,10 @@ def xor_manifest():
 @pytest.fixture
 def xnor_manifest():
     return {
-        "gate0": "and_0",
+        "input_gates": ["and_0", "and_1"],
         "gate1": "not_0",
-        "gate2": "and_1",
-        "gate3": "and_2",
-        "gate4": "not_1",
+        "gate2": "and_2",
+        "output_gate": "not_1",
         "conn0": ["and_0", "not_0", 0],
         "conn1": ["not_0", "and_2", 0],
         "conn2": ["and_1", "and_2", 1],
@@ -51,7 +49,7 @@ def xnor_manifest():
 
 
 def test_factory_init_error_bad_type():
-    with pytest.raises(CompoundError) as exc:
+    with pytest.raises(CompoundFactoryError) as exc:
         CompoundFactory()
 
     assert exc.value.args[0] == "You need to pass a valid compound logic gate type!"
@@ -82,7 +80,14 @@ def test_factory_create(config, results, request):
     for key in manifest.keys():
         assert key in res.keys()
         if "gate" in key:
-            assert manifest[key] == res[key].name
+            if isinstance(manifest[key], list):
+                assert len(manifest[key]) == len(res[key])
+                assert all(
+                    res[key][i].name == manifest[key][i] \
+                    for i in range(len(manifest[key]))
+                )
+            else:
+                assert manifest[key] == res[key].name
         elif "conn" in key:
             assert res[key].has_input_connection_set()
             assert res[key].has_output_connection_set()

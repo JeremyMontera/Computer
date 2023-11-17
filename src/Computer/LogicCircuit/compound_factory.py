@@ -16,7 +16,7 @@ def create_nand_gate() -> Dict[str, STUFF]:
     conn0.set_input_connection(gate=gate0)
     conn0.set_output_connection(gate=gate1, pin=0)
 
-    return {"gate0": gate0, "gate1": gate1, "conn0": conn0}
+    return {"input_gates": [gate0], "output_gate": gate1, "conn0": conn0}
 
 
 def create_nor_gate() -> Dict[str, STUFF]:
@@ -28,7 +28,7 @@ def create_nor_gate() -> Dict[str, STUFF]:
     conn0.set_input_connection(gate=gate0)
     conn0.set_output_connection(gate=gate1, pin=0)
 
-    return {"gate0": gate0, "gate1": gate1, "conn0": conn0}
+    return {"input_gates": [gate0], "output_gate": gate1, "conn0": conn0}
 
 
 def create_xor_gate() -> Dict[str, STUFF]:
@@ -51,10 +51,9 @@ def create_xor_gate() -> Dict[str, STUFF]:
     conn2.set_output_connection(gate=gate3, pin=1)
 
     return {
-        "gate0": gate0,
+        "input_gates": [gate0, gate2],
         "gate1": gate1,
-        "gate2": gate2,
-        "gate3": gate3,
+        "output_gate": gate3,
         "conn0": conn0,
         "conn1": conn1,
         "conn2": conn2,
@@ -86,11 +85,10 @@ def create_xnor_gate() -> Dict[str, STUFF]:
     conn3.set_output_connection(gate=gate4, pin=0)
 
     return {
-        "gate0": gate0,
+        "input_gates": [gate0, gate2],
         "gate1": gate1,
-        "gate2": gate2,
-        "gate3": gate3,
-        "gate4": gate4,
+        "gate2": gate3,
+        "output_gate": gate4,
         "conn0": conn0,
         "conn1": conn1,
         "conn2": conn2,
