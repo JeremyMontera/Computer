@@ -30,11 +30,11 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_connection(self, gate: ILogicGate) -> None:
+    def set_input_connection(self, gate: Optional[ILogicGate] = None) -> None:
         ...
 
     @abc.abstractclassmethod
-    def set_output_connection(self, gate: ILogicGate) -> None:
+    def set_output_connection(self, gate: Optional[ILogicGate] = None) -> None:
         ...
 
 
@@ -62,4 +62,8 @@ class ILogicGate(metaclass=abc.ABCMeta):
 
     @abc.abstractclassmethod
     def set_input_pin(self, value: int | IConnection = 0, pin: int = 0) -> None:
+        ...
+
+    @abc.abstractclassmethod
+    def set_output_pin(self, value: Optional[IConnection] = None) -> None:
         ...
