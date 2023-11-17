@@ -133,6 +133,45 @@ class TestCompoundGates:
             xnor_gate,
         ],
     )
+    def test_compound_gate_has_input_pin_set(self, config):
+        gate = CompoundGate(type=config.gtype, name=config.name)
+        assert not gate.has_input_pin_set(pin=0)
+        assert not gate.has_input_pin_set(pin=1)
+        for g in gate._input_gates:
+            g._input_pins[0] = 0
+
+        assert gate.has_input_pin_set(pin=0)
+        assert not gate.has_input_pin_set(pin=1)
+        for g in gate._input_gates:
+            g._input_pins[1] = 0
+
+        assert gate.has_input_pin_set(pin=0)
+        assert gate.has_input_pin_set(pin=1)
+
+    @pytest.mark.parametrize(
+        "config",
+        [
+            nand_gate,
+            nor_gate,
+            xor_gate,
+            xnor_gate,
+        ],
+    )
+    def test_compound_gate_has_output_pin_set(self, config):
+        gate = CompoundGate(type=config.gtype, name=config.name)
+        assert not gate.has_output_pin_set()
+        gate._output_gate._output_pin = 1
+        assert gate.has_output_pin_set()
+
+    @pytest.mark.parametrize(
+        "config",
+        [
+            nand_gate,
+            nor_gate,
+            xor_gate,
+            xnor_gate,
+        ],
+    )
     def test_compound_gate_set_input_pin(self, config):
         gate = CompoundGate(type=config.gtype, name=config.name)
         for g in gate._input_gates:
