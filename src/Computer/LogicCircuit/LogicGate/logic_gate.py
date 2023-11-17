@@ -159,7 +159,7 @@ class LogicGate(abc.ILogicGate):
         """
 
         # Get the input pin information
-        inputs: List[int] = [None] * self._type.value
+        inputs: List[int] = [None] * self.mapping[self._type]
         for p, pin in enumerate(self._input_pins):
             if pin is None:
                 raise LogicGateError(f"Pin {p} has not been set yet!")
@@ -167,6 +167,8 @@ class LogicGate(abc.ILogicGate):
                 inputs[p] = pin.feed()
             elif isinstance(pin, int):
                 inputs[p] = pin
+
+        print(f"{self.name} {self.type} :: {inputs=}")
 
         # Process the input pins
         if self._type == LogicType.NOT:
@@ -229,7 +231,7 @@ class LogicGate(abc.ILogicGate):
             This method is marked as public and can be called by the user.
         """
 
-        self._input_pins = [None] * self._type.value
+        self._input_pins = [None] * self.mapping[self._type]
         self._output_pin = None
 
     def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
