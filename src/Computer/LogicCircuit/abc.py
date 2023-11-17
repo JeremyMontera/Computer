@@ -9,7 +9,6 @@ E = TypeVar("E", bound=enum.Enum)
 
 
 class ICompoundFactory(metaclass=abc.ABCMeta):
-
     @abc.abstractclassmethod
     def __init__(self, type: Optional[str] = None):
         """Constructor..."""
