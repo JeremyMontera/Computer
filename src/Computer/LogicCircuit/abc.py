@@ -8,6 +8,15 @@ E = TypeVar("E", bound=enum.Enum)
 # This is to represent an arbitrary enumeration type.
 
 
+class ICompoundFactory(metaclass=abc.ABCMeta):
+
+    @abc.abstractclassmethod
+    def __init__(self, type: Optional[str] = None):
+        """Constructor..."""
+
+        ...
+
+
 class IConnection(metaclass=abc.ABCMeta):
 
     """
