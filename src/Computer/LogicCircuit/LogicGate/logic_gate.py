@@ -13,8 +13,7 @@ PIN = Union[int, "Connection"]
 class LogicType(enum.Enum):
     """
     This stores all the possible primitive Boolean logic gates that are currently
-    supported. The user can only build on of these three gates. The value of each
-    enumeration corresponds to the number of input pins that the gate needs.
+    supported. The user can only build on of these three gates.
     """
 
     NOT: int = 1
@@ -23,7 +22,7 @@ class LogicType(enum.Enum):
     AND: int = 2
     """Build an AND gate."""
 
-    OR: int = 2
+    OR: int = 3
     """Build an OR gate."""
 
 
@@ -48,6 +47,9 @@ class LogicGate(abc.ILogicGate):
         input_pins: The input pins for information to come in (private)
         output_pin: The output pin for information to leave (private)
     """
+
+    mapping = {LogicType.NOT: 1, LogicType.AND: 2, LogicType.OR: 2}
+    # Added mapping here because enum's giving me issues.
 
     def __init__(self, type: Optional[LogicType] = None, name: Optional[str] = None):
         """
@@ -82,7 +84,9 @@ class LogicGate(abc.ILogicGate):
             string
         """
 
-        self._input_pins: List[Optional[PIN]] = [cast(PIN, None)] * self._type.value
+        self._input_pins: List[Optional[PIN]] = (
+            [cast(PIN, None)] * self.mapping[self._type]
+        )
         """
         The input pins for information to come in.
 
