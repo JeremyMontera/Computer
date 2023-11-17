@@ -1,6 +1,7 @@
 import pytest
 
-from Computer.LogicCircuit import CompoundError, CompoundFactory
+from Computer.LogicCircuit import CompoundFactory
+from Computer.LogicCircuit.compound_factory import CompoundError
 
 
 @pytest.fixture

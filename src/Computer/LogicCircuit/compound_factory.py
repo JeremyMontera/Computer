@@ -1,6 +1,8 @@
 from typing import Dict, Optional, Union
 
-from Computer.LogicCircuit import Connection, LogicGate, LogicType, abc
+from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
+from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.abc import ICompoundFactory
 
 STUFF = Union[LogicGate, Connection]
 
@@ -100,7 +102,7 @@ class CompoundError(Exception):
     ...
 
 
-class CompoundFactory(abc.ICompoundFactory):
+class CompoundFactory(ICompoundFactory):
     factories = {
         "xor": create_xor_gate,
         "xnor": create_xnor_gate,

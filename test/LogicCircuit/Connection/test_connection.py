@@ -1,7 +1,8 @@
 import pytest
 
-from Computer.LogicCircuit import (Connection, ConnectionError, LogicGate,
-                                   LogicType)
+from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
+from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.Connection.connection import ConnectionError
 
 
 @pytest.fixture
