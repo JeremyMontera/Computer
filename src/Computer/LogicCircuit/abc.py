@@ -1,8 +1,8 @@
 import abc
 import enum
-from typing import Literal, Optional, TypeVar
+from typing import Optional, TypeVar
 
-E = TypeVar('E', bound=enum.Enum)
+E = TypeVar("E", bound=enum.Enum)
 
 
 class IConnection(metaclass=abc.ABCMeta):

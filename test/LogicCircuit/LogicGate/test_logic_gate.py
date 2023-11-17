@@ -1,13 +1,14 @@
 import collections
-import pytest
-from unittest import mock
 from typing import List
+from unittest import mock
+
+import pytest
+
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
 
 
 class TestLogicGates:
-
     gate = collections.namedtuple("gate", ["gtype", "name", "num"])
 
     not_gate = gate(LogicType.NOT, "foo", 1)
@@ -32,7 +33,7 @@ class TestLogicGates:
             not_gate,
             and_gate,
             or_gate,
-        ]
+        ],
     )
     def test_logic_gate_init(self, config):
         gate = LogicGate(type=config.gtype, name=config.name)
@@ -51,7 +52,7 @@ class TestLogicGates:
             not_gate,
             and_gate,
             or_gate,
-        ]
+        ],
     )
     def test_logic_gate_attrs(self, config):
         gate = LogicGate(type=config.gtype, name=config.name)
@@ -81,7 +82,7 @@ class TestLogicGates:
             not_gate,
             and_gate,
             or_gate,
-        ]
+        ],
     )
     def test_logic_gate_get_output_pin_ints(self, config):
         inputs = self.get_combs(config.num)
@@ -139,4 +140,3 @@ class TestLogicGates:
         gate.set_input_pin(value=1, pin=0)
         assert gate._input_pins[0] == 1
         mock_sanitize.assert_called_once_with(0)
-

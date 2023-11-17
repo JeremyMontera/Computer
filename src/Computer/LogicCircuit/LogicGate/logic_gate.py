@@ -37,7 +37,7 @@ class LogicGate(abc.ILogicGate):
     @property
     def type(self) -> LogicType:
         return self._type
-        
+
     def _sanitize_input(self, value: int | Connection) -> None:
         if isinstance(value, int):
             assert value in [0, 1], f"{value} is not a valid input!"
@@ -66,7 +66,7 @@ class LogicGate(abc.ILogicGate):
             raise LogicGateError(f"Entered an invalid pin: {pin}!")
 
         return self._input_pins[pin] is not None
-    
+
     def reset(self) -> None:
         self._input_pins = [None] * self._type.value
 
