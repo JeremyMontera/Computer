@@ -24,7 +24,6 @@ class LogicGate(abc.ILogicGate):
 
         self._type: LogicType = type
         self._name: str = "" if name is None else name
-        self._output_pin: Optional[PIN] = cast(PIN, None)
         self._input_pins: List[Optional[PIN]] = [cast(PIN, None)] * self._type.value
 
     @property
@@ -38,8 +37,12 @@ class LogicGate(abc.ILogicGate):
     @property
     def type(self) -> LogicType:
         return self._type
+        
+    def _sanitize_input(self, value: int | Connection) -> None:
+        if isinstance(value, int):
+            assert value in [0, 1], f"{value} is not a valid input!"
 
-    def _logic(self) -> None:
+    def get_output_pin(self) -> int:
         inputs: List[int] = [None] * self._type.value
         for p, pin in enumerate(self._input_pins):
             if pin is None:
@@ -56,26 +59,16 @@ class LogicGate(abc.ILogicGate):
         elif self._type == LogicType.OR:
             output: bool = bool(inputs[0]) or bool(inputs[1])
 
-        self._output_pin = int(output)
-
-    def _sanitize_input(self, value: int | Connection) -> None:
-        if isinstance(value, int):
-            assert value in [0, 1], f"{value} is not a valid input!"
-
-    def get_output_pin(self) -> int:
-        if self._output_pin is None:
-            self._logic()
-
-        return self._output_pin
+        return int(output)
 
     def has_input_pin_set(self, pin: int = 0) -> bool:
         if pin not in list(range(len(self._input_pins))):
             raise LogicGateError(f"Entered an invalid pin: {pin}!")
 
         return self._input_pins[pin] is not None
-
-    def has_output_pin_set(self) -> bool:
-        return self._output_pin is not None
+    
+    def reset(self) -> None:
+        self._input_pins = [None] * self._type.value
 
     def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
         self._sanitize_input(pin)
@@ -83,7 +76,3 @@ class LogicGate(abc.ILogicGate):
             raise LogicGateError(f"Input pin {pin} has already been set!")
 
         self._input_pins[pin] = value
-
-    def reset(self) -> None:
-        self._input_pins = [None] * self._type.value
-        self._output_pin = None

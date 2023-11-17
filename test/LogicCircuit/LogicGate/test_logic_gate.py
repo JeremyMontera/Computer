@@ -42,7 +42,6 @@ class TestLogicGates:
         assert gate._type.value == config.num
         assert isinstance(gate._name, str)
         assert gate._name == config.name
-        assert gate._output_pin is None
         assert len(gate._input_pins) == config.num
         assert all(pin is None for pin in gate._input_pins)
 
@@ -62,10 +61,17 @@ class TestLogicGates:
         assert gate.name == config.name + "_1"
         assert gate.type == config.gtype
 
-    def test_logic_gate__logic_error_input_not_set(self):
+    def test_logic_gate__sanitize_input(self):
+        gate = LogicGate(type=LogicType.AND)
+        with pytest.raises(AssertionError) as exc:
+            gate._sanitize_input(2)
+
+        assert exc.value.args[0] == "2 is not a valid input!"
+
+    def test_logic_gate_get_output_pin_input_not_set(self):
         gate = LogicGate(type=LogicType.NOT)
         with pytest.raises(LogicGateError) as exc:
-            gate._logic()
+            gate.get_output_pin()
 
         assert exc.value.args[0] == "Pin 0 has not been set yet!"
 
@@ -77,14 +83,13 @@ class TestLogicGates:
             or_gate,
         ]
     )
-    def test_logic_gate__logic_pins_are_ints(self, config):
+    def test_logic_gate_get_output_pin_ints(self, config):
         inputs = self.get_combs(config.num)
         gates = LogicGate(type=config.gtype, name=config.name)
-        for i, inp in enumerate(inputs):
+        for inp in inputs:
             gates._input_pins = inp
-            gates._logic()
-            assert gates._output_pin is not None
-            assert isinstance(gates._output_pin, int)
+            ret = gates.get_output_pin()
+            assert isinstance(ret, int)
 
             if config.gtype == LogicType.NOT:
                 logic = not inp[0]
@@ -93,19 +98,45 @@ class TestLogicGates:
             elif config.gtype == LogicType.OR:
                 logic = inp[0] or inp[1]
 
-            assert gates._output_pin == logic
+            assert ret == logic
             gates._input_pins = [None] * config.num
             gates._output_pin = None
 
-    def test_logic_gate__sanitize_input(self):
-        gate = LogicGate(type=LogicType.AND)
-        with pytest.raises(AssertionError) as exc:
-            gate._sanitize_input(2)
+    def test_logic_gate_has_input_pin_set_error_bad_pin(self):
+        gate = LogicGate(LogicType.AND)
+        with pytest.raises(LogicGateError) as exc:
+            gate.has_input_pin_set(pin=2)
 
-        assert exc.value.args[0] == "2 is not a valid input!"
+        assert exc.value.args[0] == "Entered an invalid pin: 2!"
 
-    @mock.patch.object(LogicGate, "_logic")
-    def test_logic_gate_get_output_pin(self, mock_logic):
-        gate = LogicGate(type=LogicType.AND)
-        gate.get_output_pin()
-        mock_logic.assert_called_once()
+    def test_logic_gate_has_input_pin_set(self):
+        gate = LogicGate(LogicType.AND)
+        for p in range(2):
+            assert not gate.has_input_pin_set(pin=p)
+            gate._input_pins[p] = 0
+            assert gate.has_input_pin_set(pin=p)
+
+    def test_logic_gate_reset(self):
+        gate = LogicGate(LogicType.AND)
+        gate._input_pins = [0, 1]
+        assert gate.has_input_pin_set(pin=0)
+        assert gate.has_input_pin_set(pin=1)
+        gate.reset()
+        assert not gate.has_input_pin_set(pin=0)
+        assert not gate.has_input_pin_set(pin=1)
+
+    def test_logic_gate_set_input_pin_error_pin_already_set(self):
+        gate = LogicGate(LogicType.AND)
+        gate._input_pins[0] = 1
+        with pytest.raises(LogicGateError) as exc:
+            gate.set_input_pin(value=0, pin=0)
+
+        assert exc.value.args[0] == "Input pin 0 has already been set!"
+
+    @mock.patch.object(LogicGate, "_sanitize_input")
+    def test_logic_gate_set_input_pin(self, mock_sanitize):
+        gate = LogicGate(LogicType.AND)
+        gate.set_input_pin(value=1, pin=0)
+        assert gate._input_pins[0] == 1
+        mock_sanitize.assert_called_once_with(0)
+

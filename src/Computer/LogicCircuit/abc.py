@@ -19,9 +19,6 @@ class ILogicGate(metaclass=abc.ABCMeta):
     def has_input_pin_set(self, pin: int = 0) -> bool:
         ...
 
-    def has_output_pin_set(self) -> bool:
-        ...
-
     def reset(self) -> None:
         ...
 
