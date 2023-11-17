@@ -22,7 +22,7 @@ class CompoundType(enum.Enum):
     XNOR: str = "xnor"
 
 
-class CompoundError(Exception):
+class CompoundGateError(Exception):
     ...
 
 
@@ -32,7 +32,7 @@ class CompoundGate(ILogicGate):
         self, type: Optional[CompoundType] = None, name: Optional[str] = None
     ):
         if type is None or not isinstance(type, CompoundType):
-            raise CompoundError("You need to enter a valid logic gate type!")
+            raise CompoundGateError("You need to enter a valid logic gate type!")
         
         self._type: CompoundType = type
         self._name: str = "" if name is None else name
@@ -52,25 +52,11 @@ class CompoundGate(ILogicGate):
         ...
 
     def reset(self):
-        self._gate0._input_pins = [None, None]
-        if self._type.value == "nand" or self._type.value == "nor":
-            self._gate1._output_pin = None
-        elif self._type.value == "xor":
-            self._gate2._input_pins = [None, None]
-            self._gate3._output_pin = None
-        elif self._type.value == "xnor":
-            self._gate2._input_pins = [None, None]
-            self._gate4._output_pin = None
+        ...
 
     def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
-        self._gate0.set_input_pin(value=value, pin=pin)
-        if self._type.value == "xor" or self._type.value == "xnor":
-            self._gate2.set_input_pin(value=value, pin=pin)
+        for gate in self._input_gates:
+            gate.set_input_pin(value=value, pin=pin)
 
     def set_output_pin(self, value: Optional[Connection] = None) -> None:
-        if self._type.value == "nand" or self._type.value == "nor":
-            self._gate1.set_output_pin(value=value)
-        elif self._type.value == "xor":
-            self._gate3.set_output_pin(value=value)
-        elif self._type.value == "xnor":
-            self._gate4.set_output_pin(value=value)
+        self._output_gate.set_output_pin(value=value)
