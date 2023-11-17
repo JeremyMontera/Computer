@@ -1,8 +1,8 @@
 from typing import Dict, Optional, Union
 
-from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
-from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.abc import ICompoundFactory
+from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
 STUFF = Union[LogicGate, Connection]
 
