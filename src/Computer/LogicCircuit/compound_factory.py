@@ -34,8 +34,8 @@ def create_nor_gate() -> Dict[str, STUFF]:
 def create_xor_gate() -> Dict[str, STUFF]:
     gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
     gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
-    gate2: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
-    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_2")
+    gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
 
     conn0: Connection = Connection()
     conn1: Connection = Connection()
@@ -63,8 +63,8 @@ def create_xor_gate() -> Dict[str, STUFF]:
 def create_xnor_gate() -> Dict[str, STUFF]:
     gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
     gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
-    gate2: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
-    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_2")
+    gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
     gate4: LogicGate = LogicGate(type=LogicType.NOT, name="not_1")
 
     conn0: Connection = Connection()

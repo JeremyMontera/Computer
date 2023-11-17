@@ -90,10 +90,10 @@ class TestCompoundGates:
     @pytest.mark.parametrize(
         "config",
         [
-            # nand_gate,
+            nand_gate,
             nor_gate,
-            # xor_gate,
-            # xnor_gate,
+            xor_gate,
+            xnor_gate,
         ],
     )
     def test_compound_gate_get_output_pin(self, config):
@@ -104,25 +104,18 @@ class TestCompoundGates:
             print(f"{inp=}")
             for g in gate._input_gates:
                 g._input_pins = inp
-            
-            for g in gate._input_gates:
-                print(f"{g.name} :: {g.type} input pins: {g._input_pins}")
 
             ret = gate.get_output_pin()
             assert isinstance(ret, int)
-
-            print(f"{ret=}")
 
             if config.gtype == CompoundType.NAND:
                 logic = not (inp[0] and inp[1])
             elif config.gtype == CompoundType.NOR:
                 logic = not (inp[0] or inp[1])
             elif config.gtype == CompoundType.XOR:
-                logic = (inp[0] and not inp[1]) or (not inp[0] and inp[1])
+                logic = inp[0] != inp[1]
             elif config.gtype == CompoundType.XNOR:
-                logic = not ((inp[0] and not inp[1]) or (not inp[0] and inp[1]))
-
-            print(f"{int(logic)=}")
+                logic = inp[0] == inp[1]
 
             assert ret == logic
             for g in gate._input_gates:

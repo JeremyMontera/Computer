@@ -25,26 +25,26 @@ def nor_manifest():
 @pytest.fixture
 def xor_manifest():
     return {
-        "input_gates": ["and_0", "and_1"],
+        "input_gates": ["and_0", "or_0"],
         "gate1": "not_0",
-        "output_gate": "and_2",
+        "output_gate": "and_1",
         "conn0": ["and_0", "not_0", 0],
-        "conn1": ["not_0", "and_2", 0],
-        "conn2": ["and_1", "and_2", 1],
+        "conn1": ["not_0", "and_1", 0],
+        "conn2": ["or_0", "and_1", 1],
     }
 
 
 @pytest.fixture
 def xnor_manifest():
     return {
-        "input_gates": ["and_0", "and_1"],
+        "input_gates": ["and_0", "or_0"],
         "gate1": "not_0",
-        "gate2": "and_2",
+        "gate2": "and_1",
         "output_gate": "not_1",
         "conn0": ["and_0", "not_0", 0],
-        "conn1": ["not_0", "and_2", 0],
-        "conn2": ["and_1", "and_2", 1],
-        "conn3": ["and_2", "not_1", 0],
+        "conn1": ["not_0", "and_1", 0],
+        "conn2": ["or_0", "and_1", 1],
+        "conn3": ["and_1", "not_1", 0],
     }
 
 

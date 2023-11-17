@@ -168,8 +168,6 @@ class LogicGate(abc.ILogicGate):
             elif isinstance(pin, int):
                 inputs[p] = pin
 
-        print(f"{self.name} {self.type} :: {inputs=}")
-
         # Process the input pins
         if self._type == LogicType.NOT:
             output: bool = not bool(inputs[0])
