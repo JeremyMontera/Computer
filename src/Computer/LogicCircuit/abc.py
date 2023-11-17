@@ -53,6 +53,10 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
+    def has_output_pin_set(self) -> bool:
+        ...
+
+    @abc.abstractclassmethod
     def reset(self) -> None:
         ...
 

@@ -45,6 +45,7 @@ class TestLogicGates:
         assert gate._name == config.name
         assert len(gate._input_pins) == config.num
         assert all(pin is None for pin in gate._input_pins)
+        assert gate._outpin_pin is None
 
     @pytest.mark.parametrize(
         "config",
@@ -117,14 +118,23 @@ class TestLogicGates:
             gate._input_pins[p] = 0
             assert gate.has_input_pin_set(pin=p)
 
+    def test_logic_gate_has_output_pin_set(self):
+        gate = LogicGate(LogicType.AND)
+        assert not gate.has_output_pin_set()
+        gate._outpin_pin = 1
+        assert gate.has_output_pin_set()
+
     def test_logic_gate_reset(self):
         gate = LogicGate(LogicType.AND)
         gate._input_pins = [0, 1]
+        gate._outpin_pin = 1
         assert gate.has_input_pin_set(pin=0)
         assert gate.has_input_pin_set(pin=1)
+        assert gate.has_output_pin_set()
         gate.reset()
         assert not gate.has_input_pin_set(pin=0)
         assert not gate.has_input_pin_set(pin=1)
+        assert not gate.has_output_pin_set()
 
     def test_logic_gate_set_input_pin_error_pin_already_set(self):
         gate = LogicGate(LogicType.AND)

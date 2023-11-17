@@ -25,6 +25,7 @@ class LogicGate(abc.ILogicGate):
         self._type: LogicType = type
         self._name: str = "" if name is None else name
         self._input_pins: List[Optional[PIN]] = [cast(PIN, None)] * self._type.value
+        self._outpin_pin: Optional[PIN] = cast(PIN, None)
 
     @property
     def name(self) -> str:
@@ -66,9 +67,13 @@ class LogicGate(abc.ILogicGate):
             raise LogicGateError(f"Entered an invalid pin: {pin}!")
 
         return self._input_pins[pin] is not None
+    
+    def has_output_pin_set(self) -> bool:
+        return self._outpin_pin is not None
 
     def reset(self) -> None:
         self._input_pins = [None] * self._type.value
+        self._outpin_pin = None
 
     def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
         self._sanitize_input(pin)
