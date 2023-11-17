@@ -35,7 +35,7 @@ comp5 - Refactor LogicGate class
     (4.4) Update Connection class                                                   x
     (5) Make gate classes and connections use Bits DEFER THIS TO comp7
     (6) Update unt tests                                                            x
-    (7) Write/update documentation
+    (7) Write/update documentation                                                  x
 
 comp6 - Refactor compound gates
     (1) Create compound gate abcs

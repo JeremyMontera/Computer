@@ -29,7 +29,7 @@ class LogicType(enum.Enum):
 
 class LogicGateError(Exception):
     """Handle any errors associated with the `LogicGate` class."""
-    
+
     ...
 
 
@@ -90,7 +90,7 @@ class LogicGate(abc.ILogicGate):
             List[Optional[integer | Connection]]
         """
 
-        self._output_pin: Optional['Connection'] = cast(PIN, None)
+        self._output_pin: Optional["Connection"] = cast(PIN, None)
         """
         The output pin for information to leave.
 
