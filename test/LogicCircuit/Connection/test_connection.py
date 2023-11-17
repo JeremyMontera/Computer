@@ -106,5 +106,5 @@ def test_connection_set_output_connection(gate):
     conn = Connection()
     gate.reset()
     conn.set_output_connection(gate=gate, pin=0)
-    assert conn._input_connection == gate
+    assert conn._output_connection == gate
     assert gate._input_pins[0] == conn
