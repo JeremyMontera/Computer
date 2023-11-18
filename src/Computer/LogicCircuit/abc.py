@@ -21,6 +21,8 @@ class ICompoundFactory(metaclass=abc.ABCMeta):
 
     @abc.abstractclassmethod
     def create(self) -> Dict[str, T]:
+        """This creates the manifest."""
+        
         ...
 
 
