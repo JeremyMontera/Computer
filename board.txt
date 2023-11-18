@@ -45,7 +45,7 @@ comp6 - Refactor compound gates                                                 
     (6) Update docs                                                                 x
 
 comp7 - Refactor to make use of Bits
-    (1) Create bit/bit string interface.
+    (1) Create bit/bit string interface.                                            x
     (2) Make gate classes and connections use Bits
     (3) Update unit tests
     (4) Update docs
