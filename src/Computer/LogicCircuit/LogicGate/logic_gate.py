@@ -84,9 +84,9 @@ class LogicGate(abc.ILogicGate):
             string
         """
 
-        self._input_pins: List[Optional[PIN]] = (
-            [cast(PIN, None)] * self.mapping[self._type]
-        )
+        self._input_pins: List[Optional[PIN]] = [cast(PIN, None)] * self.mapping[
+            self._type
+        ]
         """
         The input pins for information to come in.
 

@@ -45,7 +45,7 @@ class CompoundGate(ILogicGate):
         for gate in self._input_gates:
             if not gate.has_input_pin_set(pin=pin):
                 return False
-            
+
         return True
 
     def has_output_pin_set(self) -> bool:
@@ -54,10 +54,10 @@ class CompoundGate(ILogicGate):
     def reset(self, which: Optional[str] = None):
         def reset_inputs() -> None:
             for gate in self._input_gates:
-                gate.reset(which = "input")
+                gate.reset(which="input")
 
         def reset_output() -> None:
-            self._output_gate.reset(which = "output")
+            self._output_gate.reset(which="output")
 
         if which == "input":
             reset_inputs()

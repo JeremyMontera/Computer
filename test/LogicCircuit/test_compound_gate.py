@@ -123,7 +123,6 @@ class TestCompoundGates:
 
             gate._output_gate._output_pin = None
 
-
     @pytest.mark.parametrize(
         "config",
         [
@@ -192,7 +191,7 @@ class TestCompoundGates:
         assert gate.has_input_pin_set(pin=0)
         assert gate.has_input_pin_set(pin=1)
         assert gate.has_output_pin_set()
-        gate.reset(which = "input")
+        gate.reset(which="input")
         assert not gate.has_input_pin_set(pin=0)
         assert not gate.has_input_pin_set(pin=1)
         assert gate.has_output_pin_set()
@@ -200,7 +199,7 @@ class TestCompoundGates:
         for g in gate._input_gates:
             g._input_pins = [0, 1]
 
-        gate.reset(which = "output")
+        gate.reset(which="output")
         assert gate.has_input_pin_set(pin=0)
         assert gate.has_input_pin_set(pin=1)
         assert not gate.has_output_pin_set()
