@@ -1,7 +1,7 @@
 from typing import List
 
 from .bit import Bit, BitError
-from Computer.LogicCircuit.abc import IBitString
+from Computer.Bit.abc import IBitString
 
 
 class BitString(IBitString):

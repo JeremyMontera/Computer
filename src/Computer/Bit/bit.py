@@ -1,6 +1,6 @@
 import enum
 from typing import Union
-from Computer.LogicCircuit.abc import IBit
+from Computer.Bit.abc import IBit
 
 BitValueType = Union[int, bool, str]
 
