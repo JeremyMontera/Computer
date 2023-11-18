@@ -46,7 +46,7 @@ class CompoundGate(ILogicGate):
     """
     This implements a compund logic gate, hiding any details about the underlying logic
     gates and wires making up the compound gate from the users. It is implemented using
-    a factory design pattern: the user needs to pass a compound logic gate type when 
+    a factory design pattern: the user needs to pass a compound logic gate type when
     constructing a new instance. The factory will take the request and generate a
     manifest of the components needed to construct the compound gate.
 
@@ -60,9 +60,7 @@ class CompoundGate(ILogicGate):
         conn<>:         Any wires needed to connect all of the gates (private)
     """
 
-    def __init__(
-        self, type: Optional[CompoundType] = None, name: Optional[str] = None
-    ):
+    def __init__(self, type: Optional[CompoundType] = None, name: Optional[str] = None):
         """
         Constructor...
 
@@ -255,5 +253,5 @@ class CompoundGate(ILogicGate):
             value:
                 The `Connection` instance you want to associate to this instance.
         """
-        
+
         self._output_gate.set_output_pin(value=value)
