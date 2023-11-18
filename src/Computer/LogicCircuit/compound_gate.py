@@ -1,15 +1,14 @@
 import enum
 from typing import Dict, Optional, Union
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import ILogicGate
 from Computer.LogicCircuit.compound_factory import CompoundFactory
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate
 
-PIN = Union[int, "Connection"]
+PIN = Union[Bit, "Connection"]
 # This represents everything that a pin can be connected to.
-# TODO: replace `int` with `Bit` when ready, since bits will be passed around via the
-# `Bit` class rather than integers.
 
 STUFF = Union[LogicGate, Connection]
 # This is a short-hand for the two types of devices used to build the compound gates.
@@ -123,7 +122,7 @@ class CompoundGate(ILogicGate):
 
         return self._type
 
-    def get_output_pin(self):
+    def get_output_pin(self) -> Bit:
         """
         This will be the primary method called by the user. It will call the output
         gate's [`get_output_pin`][Computer.LogicCircuit.LogicGate] method and return the
@@ -132,8 +131,6 @@ class CompoundGate(ILogicGate):
         NOTE:
             This method is marked public and can be called by the user, though it is
             more likely to be called by other objects, such as `Connection`.
-
-        TODO: update when `Bit` can be passed around.
 
         Returns:
             result:
@@ -219,7 +216,10 @@ class CompoundGate(ILogicGate):
             reset_inputs()
             reset_output()
 
-    def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
+    def set_input_pin(
+        self, value: Bit | Connection = Bit(0), pin: int = 0
+    ) -> None:
+        
         """
         This method will set the input pins of the input gates using
         [`set_input_pin`][Computer.LogicCircuit.LogicGate]. It can either be directly
