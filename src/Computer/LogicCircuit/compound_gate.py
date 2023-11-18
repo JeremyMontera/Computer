@@ -216,10 +216,7 @@ class CompoundGate(ILogicGate):
             reset_inputs()
             reset_output()
 
-    def set_input_pin(
-        self, value: Bit | Connection = Bit(0), pin: int = 0
-    ) -> None:
-        
+    def set_input_pin(self, value: Bit | Connection = Bit(0), pin: int = 0) -> None:
         """
         This method will set the input pins of the input gates using
         [`set_input_pin`][Computer.LogicCircuit.LogicGate]. It can either be directly

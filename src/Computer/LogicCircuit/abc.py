@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import abc
 import enum
-from Computer.Bit.abc import IBit
 from typing import Dict, Optional, TypeVar
+
+from Computer.Bit.abc import IBit
 
 T = TypeVar("T")
 # This is to represent arbitrary devices.
@@ -22,7 +23,7 @@ class ICompoundFactory(metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
     def create(self) -> Dict[str, T]:
         """This creates the manifest."""
-        
+
         ...
 
 

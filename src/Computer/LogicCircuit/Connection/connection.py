@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 
-from Computer.LogicCircuit.abc import IConnection
 from Computer.Bit import Bit
+from Computer.LogicCircuit.abc import IConnection
 
 if TYPE_CHECKING:
     from Computer.LogicCircuit.LogicGate import LogicGate

@@ -1,9 +1,9 @@
 import enum
 from typing import List, Optional, Union, cast
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import ILogicGate
 from Computer.LogicCircuit.Connection import Connection
-from Computer.Bit import Bit
 
 PIN = Union[Bit, "Connection"]
 # This represents everything that a pin can be connected to.

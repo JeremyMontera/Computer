@@ -1,9 +1,9 @@
 import pytest
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.Connection.connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
-from Computer.Bit import Bit
 
 
 @pytest.fixture

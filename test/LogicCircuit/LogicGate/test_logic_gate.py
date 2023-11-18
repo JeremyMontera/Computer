@@ -3,10 +3,10 @@ from typing import List
 
 import pytest
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 from Computer.LogicCircuit.LogicGate.logic_gate import LogicGateError
-from Computer.Bit import Bit
 
 
 class TestLogicGates:
@@ -24,7 +24,7 @@ class TestLogicGates:
                 [Bit(1), Bit(1)],
                 [Bit(1), Bit(0)],
                 [Bit(0), Bit(1)],
-                [Bit(0), Bit(0)]
+                [Bit(0), Bit(0)],
             ]
 
     def test_logic_gate_init_error_no_type(self):

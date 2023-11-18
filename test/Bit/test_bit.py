@@ -30,6 +30,7 @@ def test_bit_creation_error_bad_input():
 
     assert exc.value.args[0] == "Entered something that cannot be handled!"
 
+
 @pytest.mark.parametrize(
     ("bits", "res"),
     [

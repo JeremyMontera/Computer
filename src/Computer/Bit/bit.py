@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import enum
 from typing import Union
+
 from Computer.Bit.abc import IBit
 
 BitValueType = Union[int, bool, str]
@@ -52,7 +53,7 @@ class Bit(IBit):
         Type:
             BitValue
         """
-        
+
     def __eq__(self, other: Bit) -> bool:
         """
         Overrides Python's `'=='` operator: checks if two bits are the same.
@@ -108,43 +109,43 @@ class Bit(IBit):
                 raise BitError(f"Entered an unknown value: {value}!")
         except (ValueError, TypeError):
             raise BitError("Entered something that cannot be handled!")
-        
+
     def and_op(self, other: Bit) -> Bit:
         """
         This implements a custom `'and'` operation: returns an `'ON'` bit only if both
         the input bits are `'ON'`.
-        
+
         Args:
             other:
                 ...
-                
+
         Returns:
             ret:
                 ...
         """
 
         return Bit(self._value.value and other._value.value)
-    
+
     def not_op(self) -> Bit:
         """
         This implements a custom `'not'` operation: reverses the current bit.
-                
+
         Returns:
             ret:
                 ...
         """
 
         return Bit(not self._value.value)
-    
+
     def or_op(self, other: Bit) -> Bit:
         """
         This implements a custom `'or'` operation: returns an `'OFF'` bit only if both
         the input bits are `'OFF'`.
-        
+
         Args:
             other:
                 ...
-                
+
         Returns:
             ret:
                 ...

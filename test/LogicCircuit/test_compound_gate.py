@@ -18,12 +18,7 @@ class TestCompoundGates:
     xnor_gate = cgate(CompoundType.XNOR, "spam", "xnor")
 
     def get_combs(self) -> List[List[int]]:
-        return [
-            [Bit(1), Bit(1)],
-            [Bit(1), Bit(0)],
-            [Bit(0), Bit(1)],
-            [Bit(0), Bit(0)]
-        ]
+        return [[Bit(1), Bit(1)], [Bit(1), Bit(0)], [Bit(0), Bit(1)], [Bit(0), Bit(0)]]
 
     def test_compound_gate_init_error_bad_type(self):
         with pytest.raises(CompoundGateError) as exc:

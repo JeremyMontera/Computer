@@ -7,8 +7,9 @@ from typing import TypeVar
 E = TypeVar("E", bound=enum.Enum)
 # This is to represent an arbitrary enumeration type.
 
+
 class IBit(metaclass=abc.ABCMeta):
-    
+
     """
     This implements a single bit to be passed around.
     """
