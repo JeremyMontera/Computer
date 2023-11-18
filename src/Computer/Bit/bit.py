@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import enum
 from typing import Union
 from Computer.Bit.abc import IBit
@@ -50,30 +52,21 @@ class Bit(IBit):
         Type:
             BitValue
         """
-
-    def __bool__(self) -> bool:
+        
+    def __eq__(self, other: Bit) -> bool:
         """
-        This overrides Python's built-in `bool` function: it will convert the bit to
-        either `'True'` or `'False'` depending on `_value`.
+        Overrides Python's `'=='` operator: checks if two bits are the same.
 
-        Example:
-            ```python
-            >>> bit = Bit(0)
-            >>> bool(bit)
-            False
-            >>> bit = Bit(1)
-            >>> bool(bit)
-            True
-            ```
+        Args:
+            other:
+                ...
 
         Returns:
             flag:
                 ...
         """
-        if self._value == BitValue.OFF:
-            return False
-        elif self._value == BitValue.ON:
-            return True
+
+        return self._value == other._value
 
     def __str__(self) -> str:
         """A string representation of the bit."""
@@ -115,3 +108,46 @@ class Bit(IBit):
                 raise BitError(f"Entered an unknown value: {value}!")
         except (ValueError, TypeError):
             raise BitError("Entered something that cannot be handled!")
+        
+    def and_op(self, other: Bit) -> Bit:
+        """
+        This implements a custom `'and'` operation: returns an `'ON'` bit only if both
+        the input bits are `'ON'`.
+        
+        Args:
+            other:
+                ...
+                
+        Returns:
+            ret:
+                ...
+        """
+
+        return Bit(self._value.value and other._value.value)
+    
+    def not_op(self) -> Bit:
+        """
+        This implements a custom `'not'` operation: reverses the current bit.
+                
+        Returns:
+            ret:
+                ...
+        """
+
+        return Bit(not self._value.value)
+    
+    def or_op(self, other: Bit) -> Bit:
+        """
+        This implements a custom `'or'` operation: returns an `'OFF'` bit only if both
+        the input bits are `'OFF'`.
+        
+        Args:
+            other:
+                ...
+                
+        Returns:
+            ret:
+                ...
+        """
+
+        return Bit(self._value.value or other._value.value)

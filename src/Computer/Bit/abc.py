@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import abc
 import enum
 from typing import TypeVar
@@ -13,6 +15,26 @@ class IBit(metaclass=abc.ABCMeta):
 
     @abc.abstractclassmethod
     def __init__(self, value: E):
+        """Constructor..."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def and_op(self, other: IBit) -> IBit:
+        """This implements the `'and'` operation."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def not_op(self) -> IBit:
+        """This implements the `'not'` operation."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def or_op(self, other: IBit) -> IBit:
+        """This implements the `'or'` operation."""
+
         ...
 
 
