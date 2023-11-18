@@ -1,9 +1,11 @@
 from typing import List
 
+from Computer.Bit.abc import IBitString
+
 from .bit import Bit, BitError
 
 
-class BitString:
+class BitString(IBitString):
 
     """
     This will implement a string of bits. This will make it easier to manipulate and

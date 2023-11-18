@@ -4,6 +4,8 @@ import abc
 import enum
 from typing import Dict, Optional, TypeVar
 
+from Computer.Bit.abc import IBit
+
 T = TypeVar("T")
 # This is to represent arbitrary devices.
 
@@ -20,6 +22,8 @@ class ICompoundFactory(metaclass=abc.ABCMeta):
 
     @abc.abstractclassmethod
     def create(self) -> Dict[str, T]:
+        """This creates the manifest."""
+
         ...
 
 
@@ -37,7 +41,7 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def feed(self) -> int:
+    def feed(self) -> IBit:
         """This gets the information from the input and returns it."""
 
         ...
@@ -88,7 +92,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def get_output_pin(self) -> int:
+    def get_output_pin(self) -> IBit:
         """This gets the output of performing the logic on the input(s)."""
 
         ...
@@ -112,7 +116,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_pin(self, value: int | IConnection = 0, pin: int = 0) -> None:
+    def set_input_pin(self, value: IBit | IConnection = 0, pin: int = 0) -> None:
         """This sets the input pin."""
 
         ...

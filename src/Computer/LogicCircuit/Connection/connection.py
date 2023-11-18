@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import IConnection
 
 if TYPE_CHECKING:
@@ -47,7 +48,7 @@ class Connection(IConnection):
             Optional[LogicGate]
         """
 
-    def feed(self) -> int:
+    def feed(self) -> Bit:
         """
         This is the primary method of this class. It will check to see if the input has
         been set, and will try to get information from it. If it is a `LogicGate`

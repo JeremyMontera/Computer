@@ -1,5 +1,6 @@
 import pytest
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.Connection.connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
@@ -9,8 +10,8 @@ from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 def gate():
     gate = LogicGate(LogicType.AND)
     gate.name = "foo"
-    gate.set_input_pin(value=0, pin=0)
-    gate.set_input_pin(value=1, pin=1)
+    gate.set_input_pin(value=Bit(0), pin=0)
+    gate.set_input_pin(value=Bit(1), pin=1)
     return gate
 
 
@@ -33,8 +34,8 @@ def test_connection_feed_error_no_ouput():
 def test_connection_feed(gate):
     conn = Connection()
     conn._input_connection = gate
-    ret: int = conn.feed()
-    assert ret == 0
+    ret: Bit = conn.feed()
+    assert ret == Bit(0)
 
 
 def test_has_input_connection_set(gate):
