@@ -18,11 +18,11 @@ comp3 - Create Bit/BitStream classes
     (4) Update unit tests                                                           x
     (5) Write documentation                                                         x
 
-comp4 - Create hybrid gate classes: xor, nor, nand, nxor, ...
+comp4 - Create hybrid gate classes: xor, nor, nand, nxor, ...                       x
     (1) Nest LogicGate and Connection subdirectories into LogicCircuit              x
     (2) Create/implement each of the four compound logic gates                      x
     (3) Add/update unit tests                                                       x
-    (4) Write documentation DEFER THIS TO comp5
+    (4) Write documentation DEFER THIS TO comp5                                     x
 
 comp5 - Refactor LogicGate class
     (1) Delete BinaryGate/UnaryGate modules                                         x
@@ -37,13 +37,12 @@ comp5 - Refactor LogicGate class
     (6) Update unt tests                                                            x
     (7) Write/update documentation                                                  x
 
-comp6 - Refactor compound gates
-    (1) Create compound gate abcs
-    (2) Create compound gate factory along with gate creation function
-    (3) Remove old xor, xnor, nand, nor classes
-    (4) Create new CompoundGate class that follows ILogicGate interface
-    (5) Update unit tests
-    (6) Update docs
+comp6 - Refactor compound gates                                                     x
+    (2) Create compound gate factory along with gate creation function              x
+    (3) Remove old xor, xnor, nand, nor classes                                     x
+    (4) Create new CompoundGate class that follows ILogicGate interface             x
+    (5) Update unit tests                                                           x
+    (6) Update docs                                                                 x
 
 comp7 - Refactor to make use of Bits
     (1) Make gate classes and connections use Bits
