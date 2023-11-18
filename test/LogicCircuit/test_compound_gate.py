@@ -3,6 +3,7 @@ from typing import List
 
 import pytest
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit import CompoundGate, CompoundType
 from Computer.LogicCircuit.compound_gate import CompoundGateError
 from Computer.LogicCircuit.Connection import Connection
@@ -17,7 +18,12 @@ class TestCompoundGates:
     xnor_gate = cgate(CompoundType.XNOR, "spam", "xnor")
 
     def get_combs(self) -> List[List[int]]:
-        return [[1, 1], [1, 0], [0, 1], [0, 0]]
+        return [
+            [Bit(1), Bit(1)],
+            [Bit(1), Bit(0)],
+            [Bit(0), Bit(1)],
+            [Bit(0), Bit(0)]
+        ]
 
     def test_compound_gate_init_error_bad_type(self):
         with pytest.raises(CompoundGateError) as exc:
@@ -98,24 +104,22 @@ class TestCompoundGates:
     )
     def test_compound_gate_get_output_pin(self, config):
         inputs = self.get_combs()
-        print(f"{config=}")
         gate = CompoundGate(type=config.gtype, name=config.name)
         for inp in inputs:
-            print(f"{inp=}")
             for g in gate._input_gates:
                 g._input_pins = inp
 
             ret = gate.get_output_pin()
-            assert isinstance(ret, int)
+            assert isinstance(ret, Bit)
 
             if config.gtype == CompoundType.NAND:
-                logic = not (inp[0] and inp[1])
+                logic = inp[0].and_op(inp[1]).not_op()
             elif config.gtype == CompoundType.NOR:
-                logic = not (inp[0] or inp[1])
+                logic = inp[0].or_op(inp[1]).not_op()
             elif config.gtype == CompoundType.XOR:
-                logic = inp[0] != inp[1]
+                logic = Bit(inp[0] != inp[1])
             elif config.gtype == CompoundType.XNOR:
-                logic = inp[0] == inp[1]
+                logic = Bit(inp[0] == inp[1])
 
             assert ret == logic
             for g in gate._input_gates:
