@@ -1,13 +1,12 @@
 import enum
 from typing import List, Optional, Union, cast
 
-from Computer.LogicCircuit import abc
+from Computer.LogicCircuit.abc import ILogicGate
 from Computer.LogicCircuit.Connection import Connection
+from Computer.Bit import Bit
 
-PIN = Union[int, "Connection"]
+PIN = Union[Bit, "Connection"]
 # This represents everything that a pin can be connected to.
-# TODO: replace `int` with `Bit` when ready, since bits will be passed around via the
-# `Bit` class rather than integers.
 
 
 class LogicType(enum.Enum):
@@ -32,7 +31,7 @@ class LogicGateError(Exception):
     ...
 
 
-class LogicGate(abc.ILogicGate):
+class LogicGate(ILogicGate):
 
     """
     This implements a logic gate, hiding any details about the underlying transistors
@@ -91,7 +90,7 @@ class LogicGate(abc.ILogicGate):
         The input pins for information to come in.
 
         Type:
-            List[Optional[integer | Connection]]
+            List[Optional[Bit | Connection]]
         """
 
         self._output_pin: Optional["Connection"] = cast(PIN, None)
@@ -120,27 +119,7 @@ class LogicGate(abc.ILogicGate):
 
         return self._type
 
-    def _sanitize_input(self, value: int | Connection) -> None:
-        """
-        This will check to see if the user fed the logic gate a valid input. Since the
-        input pins can be either an integer or a `Connection` instance, then this will
-        only validate in the case of an integer, and assume that the input is validated
-        higher up the chain.
-
-        NOTE:
-            This method is marked private and should not be directly called.
-
-        TODO: update when `Bit` can be passed around.
-
-        Args:
-            value:
-                ...
-        """
-
-        if isinstance(value, int):
-            assert value in [0, 1], f"{value} is not a valid input!"
-
-    def get_output_pin(self) -> int:
+    def get_output_pin(self) -> Bit:
         """
         This will be the primary method called by the user. It will first get all the
         requisite inputs for the type of logic gate built sequentially. Then, depending
@@ -151,33 +130,28 @@ class LogicGate(abc.ILogicGate):
             This method is marked public and can be called by the user, though it is
             more likely to be called by other objects, such as `Connection`.
 
-        TODO: update when `Bit` can be passed around.
-
         Returns:
             result:
                 ...
         """
 
         # Get the input pin information
-        inputs: List[int] = [None] * self.mapping[self._type]
+        inputs: List[Bit] = [None] * self.mapping[self._type]
         for p, pin in enumerate(self._input_pins):
             if pin is None:
                 raise LogicGateError(f"Pin {p} has not been set yet!")
             elif isinstance(pin, Connection):
                 inputs[p] = pin.feed()
-            elif isinstance(pin, int):
+            elif isinstance(pin, Bit):
                 inputs[p] = pin
 
         # Process the input pins
         if self._type == LogicType.NOT:
-            output: bool = not bool(inputs[0])
+            return inputs[0].not_op()
         elif self._type == LogicType.AND:
-            output: bool = bool(inputs[0]) and bool(inputs[1])
+            return inputs[0].and_op(inputs[1])
         elif self._type == LogicType.OR:
-            output: bool = bool(inputs[0]) or bool(inputs[1])
-
-        # Return the results
-        return int(output)
+            return inputs[0].or_op(inputs[1])
 
     def has_input_pin_set(self, pin: int = 0) -> bool:
         """
@@ -241,7 +215,7 @@ class LogicGate(abc.ILogicGate):
             self._input_pins = [None] * self.mapping[self._type]
             self._output_pin = None
 
-    def set_input_pin(self, value: int | Connection = 0, pin: int = 0) -> None:
+    def set_input_pin(self, value: Bit | Connection = None, pin: int = 0) -> None:
         """
         This method will set the input pin. It can either be directly given information
         (mostly used in the case of testing) or it can be given a `Connection` instance
@@ -257,7 +231,10 @@ class LogicGate(abc.ILogicGate):
                 The pin to set.
         """
 
-        self._sanitize_input(pin)
+        # Please, no mess, no shoot yourself in the foot... check if the user actually
+        # passed an input value...
+        if value is None:
+            raise LogicGateError(f"You need to enter a value to set input pin {pin}!")
 
         # Check to see if the input pin has been set yet (yupp, again, making sure we
         # don't shoot ourselves again...)
