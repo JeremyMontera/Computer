@@ -38,7 +38,7 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def feed(self) -> int:
+    def feed(self) -> IBit:
         """This gets the information from the input and returns it."""
 
         ...
