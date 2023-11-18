@@ -40,8 +40,8 @@ comp5 - Refactor LogicGate class
 comp6 - Refactor compound gates
     (2) Create compound gate factory along with gate creation function              x
     (3) Remove old xor, xnor, nand, nor classes                                     x
-    (4) Create new CompoundGate class that follows ILogicGate interface
-    (5) Update unit tests
+    (4) Create new CompoundGate class that follows ILogicGate interface             x
+    (5) Update unit tests                                                           x
     (6) Update docs
 
 comp7 - Refactor to make use of Bits
