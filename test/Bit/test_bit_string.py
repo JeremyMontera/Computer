@@ -28,7 +28,7 @@ def test_bit_string_iter(bits):
     res = [0, 1, 0]
     for bit0, bit1 in zip(bits, res):
         assert isinstance(bit0, Bit)
-        assert int(bool(bit0)) == bit1
+        assert bit0 == Bit(bit1)
 
 
 def test_bit_string_length(bits):
@@ -49,11 +49,11 @@ def test_bit_string_push(bits, config):
         assert len(bits) == 4
         assert len(bits) < bits.max_length
         for bit0, bit1 in zip(bits._bits, config["res"]):
-            assert int(bool(bit0)) == bit1
+            assert bit0 == Bit(bit1)
 
     elif config["dir"] == "right":
         bits.push_right(Bit(config["value"]))
         assert len(bits) == 4
         assert len(bits) < bits.max_length
         for bit0, bit1 in zip(bits._bits, config["res"]):
-            assert int(bool(bit0)) == bit1
+            assert bit0 == Bit(bit1)
