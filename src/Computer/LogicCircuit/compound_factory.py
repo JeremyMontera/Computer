@@ -5,14 +5,31 @@ from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
 STUFF = Union[LogicGate, Connection]
+# This is a short-hand for the two types of devices used to build the compound gates.
+# TODO: do we need to add `Branch` here for xor gates.
 
 
 def create_nand_gate() -> Dict[str, STUFF]:
+    """
+    This function will create a manifest for what nand gates need when created.
+
+    NOTE:
+        This function is marked public and can be called by the user, though it is more
+        likely to be called in [`create()`][`Computer.LogicCircuit.CompoundFactory`].
+
+    Returns:
+        manifest:
+            A dictionary of all the components needed to construct the nand gate.
+    """
+
+    # The logic gates needed...
     gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
     gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
 
+    # The wires needed...
     conn0: Connection = Connection()
 
+    # Establish all of the association relationships between the logic gates and wires.
     conn0.set_input_connection(gate=gate0)
     conn0.set_output_connection(gate=gate1, pin=0)
 
@@ -20,11 +37,26 @@ def create_nand_gate() -> Dict[str, STUFF]:
 
 
 def create_nor_gate() -> Dict[str, STUFF]:
+    """
+    This function will create a manifest for what nor gates need when created.
+
+    NOTE:
+        This function is marked public and can be called by the user, though it is more
+        likely to be called in [`create()`][`Computer.LogicCircuit.CompoundFactory`].
+
+    Returns:
+        manifest:
+            A dictionary of all the components needed to construct the nor gate.
+    """
+
+    # The logic gates needed...
     gate0: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
     gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
 
+    # The wires needed...
     conn0: Connection = Connection()
 
+    # Establish all of the association relationships between the logic gates and wires.
     conn0.set_input_connection(gate=gate0)
     conn0.set_output_connection(gate=gate1, pin=0)
 
@@ -32,21 +64,39 @@ def create_nor_gate() -> Dict[str, STUFF]:
 
 
 def create_xor_gate() -> Dict[str, STUFF]:
+    """
+    This function will create a manifest for what xor gates need when created.
+
+    NOTE:
+        This function is marked public and can be called by the user, though it is more
+        likely to be called in [`create()`][`Computer.LogicCircuit.CompoundFactory`].
+
+    Returns:
+        manifest:
+            A dictionary of all the components needed to construct the xor gate.
+    """
+
+    # The logic gates needed...
     gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
     gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
     gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
     gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
 
+    # The wires needed...
     conn0: Connection = Connection()
     conn1: Connection = Connection()
     conn2: Connection = Connection()
 
+    # Establish all of the association relationships between the logic gates and wires.
+    # For the first wire... NB: this is a nand gate in disguise.
     conn0.set_input_connection(gate=gate0)
     conn0.set_output_connection(gate=gate1, pin=0)
 
+    # For the second wire...
     conn1.set_input_connection(gate=gate1)
     conn1.set_output_connection(gate=gate3, pin=0)
 
+    # For the third wire...
     conn2.set_input_connection(gate=gate2)
     conn2.set_output_connection(gate=gate3, pin=1)
 
@@ -61,26 +111,45 @@ def create_xor_gate() -> Dict[str, STUFF]:
 
 
 def create_xnor_gate() -> Dict[str, STUFF]:
+    """
+    This function will create a manifest for what xnor gates need when created.
+
+    NOTE:
+        This function is marked public and can be called by the user, though it is more
+        likely to be called in [`create()`][`Computer.LogicCircuit.CompoundFactory`].
+
+    Returns:
+        manifest:
+            A dictionary of all the components needed to construct the xnor gate.
+    """
+
+    # The logic gates needed...
     gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
     gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
     gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
     gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
     gate4: LogicGate = LogicGate(type=LogicType.NOT, name="not_1")
 
+    # The wires needed...
     conn0: Connection = Connection()
     conn1: Connection = Connection()
     conn2: Connection = Connection()
     conn3: Connection = Connection()
 
+    # Establish all of the association relationships between the logic gates and wires.
+    # For the first wire... NB: this is a nand gate in disguise.
     conn0.set_input_connection(gate=gate0)
     conn0.set_output_connection(gate=gate1, pin=0)
 
+    # For the second wire...
     conn1.set_input_connection(gate=gate1)
     conn1.set_output_connection(gate=gate3, pin=0)
 
+    # For the third wire...
     conn2.set_input_connection(gate=gate2)
     conn2.set_output_connection(gate=gate3, pin=1)
 
+    # For the fourth wire...
     conn3.set_input_connection(gate=gate3)
     conn3.set_output_connection(gate=gate4, pin=0)
 
@@ -97,24 +166,72 @@ def create_xnor_gate() -> Dict[str, STUFF]:
 
 
 class CompoundFactoryError(Exception):
+    """Handle any errors associated with the `CompoundFactory` class."""
+
     ...
 
 
 class CompoundFactory(ICompoundFactory):
-    factories = {
+
+    """
+    This implements a factory design pattern for constructing new compound logic gates.
+    This simplifies their implementation since now you only need to specify the layout
+    of the wires and logic gates once, behind the scenes, and this factory will handle
+    the rest.
+
+    Attributes:
+        type:       What type of compound gate is being requested (private)
+        factories:  Map of known compound gates to their create functions (private)
+    """
+
+    _factories = {
         "xor": create_xor_gate,
         "xnor": create_xnor_gate,
         "nand": create_nand_gate,
         "nor": create_nor_gate,
     }
+    """
+    Map of known compound gates to their create functions.
+
+    Type:
+        dict[string, callable]
+    """
 
     def __init__(self, type: Optional[str] = None):
-        if type is None or type not in list(self.factories.keys()):
+        """
+        Constructor...
+
+        Arg:
+            type:
+                What type of compound gate is being requested.
+        """
+
+        # Hey kids, we don't like shooting ourselves in the foot... this checks if the
+        # user passed a type and that it is one of the known compound gates.
+        if type is None or type not in list(self._factories.keys()):
             raise CompoundFactoryError(
                 "You need to pass a valid compound logic gate type!"
             )
 
         self._type: str = type
+        """
+        What type of compound gate is being requested.
+
+        Type:
+            string
+        """
 
     def create(self) -> Dict[str, STUFF]:
-        return self.factories[self._type]()
+        """
+        This will call the corresponding create function to return a manifest of
+        components needed to build the compound gate.
+
+        NOTE:
+            This method is marked public and can be called by the user, though it is
+            more likely to be called in the constructor of `CompoundGate`.
+
+        Returns:
+            manifest:
+                A dictionary of all the components needed to construct the gate.
+        """
+        return self._factories[self._type]()
