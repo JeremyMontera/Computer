@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import abc
 import enum
+from Computer.Bit.abc import IBit
 from typing import Dict, Optional, TypeVar
 
 T = TypeVar("T")
@@ -88,7 +89,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def get_output_pin(self) -> int:
+    def get_output_pin(self) -> IBit:
         """This gets the output of performing the logic on the input(s)."""
 
         ...
@@ -112,7 +113,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_pin(self, value: int | IConnection = 0, pin: int = 0) -> None:
+    def set_input_pin(self, value: IBit | IConnection = 0, pin: int = 0) -> None:
         """This sets the input pin."""
 
         ...
