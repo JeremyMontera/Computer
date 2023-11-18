@@ -11,9 +11,9 @@ comp2 - Create Connection Class                                                 
     (4) Write / Update unit tests                                                   x
     (5) Write documentation                                                         x
 
-comp3 - Create Bit/BitStream classes
+comp3 - Create Bit/BitStream classes                                                x
     (1) Implement Bit class                                                         x
-    (2) Refactor code to use Bit class instead of int DEFER THIS TO comp5
+    (2) Refactor code to use Bit class instead of int DEFER THIS TO comp5           x
     (3) Implement BitString class                                                   x
     (4) Update unit tests                                                           x
     (5) Write documentation                                                         x
@@ -24,7 +24,7 @@ comp4 - Create hybrid gate classes: xor, nor, nand, nxor, ...                   
     (3) Add/update unit tests                                                       x
     (4) Write documentation DEFER THIS TO comp5                                     x
 
-comp5 - Refactor LogicGate class
+comp5 - Refactor LogicGate class                                                    x
     (1) Delete BinaryGate/UnaryGate modules                                         x
     (2) Make LogicGate an abstract base class interface                             x
     (3) Make other gate classes inherit from LogicGate interface                    x
@@ -33,7 +33,7 @@ comp5 - Refactor LogicGate class
     (4.2) Implement new LogicGate class per discussion                              x
     (4.3) Implement IConnection interface                                           x
     (4.4) Update Connection class                                                   x
-    (5) Make gate classes and connections use Bits DEFER THIS TO comp7
+    (5) Make gate classes and connections use Bits DEFER THIS TO comp7              x
     (6) Update unt tests                                                            x
     (7) Write/update documentation                                                  x
 
@@ -44,11 +44,11 @@ comp6 - Refactor compound gates                                                 
     (5) Update unit tests                                                           x
     (6) Update docs                                                                 x
 
-comp7 - Refactor to make use of Bits
+comp7 - Refactor to make use of Bits                                                x
     (1) Create bit/bit string interface.                                            x
     (2) Make gate classes and connections use Bits                                  x
     (3) Update unit tests                                                           x
-    (4) Update docs
+    (4) Update docs                                                                 x
 
 comp8 - Create Branch class in Connection
     (1) Create Branch class that follows IConnection interface
