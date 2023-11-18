@@ -1,5 +1,6 @@
 import enum
 from typing import Union
+from Computer.LogicCircuit.abc import IBit
 
 BitValueType = Union[int, bool, str]
 
@@ -23,7 +24,7 @@ class BitError(Exception):
     ...
 
 
-class Bit:
+class Bit(IBit):
 
     """
     This implements a bit class. This ensures that the user doesn't send bad data
