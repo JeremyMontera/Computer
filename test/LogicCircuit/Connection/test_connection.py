@@ -1,8 +1,9 @@
-import pytest
 from unittest import mock
 
+import pytest
+
 from Computer.Bit import Bit
-from Computer.LogicCircuit.Connection import Connection, Branch
+from Computer.LogicCircuit.Connection import Branch, Connection
 from Computer.LogicCircuit.Connection.connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
@@ -114,7 +115,7 @@ def test_connection_set_input_connection(device, request):
     conn = Connection()
     d = request.getfixturevalue(device)
     conn.set_input_connection(device=d)
-    if device =="gate":
+    if device == "gate":
         assert conn._input_connection == d
         assert d._output_pin == conn
     elif device == "branch":

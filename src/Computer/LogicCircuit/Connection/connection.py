@@ -1,7 +1,7 @@
 from typing import Optional, Tuple
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IConnection, ILogicGate, IBranch
+from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate
 
 DEVICE = ILogicGate | Tuple[IBranch, int]
 
@@ -129,7 +129,6 @@ class Connection(IConnection):
             raise ConnectionError("You need to enter a device to set the input!")
 
         if isinstance(device, ILogicGate):
-
             # No good it is to shoot one's self in foot if already there be connection.
             if self.has_input_connection_set():
                 raise ConnectionError("An input connection has already been made!")
@@ -165,7 +164,6 @@ class Connection(IConnection):
             raise ConnectionError("You need to enter a device to set the output!")
 
         if isinstance(device, ILogicGate):
-
             # No good it is to shoot one's self in foot if already there be connection.
             if self.has_output_connection_set():
                 raise ConnectionError("An output connection has already been made!")

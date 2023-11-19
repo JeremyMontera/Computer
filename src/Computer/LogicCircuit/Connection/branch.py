@@ -1,8 +1,8 @@
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.abc import IBranch
+from Computer.LogicCircuit.Connection import Connection
 
 
 class BranchError(Exception):
@@ -18,7 +18,7 @@ class Branch(IBranch):
     @property
     def num_input_connections(self) -> int:
         return len(self._input_connections)
-    
+
     @property
     def num_output_connections(self) -> int:
         return len(self._output_connections)
@@ -26,7 +26,7 @@ class Branch(IBranch):
     def _validate_mapping(self, mapping: Dict[int, int]) -> None:
         inputs: List[int] = list(set(mapping.values()))
         outputs: List[int] = list(mapping.keys())
-        
+
         inputs.sort()
         outputs.sort()
 
@@ -40,10 +40,10 @@ class Branch(IBranch):
     def feed(self, index: Optional[int] = None) -> Bit:
         if index is None:
             raise BranchError("You need to pass the index to the output connection!")
-        
+
         if index not in list(range(len(self._output_connections))):
             raise BranchError(f"{index} doesn't correspond to any output connection!")
-        
+
         return self._input_connections[self._mapping[index]].feed()
 
     def has_input_connection_set(self) -> bool:

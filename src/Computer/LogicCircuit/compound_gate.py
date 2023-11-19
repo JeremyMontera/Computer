@@ -1,12 +1,10 @@
 import enum
 from typing import Dict, Optional, Union
 
-from Computer.Bit.abc import IBit
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import ILogicGate, ICompoundFactory, IConnection
+from Computer.Bit.abc import IBit
+from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.compound_factory import CompoundFactory
-from Computer.LogicCircuit.Connection import Connection
-from Computer.LogicCircuit.LogicGate import LogicGate
 
 PIN = Union[IBit, IConnection]
 # This represents everything that a pin can be connected to.

@@ -1,8 +1,8 @@
 from typing import Dict, Optional, Union
 
 from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
-from Computer.LogicCircuit.LogicGate import LogicType, LogicGate
 from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
 STUFF = Union[ILogicGate, IConnection]
 # This is a short-hand for the two types of devices used to build the compound gates.
