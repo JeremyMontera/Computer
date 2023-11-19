@@ -4,6 +4,9 @@ from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate
 
 DEVICE = ILogicGate | Tuple[IBranch, int]
+# This represents an arbitrary device the wire can be connected to.
+# NOTE: right now, for `Branch` objects, we need to also save this instance's position
+# in `Branch._output_connections` array so that we can get the right input connection.
 
 
 class ConnectionError(Exception):
@@ -66,7 +69,7 @@ class Connection(IConnection):
         if isinstance(self._input_connection, ILogicGate):
             return self._input_connection.get_output_pin()
         elif isinstance(self._input_connection, tuple):
-            return self._input_connection[0].feed(index=self._input_connection[1])
+            return self._input_connection[0].feed(index=self._input_connection[1]-1)
 
     def has_input_connection_set(self) -> bool:
         """

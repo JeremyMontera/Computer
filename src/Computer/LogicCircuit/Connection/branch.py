@@ -1,8 +1,7 @@
 from typing import Dict, List, Optional
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IBranch
-from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.abc import IBranch, IConnection
 
 
 class BranchError(Exception):
@@ -11,9 +10,9 @@ class BranchError(Exception):
 
 class Branch(IBranch):
     def __init__(self):
-        self._input_connections: List[Connection] = []
+        self._input_connections: List[IConnection] = []
         self._mapping: Dict[int, int] = None
-        self._output_connections: List[Connection] = []
+        self._output_connections: List[IConnection] = []
 
     @property
     def num_input_connections(self) -> int:
@@ -60,7 +59,7 @@ class Branch(IBranch):
         self._output_connections = []
         self._mapping = None
 
-    def set_input_connection(self, conn: Optional[Connection] = None) -> None:
+    def set_input_connection(self, conn: Optional[IConnection] = None) -> None:
         if self._mapping is not None:
             raise BranchError(
                 "The mapping has been set already! "
@@ -82,7 +81,7 @@ class Branch(IBranch):
         self._validate_mapping(mapping)
         self._mapping = mapping
 
-    def set_output_connection(self, conn: Optional[Connection] = None) -> None:
+    def set_output_connection(self, conn: Optional[IConnection] = None) -> None:
         if self._mapping is not None:
             raise BranchError(
                 "The mapping has been set already! "

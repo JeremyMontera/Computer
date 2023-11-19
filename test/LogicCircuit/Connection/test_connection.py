@@ -49,9 +49,9 @@ def test_connection_feed_gate(gate):
 def test_connection_feed_branch(mock_get, branch, gate):
     conn0 = Connection()
     conn1 = Connection()
-    conn0._input_connection = (branch, 0)
+    conn0._input_connection = (branch, 1)
     conn1._input_connection = gate
-    conn1._output_connection = (branch, 0)
+    conn1._output_connection = (branch, 1)
     branch._output_connections = [conn0]
     branch._input_connections = [conn1]
     branch._mapping = {0: 0}
