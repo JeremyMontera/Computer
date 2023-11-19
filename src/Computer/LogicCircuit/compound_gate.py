@@ -1,16 +1,17 @@
 import enum
 from typing import Dict, Optional, Union
 
+from Computer.Bit.abc import IBit
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import ILogicGate
+from Computer.LogicCircuit.abc import ILogicGate, ICompoundFactory, IConnection
 from Computer.LogicCircuit.compound_factory import CompoundFactory
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate
 
-PIN = Union[Bit, "Connection"]
+PIN = Union[IBit, IConnection]
 # This represents everything that a pin can be connected to.
 
-STUFF = Union[LogicGate, Connection]
+STUFF = Union[ILogicGate, IConnection]
 # This is a short-hand for the two types of devices used to build the compound gates.
 # TODO: do we need to add `Branch` here for xor gates.
 
@@ -91,7 +92,7 @@ class CompoundGate(ILogicGate):
             string
         """
 
-        self._factory: CompoundFactory = CompoundFactory(type=type.value)
+        self._factory: ICompoundFactory = CompoundFactory(type=type.value)
         """
         The factory used to generate the manifest.
 
@@ -122,7 +123,7 @@ class CompoundGate(ILogicGate):
 
         return self._type
 
-    def get_output_pin(self) -> Bit:
+    def get_output_pin(self) -> IBit:
         """
         This will be the primary method called by the user. It will call the output
         gate's [`get_output_pin`][Computer.LogicCircuit.LogicGate] method and return the
@@ -216,7 +217,7 @@ class CompoundGate(ILogicGate):
             reset_inputs()
             reset_output()
 
-    def set_input_pin(self, value: Bit | Connection = Bit(0), pin: int = 0) -> None:
+    def set_input_pin(self, value: IBit | IConnection = Bit(0), pin: int = 0) -> None:
         """
         This method will set the input pins of the input gates using
         [`set_input_pin`][Computer.LogicCircuit.LogicGate]. It can either be directly
@@ -236,7 +237,7 @@ class CompoundGate(ILogicGate):
         for gate in self._input_gates:
             gate.set_input_pin(value=value, pin=pin)
 
-    def set_output_pin(self, value: Optional[Connection] = None) -> None:
+    def set_output_pin(self, value: Optional[IConnection] = None) -> None:
         """
         This method will set the output pin of the output gate using its
         [`set_output_pin`][Computer.LogicCircuit.LogicGate]. This method is to be used

@@ -2,10 +2,9 @@ import enum
 from typing import List, Optional, Union, cast
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import ILogicGate
-from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.abc import ILogicGate, IConnection
 
-PIN = Union[Bit, "Connection"]
+PIN = Union[Bit, IConnection]
 # This represents everything that a pin can be connected to.
 
 
@@ -90,15 +89,15 @@ class LogicGate(ILogicGate):
         The input pins for information to come in.
 
         Type:
-            List[Optional[Bit | Connection]]
+            List[Optional[Bit | IConnection]]
         """
 
-        self._output_pin: Optional["Connection"] = cast(PIN, None)
+        self._output_pin: Optional[IConnection] = cast(PIN, None)
         """
         The output pin for information to leave.
 
         Type:
-            List[Optional[Connection]]
+            List[Optional[IConnection]]
         """
 
     @property
@@ -128,7 +127,7 @@ class LogicGate(ILogicGate):
 
         NOTE:
             This method is marked public and can be called by the user, though it is
-            more likely to be called by other objects, such as `Connection`.
+            more likely to be called by other objects, such as `IConnection`.
 
         Returns:
             result:
@@ -140,7 +139,7 @@ class LogicGate(ILogicGate):
         for p, pin in enumerate(self._input_pins):
             if pin is None:
                 raise LogicGateError(f"Pin {p} has not been set yet!")
-            elif isinstance(pin, Connection):
+            elif isinstance(pin, IConnection):
                 inputs[p] = pin.feed()
             elif isinstance(pin, Bit):
                 inputs[p] = pin
@@ -215,10 +214,10 @@ class LogicGate(ILogicGate):
             self._input_pins = [None] * self.mapping[self._type]
             self._output_pin = None
 
-    def set_input_pin(self, value: Bit | Connection = None, pin: int = 0) -> None:
+    def set_input_pin(self, value: Bit | IConnection = None, pin: int = 0) -> None:
         """
         This method will set the input pin. It can either be directly given information
-        (mostly used in the case of testing) or it can be given a `Connection` instance
+        (mostly used in the case of testing) or it can be given a `IConnection` instance
         in order to form an association relationship.
 
         NOTE:
@@ -243,7 +242,7 @@ class LogicGate(ILogicGate):
 
         self._input_pins[pin] = value
 
-    def set_output_pin(self, value: Optional[Connection] = None) -> None:
+    def set_output_pin(self, value: Optional[IConnection] = None) -> None:
         """
         This method will set the output pin. This method is to be used to mark that the
         output pin of the gate has been set and to establish the association
@@ -254,7 +253,7 @@ class LogicGate(ILogicGate):
 
         Args:
             value:
-                The `Connection` instance you want to associate to this instance.
+                The `IConnection` instance you want to associate to this instance.
         """
 
         # Can we shoot ourselves in the foot by not passing anything?

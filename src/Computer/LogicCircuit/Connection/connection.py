@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IConnection
+from Computer.LogicCircuit.abc import IConnection, ILogicGate, IBranch
 
-if TYPE_CHECKING:
-    from Computer.LogicCircuit.LogicGate import LogicGate
+DEVICE = ILogicGate | IBranch
 
 
 class ConnectionError(Exception):
@@ -28,7 +27,7 @@ class Connection(IConnection):
     def __init__(self):
         """Constructor..."""
 
-        self._input_connection: Optional["LogicGate"] = None
+        self._input_connection: Optional[DEVICE] = None
         """
         The device it receives data from.
 
@@ -38,7 +37,7 @@ class Connection(IConnection):
             Optional[LogicGate]
         """
 
-        self._output_connection: Optional["LogicGate"] = None
+        self._output_connection: Optional[DEVICE] = None
         """
         The device is feeds data to.
 
@@ -115,7 +114,7 @@ class Connection(IConnection):
         self._input_connection = None
         self._output_connection = None
 
-    def set_input_connection(self, gate: Optional["LogicGate"] = None) -> None:
+    def set_input_connection(self, gate: Optional[DEVICE] = None) -> None:
         """
         This will set the input end of this instance. It will form an association
         relationship with the device by calling that device's set output and pass this
@@ -143,7 +142,7 @@ class Connection(IConnection):
         self._input_connection = gate
 
     def set_output_connection(
-        self, gate: Optional["LogicGate"] = None, pin: int = 0
+        self, gate: Optional[DEVICE] = None, pin: int = 0
     ) -> None:
         """
         This will set the output end of this instance. It will form an association

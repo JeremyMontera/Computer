@@ -1,10 +1,10 @@
 from typing import Dict, Optional, Union
 
-from Computer.LogicCircuit.abc import ICompoundFactory
+from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
+from Computer.LogicCircuit.LogicGate import LogicType, LogicGate
 from Computer.LogicCircuit.Connection import Connection
-from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
-STUFF = Union[LogicGate, Connection]
+STUFF = Union[ILogicGate, IConnection]
 # This is a short-hand for the two types of devices used to build the compound gates.
 # TODO: do we need to add `Branch` here for xor gates.
 
@@ -23,11 +23,11 @@ def create_nand_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate0: ILogicGate = LogicGate(type=LogicType.AND, name="and_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
 
     # The wires needed...
-    conn0: Connection = Connection()
+    conn0: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
     conn0.set_input_connection(gate=gate0)
@@ -50,11 +50,11 @@ def create_nor_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate0: ILogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
 
     # The wires needed...
-    conn0: Connection = Connection()
+    conn0: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
     conn0.set_input_connection(gate=gate0)
@@ -77,15 +77,15 @@ def create_xor_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
-    gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
-    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
+    gate0: ILogicGate = LogicGate(type=LogicType.AND, name="and_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate2: ILogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate3: ILogicGate = LogicGate(type=LogicType.AND, name="and_1")
 
     # The wires needed...
-    conn0: Connection = Connection()
-    conn1: Connection = Connection()
-    conn2: Connection = Connection()
+    conn0: IConnection = Connection()
+    conn1: IConnection = Connection()
+    conn2: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
     # For the first wire... NB: this is a nand gate in disguise.
@@ -124,17 +124,17 @@ def create_xnor_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
-    gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
-    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
-    gate4: LogicGate = LogicGate(type=LogicType.NOT, name="not_1")
+    gate0: ILogicGate = LogicGate(type=LogicType.AND, name="and_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate2: ILogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate3: ILogicGate = LogicGate(type=LogicType.AND, name="and_1")
+    gate4: ILogicGate = LogicGate(type=LogicType.NOT, name="not_1")
 
     # The wires needed...
-    conn0: Connection = Connection()
-    conn1: Connection = Connection()
-    conn2: Connection = Connection()
-    conn3: Connection = Connection()
+    conn0: IConnection = Connection()
+    conn1: IConnection = Connection()
+    conn2: IConnection = Connection()
+    conn3: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
     # For the first wire... NB: this is a nand gate in disguise.
