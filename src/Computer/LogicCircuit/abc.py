@@ -79,13 +79,12 @@ class IConnection(metaclass=abc.ABCMeta):
 
 
 class IBranch(IConnection, metaclass=abc.ABCMeta):
-    
     @abc.abstractclassmethod
     def has_mapping_set(self) -> bool:
         ...
 
     @abc.abstractclassmethod
-    def set_mapping(self, mapping: Dict[int, int]) -> None:
+    def set_mapping(self, mapping: Optional[Dict[int, int]] = None) -> None:
         ...
 
 
