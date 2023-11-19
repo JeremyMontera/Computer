@@ -1,6 +1,7 @@
 import pytest
 from unittest import mock
 
+from Computer.Bit import Bit
 from Computer.LogicCircuit.Connection.connection import Connection
 from Computer.LogicCircuit.Connection.branch import Branch, BranchError
 
@@ -47,6 +48,10 @@ def test_branch_init():
     assert isinstance(branch._output_connections, list)
     assert len(branch._output_connections) == 0
 
+def test_branch_attrs(branch_no_mapping):
+    assert branch_no_mapping.num_input_connections == 2
+    assert branch_no_mapping.num_output_connections == 3
+
 def test_branch__validate_error_inputs(branch_no_mapping, mapping):
     branch = branch_no_mapping
     branch._input_connections.append(Connection())
@@ -62,6 +67,26 @@ def test_branch__validate_error_outputs(branch_no_mapping, mapping):
         branch._validate_mapping(mapping=mapping)
 
     assert exc.value.args[0] == "Not all of the outputs have connections!"
+
+def test_branch_feed_error_no_index(branch_mapping):
+    with pytest.raises(BranchError) as exc:
+        branch_mapping.feed()
+
+    assert exc.value.args[0] == "You need to pass the index to the output connection!"
+
+def test_branch_feed_error_bad_index(branch_mapping):
+    with pytest.raises(BranchError) as exc:
+        branch_mapping.feed(index=8)
+
+    assert exc.value.args[0] == "8 doesn't correspond to any output connection!"
+
+@mock.patch.object(Connection, "feed")
+def test_branch_feed(mock_feed, branch_mapping):
+    mock_feed.return_value = Bit(0)
+    ret = branch_mapping.feed(index=0)
+    assert isinstance(ret, Bit)
+    mock_feed.assert_called_once()
+    assert ret == Bit(0)
 
 def test_branch_has_set(branch_mapping):
     branch = branch_mapping
@@ -144,7 +169,7 @@ def test_branch_set_output_connection_error_no_connection():
 
     assert exc.value.args[0] == "You need to enter a connection!"
 
-def test_branch_set_outpput_connection(connections):
+def test_branch_set_output_connection(connections):
     branch = Branch()
     for conn, loc in connections:
         if loc == "output":
