@@ -51,8 +51,9 @@ comp7 - Refactor to make use of Bits                                            
     (4) Update docs                                                                 x
 
 comp8 - Create Branch class in Connection
-    (1) Create Branch class that follows IConnection interface
-    (2) Implement set_mapping and feed methods
+    (1) Develop Branch interface based on discussion                                x
+    (2) Create Branch class                                                         x
+    (2.1) Update Connection class to also accept Branch                             x
     (3) Add unit tests
     (4) Update documentation
 
