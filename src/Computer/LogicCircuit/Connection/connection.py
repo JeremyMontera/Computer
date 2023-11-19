@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import IConnection, ILogicGate, IBranch
 
-DEVICE = ILogicGate | IBranch
+DEVICE = ILogicGate | Tuple[IBranch, int]
 
 
 class ConnectionError(Exception):
@@ -54,8 +54,6 @@ class Connection(IConnection):
             This method is marked public and can be called by the user, though it is
             more likely to be called by the output device instead.
 
-        TODO: need to handle other devices wires can be connected to.
-
         Returns:
             information:
                 The output of the device connected to this instance's input.
@@ -65,8 +63,10 @@ class Connection(IConnection):
         if not self.has_input_connection_set():
             raise ConnectionError("The output connection has not been set yet!")
 
-        # TODO: update this when we can connect to other things
-        return self._input_connection.get_output_pin()
+        if isinstance(self._input_connection, ILogicGate):
+            return self._input_connection.get_output_pin()
+        elif isinstance(self._input_connection, tuple):
+            return self._input_connection[0].feed(index=self._input_connection[1])
 
     def has_input_connection_set(self) -> bool:
         """
@@ -138,6 +138,7 @@ class Connection(IConnection):
 
         elif isinstance(device, IBranch):
             device.set_output_connection(conn=self)
+            device = (device, device.num_output_connections)
 
         self._input_connection = device
 
@@ -173,5 +174,6 @@ class Connection(IConnection):
 
         elif isinstance(device, IBranch):
             device.set_input_connection(conn=self)
+            device = (device, device.num_input_connections)
 
         self._output_connection = device

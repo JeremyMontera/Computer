@@ -15,6 +15,14 @@ class Branch(IBranch):
         self._mapping: Dict[int, int] = None
         self._output_connections: List[Connection] = []
 
+    @property
+    def num_input_connections(self) -> int:
+        return len(self._input_connections)
+    
+    @property
+    def num_output_connections(self) -> int:
+        return len(self._output_connections)
+
     def _validate_mapping(self, mapping: Dict[int, int]) -> None:
         inputs: List[int] = list(set(mapping.values()))
         outputs: List[int] = list(mapping.keys())
@@ -29,8 +37,14 @@ class Branch(IBranch):
             range(len(self._output_connections))
         ), "Not all of the outputs have connections!"
 
-    def feed(self) -> Bit:
-        ...
+    def feed(self, index: Optional[int] = None) -> Bit:
+        if index is None:
+            raise BranchError("You need to pass the index to the output connection!")
+        
+        if index not in list(range(len(self._output_connections))):
+            raise BranchError(f"{index} doesn't correspond to any output connection!")
+        
+        return self._input_connections[self._mapping[index]].feed()
 
     def has_input_connection_set(self) -> bool:
         return len(self._input_connections) > 0

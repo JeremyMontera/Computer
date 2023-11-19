@@ -82,6 +82,12 @@ class IConnection(metaclass=abc.ABCMeta):
 
 class IBranch(IConnection, metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
+    def feed(self, index: Optional[int] = None) -> IBit:
+        """This gets the information from the input and returns it."""
+
+        ...
+
+    @abc.abstractclassmethod
     def has_mapping_set(self) -> bool:
         ...
 
