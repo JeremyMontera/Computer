@@ -197,7 +197,7 @@ class CompoundFactory(ICompoundFactory):
         dict[string, callable]
     """
 
-    def __init__(self, type: Optional[str] = None):
+    def __init__(self, *, type: str):
         """
         Constructor...
 
@@ -205,13 +205,6 @@ class CompoundFactory(ICompoundFactory):
             type:
                 What type of compound gate is being requested.
         """
-
-        # Hey kids, we don't like shooting ourselves in the foot... this checks if the
-        # user passed a type and that it is one of the known compound gates.
-        if type is None or type not in list(self._factories.keys()):
-            raise CompoundFactoryError(
-                "You need to pass a valid compound logic gate type!"
-            )
 
         self._type: str = type
         """
