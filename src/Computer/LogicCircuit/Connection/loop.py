@@ -1,7 +1,7 @@
-from typing import Optional, List
+from typing import List, Optional
 
-from Computer.LogicCircuit.abc import ILoop, IConnection, IBit
 from Computer.Bit import Bit
+from Computer.LogicCircuit.abc import IBit, IConnection, ILoop
 
 
 class LoopError(Exception):
@@ -83,7 +83,6 @@ class Loop(ILoop):
 
         # Connection to the outside world
         if index == 0:
-
             # Like, OMG BECKY! Don't shoot ourselves in the foot, bitch.
             if not self.has_input_connection_set():
                 raise LoopError("The input connection has not been set yet!")
@@ -97,7 +96,6 @@ class Loop(ILoop):
 
         # The "loop"
         elif index == 1:
-
             # Fucking hell, Becky, you dumb bitch. Don't shoot ourselves in the foot.
             if self._memory is None:
                 raise LoopError("Looks like no signal came through yet!")

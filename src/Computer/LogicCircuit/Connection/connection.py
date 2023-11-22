@@ -1,7 +1,8 @@
 from typing import Optional, Tuple
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate, ISwitch, ILoop
+from Computer.LogicCircuit.abc import (IBranch, IConnection, ILogicGate, ILoop,
+                                       ISwitch)
 
 DEVICE = (
     ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int]
@@ -147,7 +148,7 @@ class Connection(IConnection):
 
         elif isinstance(device, IBranch):
             device.set_output_connection(conn=self)
-            device = (device, device.num_output_connections-1)
+            device = (device, device.num_output_connections - 1)
 
         elif isinstance(device, ISwitch):
             if device.has_output_connection_set():

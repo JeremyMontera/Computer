@@ -1,8 +1,9 @@
-import pytest
 from unittest import mock
 
+import pytest
+
 from Computer.Bit import Bit
-from Computer.LogicCircuit.Connection import Loop, LoopError, Connection
+from Computer.LogicCircuit.Connection import Connection, Loop, LoopError
 
 
 def test_loop_init():

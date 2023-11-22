@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.Connection import Branch, Connection, Switch, Loop
+from Computer.LogicCircuit.Connection import Branch, Connection, Loop, Switch
 from Computer.LogicCircuit.Connection.connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
@@ -72,6 +72,7 @@ def test_connection_feed_switch(mock_feed, switch):
     ret: Bit = conn.feed()
     assert ret == Bit(1)
     mock_feed.assert_called_once()
+
 
 @mock.patch.object(Loop, "feed")
 def test_connection_feed_loop(mock_feed, loop):
@@ -143,9 +144,8 @@ def test_connection_set_input_connection_error_device_connected(device, request)
     elif device == "switch":
         assert exc.value.args[0] == "This switch is already fully connected!"
     elif device == "loop":
-        assert (
-            exc.value.args[0]
-            == "Output connection 0 of this loop is already connected!"
+        assert exc.value.args[0] == (
+            "Output connection 0 of this loop is already connected!"
         )
 
 
