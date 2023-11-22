@@ -143,6 +143,10 @@ class ISwitch(IConnection, metaclass=abc.ABCMeta):
         ...
 
 
+class ILoop(IConnection, metaclass=abc.ABCMeta):
+    ...
+
+
 class ILogicGate(metaclass=abc.ABCMeta):
 
     """
