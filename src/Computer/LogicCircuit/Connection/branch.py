@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import IBranch, IConnection
@@ -26,7 +26,7 @@ class Branch(IBranch):
 
     def __init__(self):
         """Constructor..."""
-        
+
         self._input_connections: List[IConnection] = []
         """
         The inputs into the branch.

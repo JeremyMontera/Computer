@@ -99,7 +99,7 @@ class IBranch(IConnection, metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
     def set_mapping(self, *, mapping: Dict[int, int]) -> None:
         """This will establish a mapping between outputs and inputs."""
-        
+
         ...
 
 

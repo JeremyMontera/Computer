@@ -69,7 +69,7 @@ class Connection(IConnection):
         if isinstance(self._input_connection, ILogicGate):
             return self._input_connection.get_output_pin()
         elif isinstance(self._input_connection, tuple):
-            return self._input_connection[0].feed(index=self._input_connection[1]-1)
+            return self._input_connection[0].feed(index=self._input_connection[1] - 1)
 
     def has_input_connection_set(self) -> bool:
         """

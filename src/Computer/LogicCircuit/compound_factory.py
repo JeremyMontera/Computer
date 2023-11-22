@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Union
+from typing import Dict, Union
 
 from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.Connection import Connection

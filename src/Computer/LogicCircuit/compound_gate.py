@@ -1,7 +1,6 @@
 import enum
 from typing import Dict, Optional, Union
 
-from Computer.Bit import Bit
 from Computer.Bit.abc import IBit
 from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.compound_factory import CompoundFactory
