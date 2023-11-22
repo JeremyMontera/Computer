@@ -61,6 +61,11 @@ class LogicGate(ILogicGate):
                 The name of the logic gate.
         """
 
+        # Check to see if the user screwed up and didn't pass a valid type (don't shoot
+        # ourselves in the foot).
+        if not isinstance(type, LogicType):
+            raise LogicGateError("You need to pass a valid logic gate type!")
+
         self._type: LogicType = type
         """
         The type of logic gate.

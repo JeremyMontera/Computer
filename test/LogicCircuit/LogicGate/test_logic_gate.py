@@ -26,6 +26,12 @@ class TestLogicGates:
                 [Bit(0), Bit(1)],
                 [Bit(0), Bit(0)],
             ]
+        
+    def test_logic_gate_init_error_bad_type(self):
+        with pytest.raises(LogicGateError) as exc:
+            LogicGate(type="blah")
+
+        assert exc.value.args[0] == "You need to pass a valid logic gate type!"
 
     @pytest.mark.parametrize(
         "config",
