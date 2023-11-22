@@ -87,14 +87,6 @@ def test_connection_reset(gate):
     assert not conn.has_output_connection_set()
 
 
-def test_connection_set_input_connection_error_device_is_none():
-    conn = Connection()
-    with pytest.raises(ConnectionError) as exc:
-        conn.set_input_connection()
-
-    assert exc.value.args[0] == "You need to enter a device to set the input!"
-
-
 def test_connection_set_input_connection_error_conn_already_connected(gate):
     conn = Connection()
     conn._input_connection = gate
@@ -121,14 +113,6 @@ def test_connection_set_input_connection(device, request):
     elif device == "branch":
         assert conn._input_connection == (d, 1)
         assert d._output_connections == [conn]
-
-
-def test_connection_set_output_connection_error_device_is_none():
-    conn = Connection()
-    with pytest.raises(ConnectionError) as exc:
-        conn.set_output_connection()
-
-    assert exc.value.args[0] == "You need to enter a device to set the output!"
 
 
 def test_connection_set_output_connection_error_conn_already_connected(gate):

@@ -113,7 +113,7 @@ class Connection(IConnection):
         self._input_connection = None
         self._output_connection = None
 
-    def set_input_connection(self, device: Optional[DEVICE] = None) -> None:
+    def set_input_connection(self, *, device: DEVICE) -> None:
         """
         This will set the input end of this instance. It will form an association
         relationship with the device by calling that device's set output and pass this
@@ -126,10 +126,6 @@ class Connection(IConnection):
             device:
                 The device we want to connect to the input end of the wire.
         """
-
-        # We no want to connect to nothing... and shoot ourselves in the foot...
-        if device is None:
-            raise ConnectionError("You need to enter a device to set the input!")
 
         if isinstance(device, ILogicGate):
             # No good it is to shoot one's self in foot if already there be connection.
@@ -144,9 +140,7 @@ class Connection(IConnection):
 
         self._input_connection = device
 
-    def set_output_connection(
-        self, device: Optional[DEVICE] = None, pin: int = 0
-    ) -> None:
+    def set_output_connection(self, *, device: DEVICE, pin: int) -> None:
         """
         This will set the output end of this instance. It will form an association
         relationship with the device by calling that device's set input and pass this
@@ -161,10 +155,6 @@ class Connection(IConnection):
             pin:
                 Where to hook up the output end of the wire.
         """
-
-        # We no want to connect to nothing... and shoot ourselves in the foot...
-        if device is None:
-            raise ConnectionError("You need to enter a device to set the output!")
 
         if isinstance(device, ILogicGate):
             # No good it is to shoot one's self in foot if already there be connection.
