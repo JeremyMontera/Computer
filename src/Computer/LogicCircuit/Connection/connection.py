@@ -1,10 +1,12 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional, Tuple
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IConnection
+from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate
 
-if TYPE_CHECKING:
-    from Computer.LogicCircuit.LogicGate import LogicGate
+DEVICE = ILogicGate | Tuple[IBranch, int]
+# This represents an arbitrary device the wire can be connected to.
+# NOTE: right now, for `Branch` objects, we need to also save this instance's position
+# in `Branch._output_connections` array so that we can get the right input connection.
 
 
 class ConnectionError(Exception):
@@ -28,24 +30,20 @@ class Connection(IConnection):
     def __init__(self):
         """Constructor..."""
 
-        self._input_connection: Optional["LogicGate"] = None
+        self._input_connection: Optional[DEVICE] = None
         """
         The device it receives data from.
 
-        TODO: update when more devices implemented.
-
         Type:
-            Optional[LogicGate]
+            Optional[LogicGate | Branch]
         """
 
-        self._output_connection: Optional["LogicGate"] = None
+        self._output_connection: Optional[DEVICE] = None
         """
         The device is feeds data to.
 
-        TODO: update when more devices implemented.
-
         Type:
-            Optional[LogicGate]
+            Optional[LogicGate | Branch]
         """
 
     def feed(self) -> Bit:
@@ -59,8 +57,6 @@ class Connection(IConnection):
             This method is marked public and can be called by the user, though it is
             more likely to be called by the output device instead.
 
-        TODO: need to handle other devices wires can be connected to.
-
         Returns:
             information:
                 The output of the device connected to this instance's input.
@@ -70,8 +66,10 @@ class Connection(IConnection):
         if not self.has_input_connection_set():
             raise ConnectionError("The output connection has not been set yet!")
 
-        # TODO: update this when we can connect to other things
-        return self._input_connection.get_output_pin()
+        if isinstance(self._input_connection, ILogicGate):
+            return self._input_connection.get_output_pin()
+        elif isinstance(self._input_connection, tuple):
+            return self._input_connection[0].feed(index=self._input_connection[1] - 1)
 
     def has_input_connection_set(self) -> bool:
         """
@@ -115,7 +113,7 @@ class Connection(IConnection):
         self._input_connection = None
         self._output_connection = None
 
-    def set_input_connection(self, gate: Optional["LogicGate"] = None) -> None:
+    def set_input_connection(self, *, device: DEVICE) -> None:
         """
         This will set the input end of this instance. It will form an association
         relationship with the device by calling that device's set output and pass this
@@ -124,27 +122,25 @@ class Connection(IConnection):
         NOTE:
             This method is marked as public and can be called by the user.
 
-        TODO: updated when we can connect to other devices.
-
         Args:
-            gate:
+            device:
                 The device we want to connect to the input end of the wire.
         """
 
-        # We no want to connect to nothing... and shoot ourselves in the foot...
-        if gate is None:
-            raise ConnectionError("You need to enter a gate to set the input!")
+        if isinstance(device, ILogicGate):
+            # No good it is to shoot one's self in foot if already there be connection.
+            if self.has_input_connection_set():
+                raise ConnectionError("An input connection has already been made!")
 
-        # No good it is to shoot one's self in foot if already there be connection.
-        if self.has_input_connection_set():
-            raise ConnectionError("An input connection has already been made!")
+            device.set_output_pin(value=self)
 
-        gate.set_output_pin(value=self)
-        self._input_connection = gate
+        elif isinstance(device, IBranch):
+            device.set_output_connection(conn=self)
+            device = (device, device.num_output_connections)
 
-    def set_output_connection(
-        self, gate: Optional["LogicGate"] = None, pin: int = 0
-    ) -> None:
+        self._input_connection = device
+
+    def set_output_connection(self, *, device: DEVICE, pin: int) -> None:
         """
         This will set the output end of this instance. It will form an association
         relationship with the device by calling that device's set input and pass this
@@ -153,23 +149,22 @@ class Connection(IConnection):
         NOTE:
             This method is marked as public and can be called by the user.
 
-        TODO: updated when we can connect to other devices. The function signature will
-        need to be updated, so more than likely API-breaking change coming :(
-
         Args:
-            gate:
+            device:
                 The device we want to connect to the input end of the wire.
             pin:
                 Where to hook up the output end of the wire.
         """
 
-        # We no want to connect to nothing... and shoot ourselves in the foot...
-        if gate is None:
-            raise ConnectionError("You need to enter a gate to set the output!")
+        if isinstance(device, ILogicGate):
+            # No good it is to shoot one's self in foot if already there be connection.
+            if self.has_output_connection_set():
+                raise ConnectionError("An output connection has already been made!")
 
-        # No good it is to shoot one's self in foot if already there be connection.
-        if self.has_output_connection_set():
-            raise ConnectionError("An output connection has already been made!")
+            device.set_input_pin(value=self, pin=pin)
 
-        gate.set_input_pin(value=self, pin=pin)
-        self._output_connection = gate
+        elif isinstance(device, IBranch):
+            device.set_input_connection(conn=self)
+            device = (device, device.num_input_connections)
+
+        self._output_connection = device

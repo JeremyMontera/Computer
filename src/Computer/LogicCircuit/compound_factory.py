@@ -1,10 +1,10 @@
-from typing import Dict, Optional, Union
+from typing import Dict, Union
 
-from Computer.LogicCircuit.abc import ICompoundFactory
+from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
-STUFF = Union[LogicGate, Connection]
+STUFF = Union[ILogicGate, IConnection]
 # This is a short-hand for the two types of devices used to build the compound gates.
 # TODO: do we need to add `Branch` here for xor gates.
 
@@ -23,15 +23,15 @@ def create_nand_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate0: ILogicGate = LogicGate(type=LogicType.AND, name="and_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
 
     # The wires needed...
-    conn0: Connection = Connection()
+    conn0: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
-    conn0.set_input_connection(gate=gate0)
-    conn0.set_output_connection(gate=gate1, pin=0)
+    conn0.set_input_connection(device=gate0)
+    conn0.set_output_connection(device=gate1, pin=0)
 
     return {"input_gates": [gate0], "output_gate": gate1, "conn0": conn0}
 
@@ -50,15 +50,15 @@ def create_nor_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate0: ILogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
 
     # The wires needed...
-    conn0: Connection = Connection()
+    conn0: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
-    conn0.set_input_connection(gate=gate0)
-    conn0.set_output_connection(gate=gate1, pin=0)
+    conn0.set_input_connection(device=gate0)
+    conn0.set_output_connection(device=gate1, pin=0)
 
     return {"input_gates": [gate0], "output_gate": gate1, "conn0": conn0}
 
@@ -77,28 +77,28 @@ def create_xor_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
-    gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
-    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
+    gate0: ILogicGate = LogicGate(type=LogicType.AND, name="and_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate2: ILogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate3: ILogicGate = LogicGate(type=LogicType.AND, name="and_1")
 
     # The wires needed...
-    conn0: Connection = Connection()
-    conn1: Connection = Connection()
-    conn2: Connection = Connection()
+    conn0: IConnection = Connection()
+    conn1: IConnection = Connection()
+    conn2: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
     # For the first wire... NB: this is a nand gate in disguise.
-    conn0.set_input_connection(gate=gate0)
-    conn0.set_output_connection(gate=gate1, pin=0)
+    conn0.set_input_connection(device=gate0)
+    conn0.set_output_connection(device=gate1, pin=0)
 
     # For the second wire...
-    conn1.set_input_connection(gate=gate1)
-    conn1.set_output_connection(gate=gate3, pin=0)
+    conn1.set_input_connection(device=gate1)
+    conn1.set_output_connection(device=gate3, pin=0)
 
     # For the third wire...
-    conn2.set_input_connection(gate=gate2)
-    conn2.set_output_connection(gate=gate3, pin=1)
+    conn2.set_input_connection(device=gate2)
+    conn2.set_output_connection(device=gate3, pin=1)
 
     return {
         "input_gates": [gate0, gate2],
@@ -124,34 +124,34 @@ def create_xnor_gate() -> Dict[str, STUFF]:
     """
 
     # The logic gates needed...
-    gate0: LogicGate = LogicGate(type=LogicType.AND, name="and_0")
-    gate1: LogicGate = LogicGate(type=LogicType.NOT, name="not_0")
-    gate2: LogicGate = LogicGate(type=LogicType.OR, name="or_0")
-    gate3: LogicGate = LogicGate(type=LogicType.AND, name="and_1")
-    gate4: LogicGate = LogicGate(type=LogicType.NOT, name="not_1")
+    gate0: ILogicGate = LogicGate(type=LogicType.AND, name="and_0")
+    gate1: ILogicGate = LogicGate(type=LogicType.NOT, name="not_0")
+    gate2: ILogicGate = LogicGate(type=LogicType.OR, name="or_0")
+    gate3: ILogicGate = LogicGate(type=LogicType.AND, name="and_1")
+    gate4: ILogicGate = LogicGate(type=LogicType.NOT, name="not_1")
 
     # The wires needed...
-    conn0: Connection = Connection()
-    conn1: Connection = Connection()
-    conn2: Connection = Connection()
-    conn3: Connection = Connection()
+    conn0: IConnection = Connection()
+    conn1: IConnection = Connection()
+    conn2: IConnection = Connection()
+    conn3: IConnection = Connection()
 
     # Establish all of the association relationships between the logic gates and wires.
     # For the first wire... NB: this is a nand gate in disguise.
-    conn0.set_input_connection(gate=gate0)
-    conn0.set_output_connection(gate=gate1, pin=0)
+    conn0.set_input_connection(device=gate0)
+    conn0.set_output_connection(device=gate1, pin=0)
 
     # For the second wire...
-    conn1.set_input_connection(gate=gate1)
-    conn1.set_output_connection(gate=gate3, pin=0)
+    conn1.set_input_connection(device=gate1)
+    conn1.set_output_connection(device=gate3, pin=0)
 
     # For the third wire...
-    conn2.set_input_connection(gate=gate2)
-    conn2.set_output_connection(gate=gate3, pin=1)
+    conn2.set_input_connection(device=gate2)
+    conn2.set_output_connection(device=gate3, pin=1)
 
     # For the fourth wire...
-    conn3.set_input_connection(gate=gate3)
-    conn3.set_output_connection(gate=gate4, pin=0)
+    conn3.set_input_connection(device=gate3)
+    conn3.set_output_connection(device=gate4, pin=0)
 
     return {
         "input_gates": [gate0, gate2],
@@ -197,7 +197,7 @@ class CompoundFactory(ICompoundFactory):
         dict[string, callable]
     """
 
-    def __init__(self, type: Optional[str] = None):
+    def __init__(self, *, type: str):
         """
         Constructor...
 
@@ -205,13 +205,6 @@ class CompoundFactory(ICompoundFactory):
             type:
                 What type of compound gate is being requested.
         """
-
-        # Hey kids, we don't like shooting ourselves in the foot... this checks if the
-        # user passed a type and that it is one of the known compound gates.
-        if type is None or type not in list(self._factories.keys()):
-            raise CompoundFactoryError(
-                "You need to pass a valid compound logic gate type!"
-            )
 
         self._type: str = type
         """

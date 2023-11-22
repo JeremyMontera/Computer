@@ -22,7 +22,7 @@ class TestCompoundGates:
 
     def test_compound_gate_init_error_bad_type(self):
         with pytest.raises(CompoundGateError) as exc:
-            CompoundGate()
+            CompoundGate(type="foo")
 
         assert exc.value.args[0] == "You need to enter a valid logic gate type!"
 

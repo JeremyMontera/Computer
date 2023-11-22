@@ -1,7 +1,6 @@
 import pytest
 
 from Computer.LogicCircuit import CompoundFactory
-from Computer.LogicCircuit.compound_factory import CompoundFactoryError
 
 
 @pytest.fixture
@@ -48,15 +47,8 @@ def xnor_manifest():
     }
 
 
-def test_factory_init_error_bad_type():
-    with pytest.raises(CompoundFactoryError) as exc:
-        CompoundFactory()
-
-    assert exc.value.args[0] == "You need to pass a valid compound logic gate type!"
-
-
 def test_factory_init():
-    fact = CompoundFactory("xor")
+    fact = CompoundFactory(type="xor")
     assert hasattr(fact, "_type")
     assert isinstance(fact._type, str)
     assert fact._type == "xor"
@@ -73,7 +65,7 @@ def test_factory_init():
 )
 def test_factory_create(config, results, request):
     manifest = request.getfixturevalue(results)
-    fact = CompoundFactory(config)
+    fact = CompoundFactory(type=config)
     res = fact.create()
 
     assert len(res) == len(manifest)
