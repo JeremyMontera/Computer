@@ -1,12 +1,15 @@
 from typing import Optional, Tuple
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate, ISwitch
+from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate, ISwitch, ILoop
 
-DEVICE = ILogicGate | Tuple[IBranch, int] | ISwitch
+DEVICE = (
+    ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int]
+)
 # This represents an arbitrary device the wire can be connected to.
 # NOTE: right now, for `Branch` objects, we need to also save this instance's position
 # in `Branch._output_connections` array so that we can get the right input connection.
+# NOTE: same thing with `Loop` objects, just now the output connection.
 
 
 class ConnectionError(Exception):
@@ -35,7 +38,7 @@ class Connection(IConnection):
         The device it receives data from.
 
         Type:
-            Optional[LogicGate | Branch]
+            Optional[LogicGate | Branch | Switch | Loop]
         """
 
         self._output_connection: Optional[DEVICE] = None
@@ -43,7 +46,7 @@ class Connection(IConnection):
         The device is feeds data to.
 
         Type:
-            Optional[LogicGate | Branch]
+            Optional[LogicGate | Branch | Switch | Loop]
         """
 
     def feed(self) -> Bit:
@@ -69,7 +72,7 @@ class Connection(IConnection):
         if isinstance(self._input_connection, ILogicGate):
             return self._input_connection.get_output_pin()
         elif isinstance(self._input_connection, tuple):
-            return self._input_connection[0].feed(index=self._input_connection[1] - 1)
+            return self._input_connection[0].feed(index=self._input_connection[1])
         elif isinstance(self._input_connection, ISwitch):
             return self._input_connection.feed()
 
@@ -115,7 +118,7 @@ class Connection(IConnection):
         self._input_connection = None
         self._output_connection = None
 
-    def set_input_connection(self, *, device: DEVICE) -> None:
+    def set_input_connection(self, *, device: DEVICE, index: Optional[int] = 0) -> None:
         """
         This will set the input end of this instance. It will form an association
         relationship with the device by calling that device's set output and pass this
@@ -127,6 +130,9 @@ class Connection(IConnection):
         Args:
             device:
                 The device we want to connect to the input end of the wire.
+            index:
+                Which location on the device the input connection of the wire should
+                be connected to.
         """
 
         # No good it is to shoot one's self in foot if already there be connection.
@@ -141,13 +147,22 @@ class Connection(IConnection):
 
         elif isinstance(device, IBranch):
             device.set_output_connection(conn=self)
-            device = (device, device.num_output_connections)
+            device = (device, device.num_output_connections-1)
 
         elif isinstance(device, ISwitch):
             if device.has_output_connection_set():
                 raise ConnectionError("This switch is already fully connected!")
 
             device.set_output_connection(conn=self)
+
+        elif isinstance(device, ILoop):
+            if device.has_output_connection_set(index=index):
+                raise ConnectionError(
+                    f"Output connection {index} of this loop is already connected!"
+                )
+
+            device.set_output_connection(conn=self, index=index)
+            device = (device, index)
 
         self._input_connection = device
 
@@ -186,5 +201,11 @@ class Connection(IConnection):
                 raise ConnectionError("This switch is already fully connected!")
 
             device.set_input_connection(conn=self, index=index)
+
+        elif isinstance(device, ILoop):
+            if device.has_input_connection_set():
+                raise ConnectionError("This loop is already connected!")
+
+            device.set_input_connection(conn=self)
 
         self._output_connection = device

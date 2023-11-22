@@ -65,14 +65,19 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_connection(self, *, device: ILogicGate | IBranch | ISwitch) -> None:
+    def set_input_connection(
+        self,
+        *,
+        device: ILogicGate | IBranch | ISwitch | ILoop,
+        index: Optional[int] = 0,
+    ) -> None:
         """This will establish an input connection with a device."""
 
         ...
 
     @abc.abstractclassmethod
     def set_output_connection(
-        self, *, device: ILogicGate | IBranch | ISwitch, index: int
+        self, *, device: ILogicGate | IBranch | ISwitch | ILoop, index: int
     ) -> None:
         """This will establish an output connection with a device."""
 
@@ -144,13 +149,12 @@ class ISwitch(IConnection, metaclass=abc.ABCMeta):
 
 
 class ILoop(IConnection, metaclass=abc.ABCMeta):
-
     @abc.abstractclassmethod
     def feed(self, *, index: int) -> IBit:
         """This gets the information from the appropriate input and returns it."""
 
         ...
-    
+
     @abc.abstractclassmethod
     def has_output_connection_set(self, *, index: int) -> bool:
         """This will check if there is an output connection."""
