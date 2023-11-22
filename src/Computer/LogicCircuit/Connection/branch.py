@@ -36,10 +36,7 @@ class Branch(IBranch):
             range(len(self._output_connections))
         ), "Not all of the outputs have connections!"
 
-    def feed(self, index: Optional[int] = None) -> Bit:
-        if index is None:
-            raise BranchError("You need to pass the index to the output connection!")
-
+    def feed(self, *, index: int) -> Bit:
         if index not in list(range(len(self._output_connections))):
             raise BranchError(f"{index} doesn't correspond to any output connection!")
 
@@ -59,36 +56,27 @@ class Branch(IBranch):
         self._output_connections = []
         self._mapping = None
 
-    def set_input_connection(self, conn: Optional[IConnection] = None) -> None:
+    def set_input_connection(self, *, conn: IConnection) -> None:
         if self._mapping is not None:
             raise BranchError(
                 "The mapping has been set already! "
                 "You cannot add any more connections!"
             )
 
-        if conn is None:
-            raise BranchError("You need to enter a connection!")
-
         self._input_connections.append(conn)
 
-    def set_mapping(self, mapping: Optional[Dict[int, int]] = None) -> None:
-        if mapping is None:
-            raise BranchError("You need to enter a valid mapping!")
-
+    def set_mapping(self, *, mapping: Dict[int, int]) -> None:
         if self._mapping is not None:
             raise BranchError("The mapping has been set already!")
 
         self._validate_mapping(mapping)
         self._mapping = mapping
 
-    def set_output_connection(self, conn: Optional[IConnection] = None) -> None:
+    def set_output_connection(self, *, conn: IConnection) -> None:
         if self._mapping is not None:
             raise BranchError(
                 "The mapping has been set already! "
                 "You cannot add any more connections!"
             )
-
-        if conn is None:
-            raise BranchError("You need to enter a connection!")
 
         self._output_connections.append(conn)

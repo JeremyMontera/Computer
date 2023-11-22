@@ -78,13 +78,6 @@ def test_branch__validate_error_outputs(branch_no_mapping, mapping):
     assert exc.value.args[0] == "Not all of the outputs have connections!"
 
 
-def test_branch_feed_error_no_index(branch_mapping):
-    with pytest.raises(BranchError) as exc:
-        branch_mapping.feed()
-
-    assert exc.value.args[0] == "You need to pass the index to the output connection!"
-
-
 def test_branch_feed_error_bad_index(branch_mapping):
     with pytest.raises(BranchError) as exc:
         branch_mapping.feed(index=8)
@@ -122,36 +115,20 @@ def test_branch_reset(branch_mapping):
 def test_branch_set_input_connection_error_mapping_set(branch_mapping):
     branch = branch_mapping
     with pytest.raises(BranchError) as exc:
-        branch.set_input_connection(Connection())
+        branch.set_input_connection(conn=Connection())
 
     assert exc.value.args[0] == (
         "The mapping has been set already! " "You cannot add any more connections!"
     )
 
 
-def test_branch_set_input_connection_error_no_connection(branch_no_mapping):
-    branch = branch_no_mapping
-    with pytest.raises(BranchError) as exc:
-        branch.set_input_connection()
-
-    assert exc.value.args[0] == "You need to enter a connection!"
-
-
 def test_branch_set_inpput_connection(connections):
     branch = Branch()
     for conn, loc in connections:
         if loc == "input":
-            branch.set_input_connection(conn)
+            branch.set_input_connection(conn=conn)
 
     assert len(branch._input_connections) == 2
-
-
-def test_branch_set_mapping_error_no_mapping():
-    branch = Branch()
-    with pytest.raises(BranchError) as exc:
-        branch.set_mapping()
-
-    assert exc.value.args[0] == "You need to enter a valid mapping!"
 
 
 def test_branch_set_mapping_error_mapping_already_set(branch_mapping):
@@ -175,25 +152,17 @@ def test_branch_set_mapping(mock_validate, branch_no_mapping, mapping):
 def test_branch_set_output_connection_error_mapping_set(branch_mapping):
     branch = branch_mapping
     with pytest.raises(BranchError) as exc:
-        branch.set_input_connection(Connection())
+        branch.set_input_connection(conn=Connection())
 
     assert exc.value.args[0] == (
         "The mapping has been set already! " "You cannot add any more connections!"
     )
 
 
-def test_branch_set_output_connection_error_no_connection():
-    branch = Branch()
-    with pytest.raises(BranchError) as exc:
-        branch.set_output_connection()
-
-    assert exc.value.args[0] == "You need to enter a connection!"
-
-
 def test_branch_set_output_connection(connections):
     branch = Branch()
     for conn, loc in connections:
         if loc == "output":
-            branch.set_output_connection(conn)
+            branch.set_output_connection(conn=conn)
 
     assert len(branch._output_connections) == 3
