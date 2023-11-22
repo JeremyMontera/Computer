@@ -15,7 +15,7 @@ E = TypeVar("E", bound=enum.Enum)
 
 class ICompoundFactory(metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
-    def __init__(self, type: Optional[str] = None):
+    def __init__(self, *, type: str):
         """Constructor..."""
 
         ...
@@ -65,36 +65,39 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_connection(
-        self, device: Optional[ILogicGate | IBranch] = None
-    ) -> None:
+    def set_input_connection(self, *, device: ILogicGate | IBranch) -> None:
         """This will establish an input connection with a device."""
+
         ...
 
     @abc.abstractclassmethod
-    def set_output_connection(
-        self, device: Optional[ILogicGate] = None, pin: int = 0
-    ) -> None:
+    def set_output_connection(self, *, device: ILogicGate, pin: int) -> None:
         """This will establish an output connection with a device."""
 
         ...
 
 
 class IBranch(IConnection, metaclass=abc.ABCMeta):
+
+    """
+    This implements a branching connection: multiple wires comming in and multiple
+    wires going out of a single junction.
+    """
+
     @abc.abstractclassmethod
-    def feed(self, index: Optional[int] = None) -> IBit:
+    def feed(self, *, index: int) -> IBit:
         """This gets the information from the appropriate input and returns it."""
 
         ...
 
     @abc.abstractclassmethod
     def has_mapping_set(self) -> bool:
-        """This will check if there is a mapping."""
+        """This method will check to see if the mapping has been set yet."""
 
         ...
 
     @abc.abstractclassmethod
-    def set_mapping(self, mapping: Optional[Dict[int, int]] = None) -> None:
+    def set_mapping(self, *, mapping: Dict[int, int]) -> None:
         """This will establish a mapping between outputs and inputs."""
         
         ...
@@ -108,7 +111,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
     """
 
     @abc.abstractclassmethod
-    def __init__(self, type: Optional[E] = None, name: Optional[str] = None):
+    def __init__(self, *, type: E, name: Optional[str] = None):
         """Constructor..."""
 
         ...
@@ -120,7 +123,7 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def has_input_pin_set(self, pin: int = 0) -> bool:
+    def has_input_pin_set(self, *, pin: int) -> bool:
         """This checks if the input pin has been set."""
 
         ...
@@ -138,13 +141,13 @@ class ILogicGate(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_pin(self, value: IBit | IConnection = 0, pin: int = 0) -> None:
+    def set_input_pin(self, *, value: IBit | IConnection, pin: int) -> None:
         """This sets the input pin."""
 
         ...
 
     @abc.abstractclassmethod
-    def set_output_pin(self, value: Optional[IConnection] = None) -> None:
+    def set_output_pin(self, *, value: IConnection) -> None:
         """This sets the output pin."""
 
         ...
