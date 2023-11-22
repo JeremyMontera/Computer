@@ -136,7 +136,7 @@ class Connection(IConnection):
         if isinstance(device, ILogicGate):
             if device.has_output_pin_set():
                 raise ConnectionError(f"{device.name}'s output is already connected!")
-            
+
             device.set_output_pin(value=self)
 
         elif isinstance(device, IBranch):
@@ -146,7 +146,7 @@ class Connection(IConnection):
         elif isinstance(device, ISwitch):
             if device.has_output_connection_set():
                 raise ConnectionError("This switch is already fully connected!")
-            
+
             device.set_output_connection(conn=self)
 
         self._input_connection = device
@@ -174,7 +174,7 @@ class Connection(IConnection):
         if isinstance(device, ILogicGate):
             if device.has_input_pin_set(pin=index):
                 raise ConnectionError(f"{device.name}'s input is already connected!")
-            
+
             device.set_input_pin(value=self, pin=index)
 
         elif isinstance(device, IBranch):
@@ -184,7 +184,7 @@ class Connection(IConnection):
         elif isinstance(device, ISwitch):
             if device.has_input_connection_set(index=index):
                 raise ConnectionError("This switch is already fully connected!")
-            
+
             device.set_input_connection(conn=self, index=index)
 
         self._output_connection = device

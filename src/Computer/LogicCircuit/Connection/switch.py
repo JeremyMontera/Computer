@@ -1,17 +1,20 @@
 from typing import List
 
-from Computer.LogicCircuit.abc import ISwitch, IConnection
+from Computer.Bit import Bit
+from Computer.LogicCircuit.abc import IConnection, ISwitch
 from Computer.LogicCircuit.Connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGateError
-from Computer.Bit import Bit
 
 ERROR = (ConnectionError, LogicGateError)
 # We need to be able to catch one of the switch's inputs hasn't been set yet - this
 # might happen further upstream...
 
+
 class SwitchError(Exception):
     """Handle any errors associated with the `Switch` class."""
+
     ...
+
 
 class Switch(ISwitch):
 
@@ -27,14 +30,14 @@ class Switch(ISwitch):
         input_connections:  The inputs to the junction (private)
         output_connections: The output from the junction (private)
     """
-    
+
     def __init__(self):
         """Constructor..."""
 
         self._input_connections: List[IConnection] = [None, None]
         """
         The inputs to the junction:
-        
+
         Type:
             List[Connection]
         """
@@ -66,12 +69,11 @@ class Switch(ISwitch):
         """
 
         # Let's be smart and not shoot ourselves in the foot, please :)
-        if (
-            not self.has_input_connection_set(index=0) and 
-            not self.has_input_connection_set(index=1)
-        ):
+        if not self.has_input_connection_set(
+            index=0
+        ) and not self.has_input_connection_set(index=1):
             raise SwitchError("The input connections have not all been set!")
-        
+
         for conn in self._input_connections:
             try:
                 return conn.feed()
@@ -95,7 +97,7 @@ class Switch(ISwitch):
         # No shoot ourselves in the foot... it's late, what can I say?
         if index not in list(range(len(self._input_connections))):
             raise SwitchError(f"You entered an unknown connection: {index}!")
-        
+
         return self._input_connections[index] is not None
 
     def has_output_connection_set(self) -> bool:
@@ -142,7 +144,7 @@ class Switch(ISwitch):
         # For all that is good, please... don't shoot ourselves in the foot...
         if self.has_input_connection_set(index=index):
             raise SwitchError(f"Input connection {index} has already been connected!")
-        
+
         self._input_connections[index] = conn
 
     def set_output_connection(self, *, conn: IConnection) -> None:
@@ -163,5 +165,5 @@ class Switch(ISwitch):
         # For all that is good, please... don't shoot ourselves in the foot...
         if self._output_connection is not None:
             raise SwitchError("The output connection has already been connected!")
-        
+
         self._output_connection = conn

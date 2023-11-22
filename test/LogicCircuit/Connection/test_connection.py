@@ -12,9 +12,11 @@ from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 def gate():
     return LogicGate(type=LogicType.AND, name="foo")
 
+
 @pytest.fixture
 def branch():
     return Branch()
+
 
 @pytest.fixture
 def switch():
@@ -115,7 +117,7 @@ def test_connection_set_input_connection_error_device_connected(device, request)
         d._output_pin = 0
     elif device == "switch":
         d._output_connection = "blue"
-    
+
     with pytest.raises(ConnectionError) as exc:
         conn.set_input_connection(device=d)
 
@@ -156,6 +158,7 @@ def test_connection_set_output_connection_error_conn_already_connected(gate):
 
     assert exc.value.args[0] == "An output connection has already been made!"
 
+
 @pytest.mark.parametrize(
     "device",
     [
@@ -170,7 +173,7 @@ def test_connection_set_output_connection_error_device_connected(device, request
         d._input_pins[0] = 0
     elif device == "switch":
         d._input_connections[0] = "red"
-    
+
     with pytest.raises(ConnectionError) as exc:
         conn.set_output_connection(device=d, index=0)
 

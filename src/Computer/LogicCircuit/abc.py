@@ -72,7 +72,7 @@ class IConnection(metaclass=abc.ABCMeta):
 
     @abc.abstractclassmethod
     def set_output_connection(
-        self, *, device: ILogicGate| IBranch | ISwitch, index: int
+        self, *, device: ILogicGate | IBranch | ISwitch, index: int
     ) -> None:
         """This will establish an output connection with a device."""
 
@@ -115,6 +115,7 @@ class IBranch(IConnection, metaclass=abc.ABCMeta):
         """This will establish an output connection with a device."""
 
         ...
+
 
 class ISwitch(IConnection, metaclass=abc.ABCMeta):
 
