@@ -49,7 +49,7 @@ class LogicGate(ILogicGate):
     mapping = {LogicType.NOT: 1, LogicType.AND: 2, LogicType.OR: 2}
     # Added mapping here because enum's giving me issues.
 
-    def __init__(self, type: Optional[LogicType] = None, name: Optional[str] = None):
+    def __init__(self, *, type: LogicType, name: Optional[str] = None):
         """
         Constructor...
 
@@ -60,11 +60,6 @@ class LogicGate(ILogicGate):
             name:
                 The name of the logic gate.
         """
-
-        # Check to see if the user forgot to pass a `type` or if the user screwed up
-        # and didn't pass a valid type (don't shoot ourselves in the foot).
-        if type is None or not isinstance(type, LogicType):
-            raise LogicGateError("You need to pass a valid logic gate type!")
 
         self._type: LogicType = type
         """
@@ -152,7 +147,7 @@ class LogicGate(ILogicGate):
         elif self._type == LogicType.OR:
             return inputs[0].or_op(inputs[1])
 
-    def has_input_pin_set(self, pin: int = 0) -> bool:
+    def has_input_pin_set(self, *, pin: int) -> bool:
         """
         This method will check to see if the input pin has been set yet.
 
@@ -214,7 +209,7 @@ class LogicGate(ILogicGate):
             self._input_pins = [None] * self.mapping[self._type]
             self._output_pin = None
 
-    def set_input_pin(self, value: Bit | IConnection = None, pin: int = 0) -> None:
+    def set_input_pin(self, *, value: Bit | IConnection, pin: int) -> None:
         """
         This method will set the input pin. It can either be directly given information
         (mostly used in the case of testing) or it can be given a `IConnection` instance
@@ -230,19 +225,14 @@ class LogicGate(ILogicGate):
                 The pin to set.
         """
 
-        # Please, no mess, no shoot yourself in the foot... check if the user actually
-        # passed an input value...
-        if value is None:
-            raise LogicGateError(f"You need to enter a value to set input pin {pin}!")
-
         # Check to see if the input pin has been set yet (yupp, again, making sure we
         # don't shoot ourselves again...)
-        if self.has_input_pin_set(pin):
+        if self.has_input_pin_set(pin=pin):
             raise LogicGateError(f"Input pin {pin} has already been set!")
 
         self._input_pins[pin] = value
 
-    def set_output_pin(self, value: Optional[IConnection] = None) -> None:
+    def set_output_pin(self, *, value: IConnection) -> None:
         """
         This method will set the output pin. This method is to be used to mark that the
         output pin of the gate has been set and to establish the association
@@ -256,11 +246,8 @@ class LogicGate(ILogicGate):
                 The `IConnection` instance you want to associate to this instance.
         """
 
-        # Can we shoot ourselves in the foot by not passing anything?
-        if value is None:
-            raise LogicGateError("You need to enter a valid connection!")
-
-        # ... or can we by trying to set this instance when it has already been set?
+        # Can we shoot ourselves in the foot by trying to set this instance when it has
+        # already been set?
         if self.has_output_pin_set():
             raise LogicGateError("The output pin has already been set!")
 
