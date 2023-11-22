@@ -64,12 +64,12 @@ comp9 - Create Switch class in Connection                                       
     (3) Add unit tests                                                              x
     (4) Update documentation                                                        x
 
-comp10 - Create Loop class in Connection
-    (1) Develop Loop interface based on discussion
-    (2) Create Loop class
-    (2.1) Update Connection class to also accept Loop
-    (3) Add unit tests
-    (4) Update documentation
+comp10 - Create Loop class in Connection                                            x
+    (1) Develop Loop interface based on discussion                                  x
+    (2) Create Loop class                                                           x
+    (2.1) Update Connection class to also accept Loop                               x
+    (3) Add unit tests                                                              x
+    (4) Update documentation                                                        x
 
 comp11 - Implement Logger class
 comp12 - Implement Stdin/Stdout classes

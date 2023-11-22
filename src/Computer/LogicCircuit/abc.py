@@ -65,14 +65,19 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_connection(self, *, device: ILogicGate | IBranch | ISwitch) -> None:
+    def set_input_connection(
+        self,
+        *,
+        device: ILogicGate | IBranch | ISwitch | ILoop,
+        index: Optional[int] = 0,
+    ) -> None:
         """This will establish an input connection with a device."""
 
         ...
 
     @abc.abstractclassmethod
     def set_output_connection(
-        self, *, device: ILogicGate | IBranch | ISwitch, index: int
+        self, *, device: ILogicGate | IBranch | ISwitch | ILoop, index: int
     ) -> None:
         """This will establish an output connection with a device."""
 
@@ -138,6 +143,39 @@ class ISwitch(IConnection, metaclass=abc.ABCMeta):
 
     @abc.abstractclassmethod
     def set_output_connection(self, *, conn: IConnection) -> None:
+        """This will establish an output connection with a device."""
+
+        ...
+
+
+class ILoop(IConnection, metaclass=abc.ABCMeta):
+
+    """
+    This class is a hack... since connecting the output of one gate to the output of
+    another would cause an infinite loop (as it should in real life), this essentially
+    mimics a connection loop - holding a value until the loop is accessed.
+    """
+
+    @abc.abstractclassmethod
+    def feed(self, *, index: int) -> IBit:
+        """This gets the information from the appropriate input and returns it."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def has_output_connection_set(self, *, index: int) -> bool:
+        """This will check if there is an output connection."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_input_connection(self, *, conn: IConnection) -> None:
+        """This will establish an input connection with a device."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_output_connection(self, *, conn: IConnection, index: int) -> None:
         """This will establish an output connection with a device."""
 
         ...
