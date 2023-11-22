@@ -102,6 +102,19 @@ class IBranch(IConnection, metaclass=abc.ABCMeta):
 
         ...
 
+class ISwitch(IConnection, metaclass=abc.ABCMeta):
+    @abc.abstractclassmethod
+    def has_input_connection_set(self, *, index: int) -> bool:
+        """This will check if there is an input device."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_input_connection(self, *, conn: IConnection, index: int) -> None:
+        """This will establish an input connection with a device."""
+
+        ...
+
 
 class ILogicGate(metaclass=abc.ABCMeta):
 
