@@ -65,13 +65,15 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_connection(self, *, device: ILogicGate | IBranch) -> None:
+    def set_input_connection(self, *, device: ILogicGate | IBranch | ISwitch) -> None:
         """This will establish an input connection with a device."""
 
         ...
 
     @abc.abstractclassmethod
-    def set_output_connection(self, *, device: ILogicGate, index: int) -> None:
+    def set_output_connection(
+        self, *, device: ILogicGate| IBranch | ISwitch, index: int
+    ) -> None:
         """This will establish an output connection with a device."""
 
         ...
