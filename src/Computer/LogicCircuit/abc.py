@@ -149,6 +149,13 @@ class ISwitch(IConnection, metaclass=abc.ABCMeta):
 
 
 class ILoop(IConnection, metaclass=abc.ABCMeta):
+
+    """
+    This class is a hack... since connecting the output of one gate to the output of
+    another would cause an infinite loop (as it should in real life), this essentially
+    mimics a connection loop - holding a value until the loop is accessed.
+    """
+
     @abc.abstractclassmethod
     def feed(self, *, index: int) -> IBit:
         """This gets the information from the appropriate input and returns it."""
