@@ -58,6 +58,24 @@ comp8 - Create Branch class in Connection                                       
     (4) Update documentation                                                        x
 
 comp9 - Create Switch class in Connection
+    (1) Develop Switch interface based on discussion
+    (2) Create Switch class
+    (2.1) Update Connection class to also accept Switch
+    (3) Add unit tests
+    (4) Update documentation
+
 comp10 - Create Loop class in Connection
+    (1) Develop Loop interface based on discussion
+    (2) Create Loop class
+    (2.1) Update Connection class to also accept Loop
+    (3) Add unit tests
+    (4) Update documentation
+
 comp11 - Implement Logger class
-comp12 - Implement Half Adder
+comp12 - Implement Stdin/Stdout classes
+comp13 - Write integration tests
+comp14 - Install pre-commit hooks and mypy
+comp15 - Implement github actions for PR submitals
+comp16 - Walk through of documentation and install mkdocs
+comp17 - Release Computer0.1.0
+comp18 - Implement Half Adder
