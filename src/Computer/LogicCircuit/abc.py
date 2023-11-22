@@ -144,7 +144,30 @@ class ISwitch(IConnection, metaclass=abc.ABCMeta):
 
 
 class ILoop(IConnection, metaclass=abc.ABCMeta):
-    ...
+
+    @abc.abstractclassmethod
+    def feed(self, *, index: int) -> IBit:
+        """This gets the information from the appropriate input and returns it."""
+
+        ...
+    
+    @abc.abstractclassmethod
+    def has_output_connection_set(self, *, index: int) -> bool:
+        """This will check if there is an output connection."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_input_connection(self, *, conn: IConnection) -> None:
+        """This will establish an input connection with a device."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_output_connection(self, *, conn: IConnection, index: int) -> None:
+        """This will establish an output connection with a device."""
+
+        ...
 
 
 class ILogicGate(metaclass=abc.ABCMeta):

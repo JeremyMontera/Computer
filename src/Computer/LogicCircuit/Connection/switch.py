@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import IConnection, ISwitch
@@ -34,7 +34,7 @@ class Switch(ISwitch):
     def __init__(self):
         """Constructor..."""
 
-        self._input_connections: List[IConnection] = [None, None]
+        self._input_connections: Optional[List[IConnection]] = [None, None]
         """
         The inputs to the junction:
 
@@ -42,7 +42,7 @@ class Switch(ISwitch):
             List[Connection]
         """
 
-        self._output_connection: IConnection = None
+        self._output_connection: Optional[IConnection] = None
         """
         The output from the junction.
 
