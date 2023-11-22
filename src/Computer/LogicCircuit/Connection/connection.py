@@ -1,9 +1,9 @@
 from typing import Optional, Tuple
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate
+from Computer.LogicCircuit.abc import IBranch, IConnection, ILogicGate, ISwitch
 
-DEVICE = ILogicGate | Tuple[IBranch, int]
+DEVICE = ILogicGate | Tuple[IBranch, int] | ISwitch
 # This represents an arbitrary device the wire can be connected to.
 # NOTE: right now, for `Branch` objects, we need to also save this instance's position
 # in `Branch._output_connections` array so that we can get the right input connection.
@@ -70,6 +70,8 @@ class Connection(IConnection):
             return self._input_connection.get_output_pin()
         elif isinstance(self._input_connection, tuple):
             return self._input_connection[0].feed(index=self._input_connection[1] - 1)
+        elif isinstance(self._input_connection, ISwitch):
+            return self._input_connection.feed()
 
     def has_input_connection_set(self) -> bool:
         """
@@ -127,10 +129,13 @@ class Connection(IConnection):
                 The device we want to connect to the input end of the wire.
         """
 
+        # No good it is to shoot one's self in foot if already there be connection.
+        if self.has_input_connection_set():
+            raise ConnectionError("An input connection has already been made!")
+
         if isinstance(device, ILogicGate):
-            # No good it is to shoot one's self in foot if already there be connection.
-            if self.has_input_connection_set():
-                raise ConnectionError("An input connection has already been made!")
+            if device.has_output_pin_set():
+                raise ConnectionError(f"{device.name}'s output is already connected!")
 
             device.set_output_pin(value=self)
 
@@ -138,9 +143,15 @@ class Connection(IConnection):
             device.set_output_connection(conn=self)
             device = (device, device.num_output_connections)
 
+        elif isinstance(device, ISwitch):
+            if device.has_output_connection_set():
+                raise ConnectionError("This switch is already fully connected!")
+
+            device.set_output_connection(conn=self)
+
         self._input_connection = device
 
-    def set_output_connection(self, *, device: DEVICE, pin: int) -> None:
+    def set_output_connection(self, *, device: DEVICE, index: int) -> None:
         """
         This will set the output end of this instance. It will form an association
         relationship with the device by calling that device's set input and pass this
@@ -152,19 +163,28 @@ class Connection(IConnection):
         Args:
             device:
                 The device we want to connect to the input end of the wire.
-            pin:
+            index:
                 Where to hook up the output end of the wire.
         """
 
-        if isinstance(device, ILogicGate):
-            # No good it is to shoot one's self in foot if already there be connection.
-            if self.has_output_connection_set():
-                raise ConnectionError("An output connection has already been made!")
+        # No good it is to shoot one's self in foot if already there be connection.
+        if self.has_output_connection_set():
+            raise ConnectionError("An output connection has already been made!")
 
-            device.set_input_pin(value=self, pin=pin)
+        if isinstance(device, ILogicGate):
+            if device.has_input_pin_set(pin=index):
+                raise ConnectionError(f"{device.name}'s input is already connected!")
+
+            device.set_input_pin(value=self, pin=index)
 
         elif isinstance(device, IBranch):
             device.set_input_connection(conn=self)
             device = (device, device.num_input_connections)
+
+        elif isinstance(device, ISwitch):
+            if device.has_input_connection_set(index=index):
+                raise ConnectionError("This switch is already fully connected!")
+
+            device.set_input_connection(conn=self, index=index)
 
         self._output_connection = device

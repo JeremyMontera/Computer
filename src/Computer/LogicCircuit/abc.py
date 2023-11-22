@@ -65,13 +65,15 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_connection(self, *, device: ILogicGate | IBranch) -> None:
+    def set_input_connection(self, *, device: ILogicGate | IBranch | ISwitch) -> None:
         """This will establish an input connection with a device."""
 
         ...
 
     @abc.abstractclassmethod
-    def set_output_connection(self, *, device: ILogicGate, pin: int) -> None:
+    def set_output_connection(
+        self, *, device: ILogicGate | IBranch | ISwitch, index: int
+    ) -> None:
         """This will establish an output connection with a device."""
 
         ...
@@ -97,8 +99,46 @@ class IBranch(IConnection, metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
+    def set_input_connection(self, *, conn: IConnection) -> None:
+        """This will establish an input connection with a device."""
+
+        ...
+
+    @abc.abstractclassmethod
     def set_mapping(self, *, mapping: Dict[int, int]) -> None:
         """This will establish a mapping between outputs and inputs."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_output_connection(self, *, conn: IConnection) -> None:
+        """This will establish an output connection with a device."""
+
+        ...
+
+
+class ISwitch(IConnection, metaclass=abc.ABCMeta):
+
+    """
+    This implements a many-to-one junction: many inputs coming in and only one output
+    leaving (assuming only one input gets set at a time).
+    """
+
+    @abc.abstractclassmethod
+    def has_input_connection_set(self, *, index: int) -> bool:
+        """This will check if there is an input device."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_input_connection(self, *, conn: IConnection, index: int) -> None:
+        """This will establish an input connection with a device."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_output_connection(self, *, conn: IConnection) -> None:
+        """This will establish an output connection with a device."""
 
         ...
 
