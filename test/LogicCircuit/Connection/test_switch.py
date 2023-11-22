@@ -2,8 +2,12 @@ from unittest import mock
 
 import pytest
 
-from Computer.LogicCircuit.Connection import (Connection, ConnectionError,
-                                              Switch, SwitchError)
+from Computer.LogicCircuit.Connection import (
+    Connection,
+    ConnectionError,
+    Switch,
+    SwitchError,
+)
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.Connection import Branch, Connection, Switch
+from Computer.LogicCircuit.Connection import Branch, Connection, Switch, Loop
 from Computer.LogicCircuit.Connection.connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
@@ -21,6 +21,11 @@ def branch():
 @pytest.fixture
 def switch():
     return Switch()
+
+
+@pytest.fixture
+def loop():
+    return Loop()
 
 
 def test_connection_init():
@@ -56,7 +61,7 @@ def test_connection_feed_branch(mock_feed, branch):
     conn._input_connection = (branch, 2)
     ret: Bit = conn.feed()
     assert ret == Bit(1)
-    mock_feed.assert_called_once_with(index=1)
+    mock_feed.assert_called_once_with(index=2)
 
 
 @mock.patch.object(Switch, "feed")
@@ -67,6 +72,15 @@ def test_connection_feed_switch(mock_feed, switch):
     ret: Bit = conn.feed()
     assert ret == Bit(1)
     mock_feed.assert_called_once()
+
+@mock.patch.object(Loop, "feed")
+def test_connection_feed_loop(mock_feed, loop):
+    mock_feed.return_value = Bit(0)
+    conn = Connection()
+    conn._input_connection = (loop, 1)
+    ret: Bit = conn.feed()
+    assert ret == Bit(0)
+    mock_feed.assert_called_once_with(index=1)
 
 
 def test_has_input_connection_set(gate):
@@ -108,6 +122,7 @@ def test_connection_set_input_connection_error_conn_already_connected(gate):
     [
         "gate",
         "switch",
+        "loop",
     ],
 )
 def test_connection_set_input_connection_error_device_connected(device, request):
@@ -117,14 +132,21 @@ def test_connection_set_input_connection_error_device_connected(device, request)
         d._output_pin = 0
     elif device == "switch":
         d._output_connection = "blue"
+    elif device == "loop":
+        d._output_connections[0] = "ten"
 
     with pytest.raises(ConnectionError) as exc:
-        conn.set_input_connection(device=d)
+        conn.set_input_connection(device=d, index=0)
 
     if device == "gate":
         assert exc.value.args[0] == "foo's output is already connected!"
     elif device == "switch":
         assert exc.value.args[0] == "This switch is already fully connected!"
+    elif device == "loop":
+        assert (
+            exc.value.args[0]
+            == "Output connection 0 of this loop is already connected!"
+        )
 
 
 @pytest.mark.parametrize(
@@ -133,21 +155,25 @@ def test_connection_set_input_connection_error_device_connected(device, request)
         "gate",
         "branch",
         "switch",
+        "loop",
     ],
 )
 def test_connection_set_input_connection(device, request):
     conn = Connection()
     d = request.getfixturevalue(device)
-    conn.set_input_connection(device=d)
+    conn.set_input_connection(device=d, index=1)
     if device == "gate":
         assert conn._input_connection == d
         assert d._output_pin == conn
     elif device == "branch":
-        assert conn._input_connection == (d, 1)
+        assert conn._input_connection == (d, 0)
         assert d._output_connections == [conn]
     elif device == "switch":
         assert conn._input_connection == d
         assert d._output_connection == conn
+    elif device == "loop":
+        assert conn._input_connection == (d, 1)
+        assert d._output_connections[1] == conn
 
 
 def test_connection_set_output_connection_error_conn_already_connected(gate):
@@ -164,6 +190,7 @@ def test_connection_set_output_connection_error_conn_already_connected(gate):
     [
         "gate",
         "switch",
+        "loop",
     ],
 )
 def test_connection_set_output_connection_error_device_connected(device, request):
@@ -173,6 +200,8 @@ def test_connection_set_output_connection_error_device_connected(device, request
         d._input_pins[0] = 0
     elif device == "switch":
         d._input_connections[0] = "red"
+    elif device == "loop":
+        d._input_connection = "blah"
 
     with pytest.raises(ConnectionError) as exc:
         conn.set_output_connection(device=d, index=0)
@@ -181,6 +210,8 @@ def test_connection_set_output_connection_error_device_connected(device, request
         assert exc.value.args[0] == "foo's input is already connected!"
     elif device == "switch":
         assert exc.value.args[0] == "This switch is already fully connected!"
+    elif device == "loop":
+        assert exc.value.args[0] == "This loop is already connected!"
 
 
 @pytest.mark.parametrize(
@@ -189,6 +220,7 @@ def test_connection_set_output_connection_error_device_connected(device, request
         "gate",
         "branch",
         "switch",
+        "loop",
     ],
 )
 def test_connection_set_output_connection(device, request):
@@ -205,3 +237,6 @@ def test_connection_set_output_connection(device, request):
     elif device == "switch":
         assert conn._output_connection == d
         assert d._input_connections[0] == conn
+    elif device == "loop":
+        assert conn._output_connection == d
+        assert d._input_connection == conn
