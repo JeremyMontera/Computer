@@ -117,6 +117,12 @@ class IBranch(IConnection, metaclass=abc.ABCMeta):
         ...
 
 class ISwitch(IConnection, metaclass=abc.ABCMeta):
+
+    """
+    This implements a many-to-one junction: many inputs coming in and only one output
+    leaving (assuming only one input gets set at a time).
+    """
+
     @abc.abstractclassmethod
     def has_input_connection_set(self, *, index: int) -> bool:
         """This will check if there is an input device."""
