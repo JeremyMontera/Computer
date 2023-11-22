@@ -97,8 +97,20 @@ class IBranch(IConnection, metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
+    def set_input_connection(self, *, conn: IConnection) -> None:
+        """This will establish an input connection with a device."""
+
+        ...
+
+    @abc.abstractclassmethod
     def set_mapping(self, *, mapping: Dict[int, int]) -> None:
         """This will establish a mapping between outputs and inputs."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_output_connection(self, *, conn: IConnection) -> None:
+        """This will establish an output connection with a device."""
 
         ...
 
@@ -112,6 +124,12 @@ class ISwitch(IConnection, metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
     def set_input_connection(self, *, conn: IConnection, index: int) -> None:
         """This will establish an input connection with a device."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def set_output_connection(self, *, conn: IConnection) -> None:
+        """This will establish an output connection with a device."""
 
         ...
 
