@@ -10,7 +10,7 @@ from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
 
 @pytest.fixture
 def gate():
-    gate = LogicGate(LogicType.AND)
+    gate = LogicGate(type=LogicType.AND)
     gate.name = "foo"
     gate.set_input_pin(value=Bit(0), pin=0)
     gate.set_input_pin(value=Bit(1), pin=1)
