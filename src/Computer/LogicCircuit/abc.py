@@ -71,7 +71,7 @@ class IConnection(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_output_connection(self, *, device: ILogicGate, pin: int) -> None:
+    def set_output_connection(self, *, device: ILogicGate, index: int) -> None:
         """This will establish an output connection with a device."""
 
         ...

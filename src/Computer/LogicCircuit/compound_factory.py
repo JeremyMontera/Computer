@@ -31,7 +31,7 @@ def create_nand_gate() -> Dict[str, STUFF]:
 
     # Establish all of the association relationships between the logic gates and wires.
     conn0.set_input_connection(device=gate0)
-    conn0.set_output_connection(device=gate1, pin=0)
+    conn0.set_output_connection(device=gate1, index=0)
 
     return {"input_gates": [gate0], "output_gate": gate1, "conn0": conn0}
 
@@ -58,7 +58,7 @@ def create_nor_gate() -> Dict[str, STUFF]:
 
     # Establish all of the association relationships between the logic gates and wires.
     conn0.set_input_connection(device=gate0)
-    conn0.set_output_connection(device=gate1, pin=0)
+    conn0.set_output_connection(device=gate1, index=0)
 
     return {"input_gates": [gate0], "output_gate": gate1, "conn0": conn0}
 
@@ -90,15 +90,15 @@ def create_xor_gate() -> Dict[str, STUFF]:
     # Establish all of the association relationships between the logic gates and wires.
     # For the first wire... NB: this is a nand gate in disguise.
     conn0.set_input_connection(device=gate0)
-    conn0.set_output_connection(device=gate1, pin=0)
+    conn0.set_output_connection(device=gate1, index=0)
 
     # For the second wire...
     conn1.set_input_connection(device=gate1)
-    conn1.set_output_connection(device=gate3, pin=0)
+    conn1.set_output_connection(device=gate3, index=0)
 
     # For the third wire...
     conn2.set_input_connection(device=gate2)
-    conn2.set_output_connection(device=gate3, pin=1)
+    conn2.set_output_connection(device=gate3, index=1)
 
     return {
         "input_gates": [gate0, gate2],
@@ -139,19 +139,19 @@ def create_xnor_gate() -> Dict[str, STUFF]:
     # Establish all of the association relationships between the logic gates and wires.
     # For the first wire... NB: this is a nand gate in disguise.
     conn0.set_input_connection(device=gate0)
-    conn0.set_output_connection(device=gate1, pin=0)
+    conn0.set_output_connection(device=gate1, index=0)
 
     # For the second wire...
     conn1.set_input_connection(device=gate1)
-    conn1.set_output_connection(device=gate3, pin=0)
+    conn1.set_output_connection(device=gate3, index=0)
 
     # For the third wire...
     conn2.set_input_connection(device=gate2)
-    conn2.set_output_connection(device=gate3, pin=1)
+    conn2.set_output_connection(device=gate3, index=1)
 
     # For the fourth wire...
     conn3.set_input_connection(device=gate3)
-    conn3.set_output_connection(device=gate4, pin=0)
+    conn3.set_output_connection(device=gate4, index=0)
 
     return {
         "input_gates": [gate0, gate2],
