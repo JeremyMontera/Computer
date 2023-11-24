@@ -1,11 +1,11 @@
 from typing import Dict, Union
 
+from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
-from Computer.Logger import OUT
 
-INFO = lambda msg: OUT.info(msg, level=1)
+INFO = lambda msg: OUT.info(msg, level=1)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 STUFF = Union[ILogicGate, IConnection]

@@ -38,6 +38,6 @@ class Logger:
         """
         if level is None:
             raise ValueError("You need to provide a valid logging level!")
-        
+
         current_time: str = time.strftime("%H:%M:%S")
         print(f"[{current_time}] {MAPPING[level]} :: {message}")

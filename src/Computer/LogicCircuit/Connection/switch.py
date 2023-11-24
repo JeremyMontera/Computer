@@ -1,12 +1,12 @@
 from typing import List, Optional
 
 from Computer.Bit import Bit
+from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import IConnection, ISwitch
 from Computer.LogicCircuit.Connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGateError
-from Computer.Logger import OUT
 
-INFO = lambda msg: OUT.info(msg, level=5)
+INFO = lambda msg: OUT.info(msg, level=5)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 ERROR = (ConnectionError, LogicGateError)

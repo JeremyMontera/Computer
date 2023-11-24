@@ -1,10 +1,10 @@
 from typing import Dict, List
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IBranch, IConnection
 from Computer.Logger import OUT
+from Computer.LogicCircuit.abc import IBranch, IConnection
 
-INFO = lambda msg: OUT.info(msg, level=4)
+INFO = lambda msg: OUT.info(msg, level=4)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 

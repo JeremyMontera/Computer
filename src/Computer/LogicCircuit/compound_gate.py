@@ -2,11 +2,11 @@ import enum
 from typing import Dict, Optional, Union
 
 from Computer.Bit.abc import IBit
+from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.compound_factory import CompoundFactory
-from Computer.Logger import OUT
 
-INFO = lambda msg: OUT.info(msg, level=2)
+INFO = lambda msg: OUT.info(msg, level=2)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 PIN = Union[IBit, IConnection]
@@ -76,7 +76,7 @@ class CompoundGate(ILogicGate):
         # a valid type to feed to the factory.
         if not isinstance(type, CompoundType):
             raise CompoundGateError("You need to enter a valid logic gate type!")
-        
+
         INFO(f"Creating a new {type} compound logic gate with name {name}.")
 
         self._type: CompoundType = type

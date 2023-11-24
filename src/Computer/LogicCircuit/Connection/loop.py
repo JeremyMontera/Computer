@@ -1,10 +1,10 @@
 from typing import List, Optional
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IBit, IConnection, ILoop
 from Computer.Logger import OUT
+from Computer.LogicCircuit.abc import IBit, IConnection, ILoop
 
-INFO = lambda msg: OUT.info(msg, level=6)
+INFO = lambda msg: OUT.info(msg, level=6)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 
@@ -210,5 +210,5 @@ class Loop(ILoop):
             INFO("Setting the outside connection of the loop.")
         elif index == 1:
             INFO("Setting the looping connection of the loop.")
-            
+
         self._output_connections[index] = conn

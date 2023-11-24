@@ -1,11 +1,11 @@
 from typing import Optional, Tuple
 
 from Computer.Bit import Bit
+from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import (IBranch, IConnection, ILogicGate, ILoop,
                                        ISwitch)
-from Computer.Logger import OUT
 
-INFO = lambda msg: OUT.info(msg, level=3)
+INFO = lambda msg: OUT.info(msg, level=3)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 DEVICE = (
@@ -79,7 +79,9 @@ class Connection(IConnection):
         if isinstance(self._input_connection, ILogicGate):
             output: Bit = self._input_connection.get_output_pin()
         elif isinstance(self._input_connection, tuple):
-            output: Bit = self._input_connection[0].feed(index=self._input_connection[1])
+            output: Bit = self._input_connection[0].feed(
+                index=self._input_connection[1]
+            )
         elif isinstance(self._input_connection, ISwitch):
             output: Bit = self._input_connection.feed()
 
@@ -149,7 +151,7 @@ class Connection(IConnection):
         # No good it is to shoot one's self in foot if already there be connection.
         if self.has_input_connection_set():
             raise ConnectionError("An input connection has already been made!")
-        
+
         INFO(
             "Attempting to hook the wire's input connection to the device's output "
             "connection."
@@ -201,7 +203,7 @@ class Connection(IConnection):
         # No good it is to shoot one's self in foot if already there be connection.
         if self.has_output_connection_set():
             raise ConnectionError("An output connection has already been made!")
-        
+
         INFO(
             "Attempting to set the wire's output connection to the device's input "
             "connection."

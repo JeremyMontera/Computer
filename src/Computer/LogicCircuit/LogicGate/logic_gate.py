@@ -2,10 +2,10 @@ import enum
 from typing import List, Optional, Union, cast
 
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IConnection, ILogicGate
 from Computer.Logger import OUT
+from Computer.LogicCircuit.abc import IConnection, ILogicGate
 
-INFO = lambda msg: OUT.info(msg, level=0)
+INFO = lambda msg: OUT.info(msg, level=0)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 PIN = Union[Bit, IConnection]
@@ -69,7 +69,7 @@ class LogicGate(ILogicGate):
         # ourselves in the foot).
         if not isinstance(type, LogicType):
             raise LogicGateError("You need to pass a valid logic gate type!")
-        
+
         INFO(f"Creating a new {type} logic gate with name {name}.")
 
         self._type: LogicType = type
