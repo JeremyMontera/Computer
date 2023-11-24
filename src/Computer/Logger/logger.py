@@ -4,6 +4,7 @@ MAPPING = {0: "LogicCircuit", 1: "Bit"}
 # This makes it so we don't have to continously type in where the message is being
 # printed from. Later on, this will be replaced with a more robust logging level.
 
+
 class Logger:
 
     """
@@ -11,7 +12,7 @@ class Logger:
     package is more complete (i.e., able to run on the command-line), then this will be
     filled in more.
     """
-    
+
     logging.basicConfig(
         format="[%(asctime)s] %(message)s",
         datefmt="%I:%M:%S",
