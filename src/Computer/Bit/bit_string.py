@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List
 
 from Computer.Bit.abc import IBitString
@@ -16,7 +18,7 @@ class BitString(IBitString):
         bits:       the collection of bits (private)
     """
 
-    def __init__(self, max_length: int):
+    def __init__(self, *, max_length: int):
         """
         Constructor...
 
@@ -30,7 +32,7 @@ class BitString(IBitString):
         The maximum number of bits this can hold.
 
         Type:
-            int
+            Optional[int]
         """
 
         self._bits: List[Bit] = []
@@ -40,6 +42,14 @@ class BitString(IBitString):
         Type:
             List[Bit]
         """
+
+    def __getitem__(self, index: int) -> Bit:
+        """This allows the user to access bits from the bit string."""
+
+        if index not in list(range(len(self._bits))):
+            raise BitError(f"Index {index} lies outside the bit string length!")
+        
+        return self._bits[index]
 
     def __iter__(self) -> Bit:
         """This allows one to iterate over the bits in the collection."""
@@ -67,6 +77,44 @@ class BitString(IBitString):
         """Get the maximum number of bits this can hold."""
 
         return self._max_length
+    
+    def extend_left(self, bits: BitString) -> None:
+        """
+        This will add another bit string to the left of this current bit string.
+
+        This is a public method.
+
+        Args:
+            bits:
+                ...
+        """
+        
+        if len(self._bits) + len(bits) > self._max_length:
+            raise BitError(
+                f"Adding {len(self._bits)} more bits to the bit string will exceed the "
+                "max length!"
+            )
+        
+        self._bits = [b for b in bits] + self._bits
+
+    def extend_right(self, bits: BitString) -> None:
+        """
+        This will add another bit string to the right of this current bit string.
+
+        This is a public method.
+
+        Args:
+            bits:
+                ...
+        """
+
+        if len(self._bits) + len(bits) > self._max_length:
+            raise BitError(
+                f"Adding {len(self._bits)} more bits to the bit string will exceed the "
+                "max length!"
+            )
+            
+        self._bits += [b for b in bits]
 
     def pop_left(self) -> Bit:
         """

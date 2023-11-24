@@ -48,6 +48,19 @@ class IBitString(metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
     def __init__(self, max_length: int):
         """Constructor..."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def extend_left(self, bits: IBitString) -> None:
+        """This will add another bit string to the left of this current bit string."""
+
+        ...
+
+    @abc.abstractclassmethod
+    def extend_right(self, bits: IBitString) -> None:
+        """This will add another bit string to the right of this current bit string."""
+
         ...
 
     @abc.abstractclassmethod
