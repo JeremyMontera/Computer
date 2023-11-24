@@ -1,4 +1,5 @@
-import logging
+import time
+from typing import Optional
 
 MAPPING = {0: "LogicCircuit", 1: "Bit"}
 # This makes it so we don't have to continously type in where the message is being
@@ -13,17 +14,13 @@ class Logger:
     filled in more.
     """
 
-    logging.basicConfig(
-        format="[%(asctime)s] %(message)s",
-        datefmt="%I:%M:%S",
-        level=logging.INFO,
-    )
-
     @staticmethod
-    def info(*, message: str, level: int) -> None:
+    def info(message: str, level: Optional[int] = None) -> None:
         """
         This method will forward the message and the level to [`info()`][logging.info].
         This will format the message based on where the message originated from.
+
+        TODO: actually do this when we are ready to do so...
 
         Args:
             message:
@@ -31,5 +28,8 @@ class Logger:
             level:
                 Where the message came from.
         """
-
-        logging.info(f"{MAPPING[level]} :: {message}")
+        if level is None:
+            raise ValueError("You need to provide a valid logging level!")
+        
+        current_time: str = time.strftime("%H:%M:%S")
+        print(f"[{current_time}] {MAPPING[level]} :: {message}")
