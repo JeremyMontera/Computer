@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import List
 
 from Computer.Bit.abc import IBitString
 
@@ -18,7 +18,7 @@ class BitString(IBitString):
         bits:       the collection of bits (private)
     """
 
-    def __init__(self, max_length: Optional[int] = None):
+    def __init__(self, *, max_length: int):
         """
         Constructor...
 
@@ -27,7 +27,7 @@ class BitString(IBitString):
                 The maximum number of bits this can hold.
         """
 
-        self._max_length: Optional[int] = max_length
+        self._max_length: int = max_length
         """
         The maximum number of bits this can hold.
 
@@ -47,7 +47,7 @@ class BitString(IBitString):
         """This allows the user to access bits from the bit string."""
 
         if index not in list(range(len(self._bits))):
-            raise BitError(f"Index {index} lies outside the bitstring length!")
+            raise BitError(f"Index {index} lies outside the bit string length!")
         
         return self._bits[index]
 
@@ -88,16 +88,14 @@ class BitString(IBitString):
             bits:
                 ...
         """
-
-        # Keep from shoot ourselves in the foot... if we can...
-        if self._max_length is not None:
-            if len(self) + len(bits) > self._max_length:
-                raise BitError(
-                    f"Adding these {len(bits)} bits would exceed the max length!"
-                )
-            
-        for bit in self:
-            self._bits.push_left(bit)
+        
+        if len(self._bits) + len(bits) > self._max_length:
+            raise BitError(
+                f"Adding {len(self._bits)} more bits to the bit string will exceed the "
+                "max length!"
+            )
+        
+        self._bits = [b for b in bits] + self._bits
 
     def extend_right(self, bits: BitString) -> None:
         """
@@ -110,15 +108,13 @@ class BitString(IBitString):
                 ...
         """
 
-        # Keep from shoot ourselves in the foot... if we can...
-        if self._max_length is not None:
-            if len(self) + len(bits) > self._max_length:
-                raise BitError(
-                    f"Adding these {len(bits)} bits would exceed the max length!"
-                )
+        if len(self._bits) + len(bits) > self._max_length:
+            raise BitError(
+                f"Adding {len(self._bits)} more bits to the bit string will exceed the "
+                "max length!"
+            )
             
-        for bit in self:
-            self._bits.push_right(bit)
+        self._bits += [b for b in bits]
 
     def pop_left(self) -> Bit:
         """
@@ -182,11 +178,8 @@ class BitString(IBitString):
                 This bit string has the maximum number of bits allowed!
         """
 
-        if self._max_length is not None:
-            if len(self) == self._max_length:
-                raise BitError(
-                    "This bit string has the maximum number of bits allowed!"
-                )
+        if len(self) == self._max_length:
+            raise BitError("This bit string has the maximum number of bits allowed!")
 
         self._bits = [bit] + self._bits
 
@@ -206,10 +199,7 @@ class BitString(IBitString):
                 This bit string has the maximum number of bits allowed!
         """
 
-        if self._max_length is not None:
-            if len(self) == self._max_length:
-                raise BitError(
-                    "This bit string has the maximum number of bits allowed!"
-                )
+        if len(self) == self._max_length:
+            raise BitError("This bit string has the maximum number of bits allowed!")
 
         self._bits += [bit]
