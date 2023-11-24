@@ -71,7 +71,11 @@ comp10 - Create Loop class in Connection                                        
     (3) Add unit tests                                                              x
     (4) Update documentation                                                        x
 
-comp11 - Implement Logger class
+comp11 - Create logger class                                                        x
+    (1) Write logger class for later (DOESN'T NEED API) - use Logger module         x
+    (1.1) Allow for various levels to be set - don't use them though                x
+    (2) Use throughout to print out status                                          x
+
 comp12 - Implement Stdin/Stdout classes
 comp13 - Write integration tests
 comp14 - Install pre-commit hooks and mypy

@@ -1,8 +1,12 @@
 from typing import Dict, Union
 
+from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.Connection import Connection
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
+
+INFO = lambda msg: OUT.info(msg, level=1)  # noqa: E731
+# Short-cut so we don't have to keep writing the same stuff...
 
 STUFF = Union[ILogicGate, IConnection]
 # This is a short-hand for the two types of devices used to build the compound gates.
@@ -206,6 +210,8 @@ class CompoundFactory(ICompoundFactory):
                 What type of compound gate is being requested.
         """
 
+        INFO(f"Creating a new {type} compound factory.")
+
         self._type: str = type
         """
         What type of compound gate is being requested.
@@ -227,4 +233,6 @@ class CompoundFactory(ICompoundFactory):
             manifest:
                 A dictionary of all the components needed to construct the gate.
         """
+
+        INFO(f"Building the manifest for a {self._type} compound logic gate.")
         return self._factories[self._type]()

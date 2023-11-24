@@ -1,8 +1,12 @@
 from typing import Optional, Tuple
 
 from Computer.Bit import Bit
+from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import (IBranch, IConnection, ILogicGate, ILoop,
                                        ISwitch)
+
+INFO = lambda msg: OUT.info(msg, level=3)  # noqa: E731
+# Short-cut so we don't have to keep writing the same stuff...
 
 DEVICE = (
     ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int]
@@ -33,6 +37,8 @@ class Connection(IConnection):
 
     def __init__(self):
         """Constructor..."""
+
+        INFO("Creating a new empty wire.")
 
         self._input_connection: Optional[DEVICE] = None
         """
@@ -71,11 +77,16 @@ class Connection(IConnection):
             raise ConnectionError("The output connection has not been set yet!")
 
         if isinstance(self._input_connection, ILogicGate):
-            return self._input_connection.get_output_pin()
+            output: Bit = self._input_connection.get_output_pin()
         elif isinstance(self._input_connection, tuple):
-            return self._input_connection[0].feed(index=self._input_connection[1])
+            output: Bit = self._input_connection[0].feed(
+                index=self._input_connection[1]
+            )
         elif isinstance(self._input_connection, ISwitch):
-            return self._input_connection.feed()
+            output: Bit = self._input_connection.feed()
+
+        INFO(f"Feeding information {output} to the output device.")
+        return output
 
     def has_input_connection_set(self) -> bool:
         """
@@ -116,6 +127,7 @@ class Connection(IConnection):
             This method is marked as public and can be called by the user.
         """
 
+        INFO("Resetting the wire's connections.")
         self._input_connection = None
         self._output_connection = None
 
@@ -139,6 +151,11 @@ class Connection(IConnection):
         # No good it is to shoot one's self in foot if already there be connection.
         if self.has_input_connection_set():
             raise ConnectionError("An input connection has already been made!")
+
+        INFO(
+            "Attempting to hook the wire's input connection to the device's output "
+            "connection."
+        )
 
         if isinstance(device, ILogicGate):
             if device.has_output_pin_set():
@@ -186,6 +203,11 @@ class Connection(IConnection):
         # No good it is to shoot one's self in foot if already there be connection.
         if self.has_output_connection_set():
             raise ConnectionError("An output connection has already been made!")
+
+        INFO(
+            "Attempting to set the wire's output connection to the device's input "
+            "connection."
+        )
 
         if isinstance(device, ILogicGate):
             if device.has_input_pin_set(pin=index):

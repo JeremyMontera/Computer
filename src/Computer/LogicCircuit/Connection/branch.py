@@ -1,7 +1,11 @@
 from typing import Dict, List
 
 from Computer.Bit import Bit
+from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import IBranch, IConnection
+
+INFO = lambda msg: OUT.info(msg, level=4)  # noqa: E731
+# Short-cut so we don't have to keep writing the same stuff...
 
 
 class BranchError(Exception):
@@ -26,6 +30,8 @@ class Branch(IBranch):
 
     def __init__(self):
         """Constructor..."""
+
+        INFO("Creating a new empty junction.")
 
         self._input_connections: List[IConnection] = []
         """
@@ -88,6 +94,8 @@ class Branch(IBranch):
             range(len(self._output_connections))
         ), "Not all of the outputs have connections!"
 
+        INFO("Mapping validated, applying the mapping.")
+
     def feed(self, *, index: int) -> Bit:
         """
         This is the primary method of this class. It will check to see that a valid
@@ -114,7 +122,12 @@ class Branch(IBranch):
         if index not in list(range(len(self._output_connections))):
             raise BranchError(f"{index} doesn't correspond to any output connection!")
 
-        return self._input_connections[self._mapping[index]].feed()
+        output: Bit = self._input_connections[self._mapping[index]].feed()
+        INFO(
+            f"Feeding information {output} from input {self._mapping[index]} to the "
+            f"output {index}."
+        )
+        return output
 
     def has_input_connection_set(self) -> bool:
         """
@@ -168,6 +181,7 @@ class Branch(IBranch):
             This method is marked as public and can be called by the user.
         """
 
+        INFO("Resetting the junction's connections.")
         self._input_connections = []
         self._output_connections = []
         self._mapping = None
@@ -193,6 +207,7 @@ class Branch(IBranch):
                 "You cannot add any more connections!"
             )
 
+        INFO("Adding a new connection to the junction.")
         self._input_connections.append(conn)
 
     def set_mapping(self, *, mapping: Dict[int, int]) -> None:
@@ -212,6 +227,7 @@ class Branch(IBranch):
             raise BranchError("The mapping has been set already!")
 
         self._validate_mapping(mapping)
+        INFO("Applying the mapping and locking out any more connections.")
         self._mapping = mapping
 
     def set_output_connection(self, *, conn: IConnection) -> None:
@@ -235,4 +251,5 @@ class Branch(IBranch):
                 "You cannot add any more connections!"
             )
 
+        INFO("Adding another output connection to the junction.")
         self._output_connections.append(conn)
