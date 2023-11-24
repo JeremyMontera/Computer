@@ -1,7 +1,15 @@
 import time
 from typing import Optional
 
-MAPPING = {0: "LogicCircuit", 1: "Bit"}
+MAPPING = {
+    0: "LogicGate",
+    1: "Compound Factory",
+    2: "Compound Gate",
+    3: "Connection",
+    4: "Branch",
+    5: "Switch",
+    6: "Loop",
+}
 # This makes it so we don't have to continously type in where the message is being
 # printed from. Later on, this will be replaced with a more robust logging level.
 

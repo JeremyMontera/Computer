@@ -4,6 +4,10 @@ from typing import Dict, Optional, Union
 from Computer.Bit.abc import IBit
 from Computer.LogicCircuit.abc import ICompoundFactory, IConnection, ILogicGate
 from Computer.LogicCircuit.compound_factory import CompoundFactory
+from Computer.Logger import OUT
+
+INFO = lambda msg: OUT.info(msg, level=2)
+# Short-cut so we don't have to keep writing the same stuff...
 
 PIN = Union[IBit, IConnection]
 # This represents everything that a pin can be connected to.
@@ -72,6 +76,8 @@ class CompoundGate(ILogicGate):
         # a valid type to feed to the factory.
         if not isinstance(type, CompoundType):
             raise CompoundGateError("You need to enter a valid logic gate type!")
+        
+        INFO(f"Creating a new {type} compound logic gate with name {name}.")
 
         self._type: CompoundType = type
         """
@@ -135,6 +141,7 @@ class CompoundGate(ILogicGate):
                 ...
         """
 
+        INFO(f"Getting the output of {self._name}.")
         return self._output_gate.get_output_pin()
 
     def has_input_pin_set(self, *, pin: int) -> bool:
@@ -207,10 +214,13 @@ class CompoundGate(ILogicGate):
             self._output_gate.reset(which="output")
 
         if which == "input":
+            INFO(f"Resetting the input pins of {self._name}.")
             reset_inputs()
         elif which == "output":
+            INFO(f"Resetting the output pins of {self._name}.")
             reset_output()
         else:
+            INFO(f"Resetting the all of the pins of {self._name}.")
             reset_inputs()
             reset_output()
 
@@ -231,6 +241,11 @@ class CompoundGate(ILogicGate):
                 The pin to set.
         """
 
+        if isinstance(value, IBit):
+            INFO(f"Setting input pin {pin} of {self._name} to bit {str(value)}.")
+        elif isinstance(value, IConnection):
+            INFO(f"Setting input pin {pin} of {self._name} to a connection.")
+
         for gate in self._input_gates:
             gate.set_input_pin(value=value, pin=pin)
 
@@ -249,4 +264,5 @@ class CompoundGate(ILogicGate):
                 The `Connection` instance you want to associate to this instance.
         """
 
+        INFO(f"Setting the output pin of {self._name} to a connection.")
         self._output_gate.set_output_pin(value=value)

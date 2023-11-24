@@ -3,6 +3,10 @@ from typing import List, Optional, Union, cast
 
 from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import IConnection, ILogicGate
+from Computer.Logger import OUT
+
+INFO = lambda msg: OUT.info(msg, level=0)
+# Short-cut so we don't have to keep writing the same stuff...
 
 PIN = Union[Bit, IConnection]
 # This represents everything that a pin can be connected to.
@@ -14,13 +18,13 @@ class LogicType(enum.Enum):
     supported. The user can only build on of these three gates.
     """
 
-    NOT: int = 1
+    NOT: str = "not"
     """Build a NOT gate."""
 
-    AND: int = 2
+    AND: str = "and"
     """Build an AND gate."""
 
-    OR: int = 3
+    OR: str = "or"
     """Build an OR gate."""
 
 
@@ -65,6 +69,8 @@ class LogicGate(ILogicGate):
         # ourselves in the foot).
         if not isinstance(type, LogicType):
             raise LogicGateError("You need to pass a valid logic gate type!")
+        
+        INFO(f"Creating a new {type} logic gate with name {name}.")
 
         self._type: LogicType = type
         """
@@ -134,6 +140,8 @@ class LogicGate(ILogicGate):
                 ...
         """
 
+        INFO(f"Getting the output of {self._name}.")
+
         # Get the input pin information
         inputs: List[Bit] = [None] * self.mapping[self._type]
         for p, pin in enumerate(self._input_pins):
@@ -144,13 +152,18 @@ class LogicGate(ILogicGate):
             elif isinstance(pin, Bit):
                 inputs[p] = pin
 
+        INFO(f"The inputs have been set to: {[str(inp) for inp in inputs]}.")
+
         # Process the input pins
         if self._type == LogicType.NOT:
-            return inputs[0].not_op()
+            output: Bit = inputs[0].not_op()
         elif self._type == LogicType.AND:
-            return inputs[0].and_op(inputs[1])
+            output: Bit = inputs[0].and_op(inputs[1])
         elif self._type == LogicType.OR:
-            return inputs[0].or_op(inputs[1])
+            output: Bit = inputs[0].or_op(inputs[1])
+
+        INFO(f"The resulting output is: {output}.")
+        return output
 
     def has_input_pin_set(self, *, pin: int) -> bool:
         """
@@ -207,10 +220,13 @@ class LogicGate(ILogicGate):
         """
 
         if which == "input":
+            INFO(f"Resetting the input pins of {self._name}.")
             self._input_pins = [None] * self.mapping[self._type]
         elif which == "output":
+            INFO(f"Resetting the output pins of {self._name}.")
             self._output_pin = None
         else:
+            INFO(f"Resetting the all of the pins of {self._name}.")
             self._input_pins = [None] * self.mapping[self._type]
             self._output_pin = None
 
@@ -235,6 +251,11 @@ class LogicGate(ILogicGate):
         if self.has_input_pin_set(pin=pin):
             raise LogicGateError(f"Input pin {pin} has already been set!")
 
+        if isinstance(value, Bit):
+            INFO(f"Setting input pin {pin} of {self._name} to bit {str(value)}.")
+        elif isinstance(value, IConnection):
+            INFO(f"Setting input pin {pin} of {self._name} to a connection.")
+
         self._input_pins[pin] = value
 
     def set_output_pin(self, *, value: IConnection) -> None:
@@ -256,4 +277,5 @@ class LogicGate(ILogicGate):
         if self.has_output_pin_set():
             raise LogicGateError("The output pin has already been set!")
 
+        INFO(f"Setting the output pin of {self._name} to a connection.")
         self._output_pin = value

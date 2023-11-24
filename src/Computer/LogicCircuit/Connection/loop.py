@@ -2,6 +2,10 @@ from typing import List, Optional
 
 from Computer.Bit import Bit
 from Computer.LogicCircuit.abc import IBit, IConnection, ILoop
+from Computer.Logger import OUT
+
+INFO = lambda msg: OUT.info(msg, level=6)
+# Short-cut so we don't have to keep writing the same stuff...
 
 
 class LoopError(Exception):
@@ -25,6 +29,8 @@ class Loop(ILoop):
 
     def __init__(self):
         """Constructor..."""
+
+        INFO("Creating a new empty loop connection.")
 
         self._input_connection: Optional[IConnection] = None
         """
@@ -88,10 +94,15 @@ class Loop(ILoop):
                 raise LoopError("The input connection has not been set yet!")
 
             output: IBit = self._input_connection.feed()
+            INFO(
+                f"Feeding inforation {output} from outside the loop to the output "
+                "connection."
+            )
 
             # Save the memory, single went through and now should be circulated
             # indefinitly until the end of the program.
             if self._memory is None:
+                INFO(f"The loop wasn't energized yet and now holds {output}.")
                 self._memory = output
 
         # The "loop"
@@ -101,6 +112,10 @@ class Loop(ILoop):
                 raise LoopError("Looks like no signal came through yet!")
 
             output: IBit = self._memory
+            INFO(
+                f"Feeding infomation {output} held in the loop to the output "
+                "connection."
+            )
 
         return output
 
@@ -145,6 +160,7 @@ class Loop(ILoop):
             This method is marked as public and can be called by the user.
         """
 
+        INFO("Deactivating the loop and resetting the connections.")
         self._input_connection = None
         self._output_connections = [None, None]
         self._memory = None
@@ -167,6 +183,7 @@ class Loop(ILoop):
         if self.has_input_connection_set():
             raise LoopError("The input connection has already been set!")
 
+        INFO("Setting the input connection of the loop.")
         self._input_connection = conn
 
     def set_output_connection(self, *, conn: IConnection, index: int) -> None:
@@ -189,4 +206,9 @@ class Loop(ILoop):
         if self.has_output_connection_set(index=index):
             raise LoopError(f"Output connection {index} is already connected!")
 
+        if index == 0:
+            INFO("Setting the outside connection of the loop.")
+        elif index == 1:
+            INFO("Setting the looping connection of the loop.")
+            
         self._output_connections[index] = conn
