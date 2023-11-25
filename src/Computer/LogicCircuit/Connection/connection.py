@@ -4,12 +4,13 @@ from Computer.Bit import Bit
 from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import (IBranch, IConnection, ILogicGate, ILoop,
                                        ISwitch)
+from Computer.StandardStream.abc import IStdIn
 
 INFO = lambda msg: OUT.info(msg, level=3)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 DEVICE = (
-    ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int]
+    ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int] | IStdIn
 )
 # This represents an arbitrary device the wire can be connected to.
 # NOTE: right now, for `Branch` objects, we need to also save this instance's position
@@ -82,7 +83,7 @@ class Connection(IConnection):
             output: Bit = self._input_connection[0].feed(
                 index=self._input_connection[1]
             )
-        elif isinstance(self._input_connection, ISwitch):
+        elif isinstance(self._input_connection, ISwitch) or isinstance(self._input_connection, IStdIn):
             output: Bit = self._input_connection.feed()
 
         INFO(f"Feeding information {output} to the output device.")
@@ -181,6 +182,9 @@ class Connection(IConnection):
 
             device.set_output_connection(conn=self, index=index)
             device = (device, index)
+
+        elif isinstance(device, IStdIn):
+            device.set_output_connection(conn=self)
 
         self._input_connection = device
 

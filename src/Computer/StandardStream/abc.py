@@ -13,11 +13,11 @@ class IStdIn(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_input_connection(self, *, conn: IConnection) -> None:
+    def set_input_value(self, *, value: IBit | IBitString, index: int) -> None:
         ...
 
     @abc.abstractclassmethod
-    def set_input_value(self, *, value: IBit | IBitString, index: int) -> None:
+    def set_output_connection(self, *, conn: IConnection) -> None:
         ...
 
 class IStdOut(metaclass=abc.ABCMeta):

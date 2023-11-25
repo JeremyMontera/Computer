@@ -3,7 +3,7 @@ from typing import List
 from .abc import IStdIn
 from Computer.Bit import Bit, BitString
 from Computer.Logger import OUT
-from Computer.LogicCircuit.Connection import Connection
+from Computer.LogicCircuit.abc import IConnection
 
 INFO = lambda msg: OUT.info(msg, level=7)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
@@ -17,7 +17,7 @@ class StdIn(IStdIn):
     def __init__(self, *, max_length: int):
         INFO("Creating a new standard input stream device.")
 
-        self._input_connections: List[Connection] = []
+        self._output_connections: List[IConnection] = []
         self._stored_values: BitString = BitString(max_length=max_length)
 
     @property
@@ -27,16 +27,15 @@ class StdIn(IStdIn):
     def feed(self) -> None:
         return self._stored_values.pop_left()
 
-    def set_input_connection(self, *, conn: Connection) -> None:
-        if conn.has_input_connection_set():
-            raise StdInError("The connection is already connected!")
-        
-        INFO("Connecting the wire to the standard input.")
-        self._input_connections.append(conn)
-
     def set_input_value(self, *, value: Bit | BitString) -> None:
         if isinstance(value, Bit):
             self._stored_values.push_right(value)
         elif isinstance(value, BitString):
             self._stored_values.extend_right(value)
-            
+
+    def set_output_connection(self, *, conn: IConnection) -> None:
+        if conn.has_input_connection_set():
+            raise StdInError("The connection is already connected!")
+        
+        INFO("Connecting the wire to the standard input.")
+        self._output_connections.append(conn)            
