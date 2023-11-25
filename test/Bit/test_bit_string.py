@@ -27,7 +27,7 @@ def test_bit_string_max_length(bits):
 
 def test_bit_string_getitem_error_out_of_bounds(bits):
     with pytest.raises(BitError) as exc:
-        blah = bits[4]
+        bits[4]
 
     assert exc.value.args[0] == "Index 4 lies outside the bit string length!"
 
@@ -77,7 +77,7 @@ def test_bit_string_extend_error_exceed_max_length():
     [
         dict(dir="left", value=[0, 1], res=[0, 1, 0, 1, 0]),
         dict(dir="right", value=[1, 1], res=[0, 1, 0, 1, 1]),
-    ]
+    ],
 )
 def test_bit_string_extend(bits, config):
     stuff: BitString = BitString(max_length=2)
@@ -110,7 +110,7 @@ def test_bit_string_pop_error_len_zero():
     [
         dict(dir="left", res=[0, 1, 0]),
         dict(dir="right", res=[0, 1, 0]),
-    ]
+    ],
 )
 def test_bit_string_pop(bits, config):
     while len(bits._bits) > 0:
@@ -122,7 +122,6 @@ def test_bit_string_pop(bits, config):
             bit: Bit = bits.pop_right()
             res: Bit = Bit(config["res"].pop(-1))
             assert bit == res
-
 
 
 def test_bit_string_push_error_exceed_max_length():

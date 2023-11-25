@@ -10,7 +10,14 @@ INFO = lambda msg: OUT.info(msg, level=3)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 DEVICE = (
-    ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int] | IStdIn | IStdOut
+    ILogicGate  # noqa: W503
+    | IBranch  # noqa: W503
+    | Tuple[IBranch, int]  # noqa: W503
+    | ISwitch  # noqa: W503
+    | ILoop  # noqa: W503
+    | Tuple[ILoop, int]  # noqa: W503
+    | IStdIn  # noqa: W503
+    | IStdOut  # noqa: W503
 )
 # This represents an arbitrary device the wire can be connected to.
 # NOTE: right now, for `Branch` objects, we need to also save this instance's position
@@ -83,7 +90,9 @@ class Connection(IConnection):
             output: Bit = self._input_connection[0].feed(
                 index=self._input_connection[1]
             )
-        elif isinstance(self._input_connection, ISwitch) or isinstance(self._input_connection, IStdIn):
+        elif isinstance(self._input_connection, ISwitch) or isinstance(
+            self._input_connection, IStdIn
+        ):
             output: Bit = self._input_connection.feed()
 
         INFO(f"Feeding information {output} to the output device.")

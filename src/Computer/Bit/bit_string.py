@@ -48,7 +48,7 @@ class BitString(IBitString):
 
         if index not in list(range(len(self._bits))):
             raise BitError(f"Index {index} lies outside the bit string length!")
-        
+
         return self._bits[index]
 
     def __iter__(self) -> Bit:
@@ -77,7 +77,7 @@ class BitString(IBitString):
         """Get the maximum number of bits this can hold."""
 
         return self._max_length
-    
+
     def extend_left(self, bits: BitString) -> None:
         """
         This will add another bit string to the left of this current bit string.
@@ -88,13 +88,13 @@ class BitString(IBitString):
             bits:
                 ...
         """
-        
+
         if len(self._bits) + len(bits) > self._max_length:
             raise BitError(
                 f"Adding {len(self._bits)} more bits to the bit string will exceed the "
                 "max length!"
             )
-        
+
         self._bits = [b for b in bits] + self._bits
 
     def extend_right(self, bits: BitString) -> None:
@@ -113,7 +113,7 @@ class BitString(IBitString):
                 f"Adding {len(self._bits)} more bits to the bit string will exceed the "
                 "max length!"
             )
-            
+
         self._bits += [b for b in bits]
 
     def pop_left(self) -> Bit:

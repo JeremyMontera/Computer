@@ -1,15 +1,16 @@
 from typing import List
 
-from .abc import IStdIn
 from Computer.Bit import Bit, BitString
 from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import IConnection
 
+from .abc import IStdIn
+
 INFO = lambda msg: OUT.info(msg, level=7)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
+
 class StdIn(IStdIn):
-    
     def __init__(self, *, max_length: int):
         INFO("Creating a new standard input stream device.")
 
@@ -19,7 +20,7 @@ class StdIn(IStdIn):
     @property
     def stored_values(self) -> BitString:
         return self._stored_values
-    
+
     def feed(self) -> None:
         INFO(f"Feeding {self._stored_values[0]} to the circuit.")
         return self._stored_values.pop_left()
@@ -37,4 +38,4 @@ class StdIn(IStdIn):
 
     def set_output_connection(self, *, conn: IConnection) -> None:
         INFO("Connecting the wire to the standard input.")
-        self._output_connections.append(conn)            
+        self._output_connections.append(conn)

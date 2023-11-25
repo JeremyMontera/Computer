@@ -1,15 +1,16 @@
 from typing import List
 
-from .abc import IStdOut
 from Computer.Bit import Bit
-from Computer.LogicCircuit.abc import IConnection
 from Computer.Logger import OUT
+from Computer.LogicCircuit.abc import IConnection
+
+from .abc import IStdOut
 
 INFO = lambda msg: OUT.info(msg, level=8)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
+
 class StdOut(IStdOut):
-    
     def __init__(self):
         INFO("Creating a new standard output stream device!")
         self._input_connections: List[IConnection] = []

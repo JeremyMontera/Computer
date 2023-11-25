@@ -3,8 +3,8 @@ import abc
 from Computer.Bit.abc import IBit, IBitString
 from Computer.LogicCircuit.abc import IConnection
 
-class IStdIn(metaclass=abc.ABCMeta):
 
+class IStdIn(metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
     def __init__(self, *, max_length: int):
         ...
@@ -20,8 +20,8 @@ class IStdIn(metaclass=abc.ABCMeta):
     def set_output_connection(self, *, conn: IConnection) -> None:
         ...
 
-class IStdOut(metaclass=abc.ABCMeta):
 
+class IStdOut(metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
     def __init__(self):
         ...
