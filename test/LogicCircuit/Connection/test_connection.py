@@ -6,7 +6,7 @@ from Computer.Bit import Bit
 from Computer.LogicCircuit.Connection import Branch, Connection, Loop, Switch
 from Computer.LogicCircuit.Connection.connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
-from Computer.StandardStream import StdIn
+from Computer.StandardStream import StdIn, StdOut
 
 
 @pytest.fixture
@@ -32,6 +32,11 @@ def loop():
 @pytest.fixture
 def stdin():
     return StdIn(max_length=10)
+
+
+@pytest.fixture
+def stdout():
+    return StdOut()
 
 
 def test_connection_init():
@@ -241,12 +246,12 @@ def test_connection_set_output_connection_error_device_connected(device, request
         "branch",
         "switch",
         "loop",
+        "stdout",
     ],
 )
 def test_connection_set_output_connection(device, request):
     conn = Connection()
     d = request.getfixturevalue(device)
-    d.reset()
     conn.set_output_connection(device=d, index=0)
     if device == "gate":
         assert conn._output_connection == d
@@ -260,3 +265,6 @@ def test_connection_set_output_connection(device, request):
     elif device == "loop":
         assert conn._output_connection == d
         assert d._input_connection == conn
+    elif device == "stdout":
+        assert conn._output_connection == d
+        assert d._input_connections[0] == conn
