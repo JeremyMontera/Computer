@@ -77,6 +77,11 @@ comp11 - Create logger class                                                    
     (2) Use throughout to print out status                                          x
 
 comp12 - Implement Stdin/Stdout classes
+    (1) Create interfaces                                                           x
+    (2) Implement standard streams based on interfaces                              x
+    (3) Add unit tests
+    (4) Add documentation
+
 comp13 - Write integration tests
 comp14 - Install pre-commit hooks and mypy
 comp15 - Implement github actions for PR submitals
