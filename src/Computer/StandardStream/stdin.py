@@ -5,7 +5,7 @@ from Computer.Bit import Bit, BitString
 from Computer.Logger import OUT
 from Computer.LogicCircuit.Connection import Connection
 
-INFO = lambda msg: OUT.info(msg, level=8)  # noqa: E731
+INFO = lambda msg: OUT.info(msg, level=7)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 class StdInError(Exception):
@@ -14,31 +14,29 @@ class StdInError(Exception):
 
 class StdIn(IStdIn):
     
-    def __init__(self):
+    def __init__(self, *, max_length: int):
         INFO("Creating a new standard input stream device.")
 
         self._input_connections: List[Connection] = []
-        self._value: BitString = BitString()
-
-    def __iter__(self) -> Bit:
-        for bit in self._value:
-            yield bit
+        self._stored_values: BitString = BitString(max_length=max_length)
 
     @property
-    def value(self) -> BitString:
-        return self._value
+    def stored_values(self) -> BitString:
+        return self._stored_values
+    
+    def feed(self) -> None:
+        return self._stored_values.pop_left()
 
-    def set_input_connection(self, conn: Connection) -> None:
+    def set_input_connection(self, *, conn: Connection) -> None:
         if conn.has_input_connection_set():
             raise StdInError("The connection is already connected!")
         
         INFO("Connecting the wire to the standard input.")
         self._input_connections.append(conn)
 
-    def set_input_value(self, value: Bit | BitString) -> None:
+    def set_input_value(self, *, value: Bit | BitString) -> None:
         if isinstance(value, Bit):
-            self._value.push_right(value)
+            self._stored_values.push_right(value)
         elif isinstance(value, BitString):
-            for bit in value:
-                self._value.push_right(bit)
+            self._stored_values.extend_right(value)
             

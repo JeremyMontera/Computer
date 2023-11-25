@@ -9,6 +9,8 @@ MAPPING = {
     4: "Branch",
     5: "Switch",
     6: "Loop",
+    7: "Standard Input",
+    8: "Standard Output",
 }
 # This makes it so we don't have to continously type in where the message is being
 # printed from. Later on, this will be replaced with a more robust logging level.
