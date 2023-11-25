@@ -6,9 +6,9 @@ from Computer.StandardStream import StdIn
 
 def test_stdin_init():
     stdin = StdIn(max_length=10)
-    assert hasattr(stdin, "_input_connections")
-    assert isinstance(stdin._input_connections, list)
-    assert len(stdin._input_connections) == 0
+    assert hasattr(stdin, "_output_connections")
+    assert isinstance(stdin._output_connections, list)
+    assert len(stdin._output_connections) == 0
     assert hasattr(stdin, "_stored_values")
     assert isinstance(stdin._stored_values, BitString)
     assert len(stdin._stored_values) == 0
@@ -28,11 +28,11 @@ def test_stdin_feed():
     assert stdin.feed() == Bit(0)
     assert len(stdin._stored_values) == 0
 
-def test_stdin_set_input_connection():
+def test_stdin_set_output_connection():
     stdin = StdIn(max_length=10)
     conn = Connection()
-    stdin.set_input_connection(conn=conn)
-    assert len(stdin._input_connections) == 1
+    stdin.set_output_connection(conn=conn)
+    assert len(stdin._output_connections) == 1
 
 def test_stdin_set_input_value():
     stdin = StdIn(max_length=10)

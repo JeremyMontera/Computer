@@ -6,6 +6,7 @@ from Computer.Bit import Bit
 from Computer.LogicCircuit.Connection import Branch, Connection, Loop, Switch
 from Computer.LogicCircuit.Connection.connection import ConnectionError
 from Computer.LogicCircuit.LogicGate import LogicGate, LogicType
+from Computer.StandardStream import StdIn
 
 
 @pytest.fixture
@@ -26,6 +27,11 @@ def switch():
 @pytest.fixture
 def loop():
     return Loop()
+
+
+@pytest.fixture
+def stdin():
+    return StdIn(max_length=10)
 
 
 def test_connection_init():
@@ -82,6 +88,16 @@ def test_connection_feed_loop(mock_feed, loop):
     ret: Bit = conn.feed()
     assert ret == Bit(0)
     mock_feed.assert_called_once_with(index=1)
+
+
+@mock.patch.object(StdIn, "feed")
+def test_connection_feed_stdin(mock_feed, stdin):
+    mock_feed.return_value = Bit(0)
+    conn = Connection()
+    conn._input_connection = stdin
+    ret: Bit = conn.feed()
+    assert ret == Bit(0)
+    mock_feed.assert_called_once_with()
 
 
 def test_has_input_connection_set(gate):
@@ -156,6 +172,7 @@ def test_connection_set_input_connection_error_device_connected(device, request)
         "branch",
         "switch",
         "loop",
+        "stdin",
     ],
 )
 def test_connection_set_input_connection(device, request):
@@ -174,6 +191,9 @@ def test_connection_set_input_connection(device, request):
     elif device == "loop":
         assert conn._input_connection == (d, 1)
         assert d._output_connections[1] == conn
+    elif device == "stdin":
+        assert conn._input_connection == d
+        assert d._output_connections[0] == conn
 
 
 def test_connection_set_output_connection_error_conn_already_connected(gate):
