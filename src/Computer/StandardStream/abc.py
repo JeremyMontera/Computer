@@ -31,5 +31,5 @@ class IStdOut(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractclassmethod
-    def set_output_connection(self, *, conn: IConnection) -> None:
+    def set_input_connection(self, *, conn: IConnection) -> None:
         ...

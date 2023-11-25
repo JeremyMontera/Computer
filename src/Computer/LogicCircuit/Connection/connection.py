@@ -4,13 +4,13 @@ from Computer.Bit import Bit
 from Computer.Logger import OUT
 from Computer.LogicCircuit.abc import (IBranch, IConnection, ILogicGate, ILoop,
                                        ISwitch)
-from Computer.StandardStream.abc import IStdIn
+from Computer.StandardStream.abc import IStdIn, IStdOut
 
 INFO = lambda msg: OUT.info(msg, level=3)  # noqa: E731
 # Short-cut so we don't have to keep writing the same stuff...
 
 DEVICE = (
-    ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int] | IStdIn
+    ILogicGate | IBranch | Tuple[IBranch, int] | ISwitch | ILoop | Tuple[ILoop, int] | IStdIn | IStdOut
 )
 # This represents an arbitrary device the wire can be connected to.
 # NOTE: right now, for `Branch` objects, we need to also save this instance's position
@@ -233,6 +233,9 @@ class Connection(IConnection):
             if device.has_input_connection_set():
                 raise ConnectionError("This loop is already connected!")
 
+            device.set_input_connection(conn=self)
+
+        elif isinstance(device, IStdOut):
             device.set_input_connection(conn=self)
 
         self._output_connection = device
